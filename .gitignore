@@ -25,6 +25,8 @@
 *.log
 *.sql
 *.sqlite
+*.iml
+.idea
 
 # OS generated files #
 ######################
