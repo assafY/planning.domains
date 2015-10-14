@@ -2,16 +2,18 @@ package server;
 
 import global.Settings;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
 
+    private ArrayList<String> clusterList;
+
     public Server() {
+        importClusterList();
+        for(String s : clusterList) { System.out.println(s); }
         try {
             ServerSocket serverSocket = new ServerSocket(Settings.PORT_NUMBER);
             System.out.println("waiting for client input");
@@ -32,5 +34,21 @@ public class Server {
 
     public static void main(String[] args) {
         Server server = new Server();
+    }
+
+    private void importClusterList() {
+        clusterList = new ArrayList<String>();
+        try {
+            String currentCluster;
+            BufferedReader br = new BufferedReader(new FileReader("./res/cluster_list.txt"));
+
+            while ((currentCluster = br.readLine()) != null) {
+                clusterList.add(currentCluster);
+            }
+        } catch (IOException e) {
+          //TODO: handle exception
+            System.out.println("Error importing cluster list");
+        }
+
     }
 }

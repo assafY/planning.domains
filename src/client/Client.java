@@ -9,7 +9,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Client {
+
     public Client() {
+
+    }
+
+    public void connect() {
         try {
             Socket clientSocket = new Socket(Settings.HOST_NAME, Settings.PORT_NUMBER);
             System.out.println("Connected to server");
