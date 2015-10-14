@@ -1,6 +1,6 @@
 package server;
 
-import global.*;
+import global.Settings;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +14,7 @@ public class Server {
     public Server() {
         try {
             ServerSocket serverSocket = new ServerSocket(Settings.PORT_NUMBER);
+            System.out.println("waiting for client input");
             Socket clientSocket = serverSocket.accept();
             PrintWriter out =
                     new PrintWriter(clientSocket.getOutputStream(), true);

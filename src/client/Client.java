@@ -12,6 +12,7 @@ public class Client {
     public Client() {
         try {
             Socket clientSocket = new Socket(Settings.HOST_NAME, Settings.PORT_NUMBER);
+            System.out.println("Connected to server");
             PrintWriter out =
                     new PrintWriter(clientSocket.getOutputStream());
             BufferedReader in =
