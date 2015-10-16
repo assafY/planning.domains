@@ -9,46 +9,61 @@ import java.util.ArrayList;
 
 public class Server {
 
+    // list of all clusters in system
     private ArrayList<String> clusterList;
 
     public Server() {
-        importClusterList();
-        for(String s : clusterList) { System.out.println(s); }
         try {
-            ServerSocket serverSocket = new ServerSocket(Settings.PORT_NUMBER);
-            System.out.println("waiting for client input");
-            Socket clientSocket = serverSocket.accept();
-            PrintWriter out =
-                    new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(clientSocket.getInputStream()));
-            String inputLine;
-            while((inputLine = in.readLine()) != null) {
-                out.println(inputLine);
-            }
+            startServer();
         } catch (IOException e) {
             // TODO: handle exception
             System.out.println("Server failed to open socket");
         }
+        importClusterList();
     }
 
-    public static void main(String[] args) {
-        Server server = new Server();
+    // start server and constantly listen for client connections
+    private void startServer() throws IOException {
+        ServerSocket serverSocket = new ServerSocket(Settings.PORT_NUMBER);
+        Socket clientSocket;
+
+        while(true) {
+            System.out.println("waiting for client input");
+            clientSocket = serverSocket.accept();
+
+            ClientThread thread = new ClientThread(clientSocket);
+            thread.start();
+        }
     }
 
+    /**
+     * Import list of clusters from the res folder into arraylist.
+     */
     private void importClusterList() {
+
         clusterList = new ArrayList<String>();
+        BufferedReader br = null;
         try {
             String currentCluster;
-            BufferedReader br = new BufferedReader(new FileReader("./res/cluster_list.txt"));
+            br = new BufferedReader(new FileReader(Settings.CLUSTER_LIST_PATH));
 
             while ((currentCluster = br.readLine()) != null) {
                 clusterList.add(currentCluster);
             }
         } catch (IOException e) {
           //TODO: handle exception
-            System.out.println("Error importing cluster list");
+            System.err.println("Error importing cluster list file");
+        } finally {
+            try {
+                if (br != null) br.close();
+            } catch (IOException ex) {
+                //TODO: handle exception
+                System.err.println("Error closing cluster list file");
+            }
         }
+    }
 
+    public static void main(String[] args) {
+        new Server();
     }
 }
