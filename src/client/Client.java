@@ -68,6 +68,17 @@ public class Client {
         }
     }
 
+    /**
+     * Send a message to the server
+     *
+     * @param msg The message to send
+     * @throws IOException
+     */
+    public void sendMessage(Message msg) throws IOException {
+        outputStream.writeObject(msg);
+        outputStream.flush();
+    }
+
     public static void main(String[] args) {
         new Client();
     }
