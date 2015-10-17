@@ -77,6 +77,7 @@ public class Client {
     public void sendMessage(Message msg) throws IOException {
         outputStream.writeObject(msg);
         outputStream.flush();
+        
     }
 
     public static void main(String[] args) {
