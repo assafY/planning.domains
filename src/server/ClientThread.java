@@ -40,6 +40,20 @@ public class ClientThread extends Thread {
         outputStream.writeObject(msg);
     }
 
+    /**
+     * onReceiveMessage specifies the action the client needs to take depending
+     * on the type of message received from the server.
+     *
+     * @param msg The message from the server
+     */
+    public void onReceiveMessage(Message msg) {
+
+        switch (msg.getType()) {
+            case Message.CLIENT_CONNECTED:
+                name = msg.getMessage();
+        }
+    }
+
     // listen for incoming messages from the client and decide what to do with them
     @Override
     public void run() {
@@ -48,17 +62,13 @@ public class ClientThread extends Thread {
             Message msg;
             try {
                 msg = (Message) inputStream.readObject();
+                onReceiveMessage(msg);
             } catch (ClassNotFoundException e) {
                 //TODO: handle exception
                 break;
             } catch (IOException e) {
                 //TODO: handle exception
                 break;
-            }
-
-            switch (msg.getType()) {
-                case Message.CLIENT_CONNECTED:
-                    name = msg.getMessage();
             }
         }
     }

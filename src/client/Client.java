@@ -3,6 +3,8 @@ package client;
 import global.*;
 import java.io.*;
 import java.net.Socket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Client class to run independently on clusters in the system. Clusters
@@ -14,6 +16,7 @@ public class Client {
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 
+    private String clientName;
     /**
      * Opens a socket to the server, and gets object input and output streams. Starts
      * a thread listening for messages received from the server.
@@ -27,6 +30,10 @@ public class Client {
             inputStream = new ObjectInputStream(clientSocket.getInputStream());
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 
+            // find client name and notify server
+            setClientName();
+            sendMessage(new Message(clientName, 1));
+
             // listen for incoming messages from the server
             new ListenFromServer().start();
 
@@ -36,6 +43,15 @@ public class Client {
         }
     }
 
+    private void setClientName() {
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            clientName = address.getHostName();
+        } catch (UnknownHostException e) {
+            //TODO : hanle excpetion
+            System.out.println("Cannot resolve hostname");
+        }
+    }
     /**
      * onReceiveMessage specifies the action the client needs to take depending
      * on the type of message received from the server.
