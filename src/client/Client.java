@@ -17,6 +17,7 @@ public class Client {
     private ObjectOutputStream outputStream;
 
     private String clientName;
+
     /**
      * Opens a socket to the server, and gets object input and output streams. Starts
      * a thread listening for messages received from the server.
@@ -96,6 +97,7 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        new Client();
+        Client client = new Client();
+        client.connect();
     }
 }

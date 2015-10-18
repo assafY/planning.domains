@@ -41,16 +41,17 @@ public class ClientThread extends Thread {
     }
 
     /**
-     * onReceiveMessage specifies the action the client needs to take depending
-     * on the type of message received from the server.
+     * onReceiveMessage specifies the action the server needs to take depending
+     * on the type of message received from the client.
      *
-     * @param msg The message from the server
+     * @param msg The message from the client
      */
     public void onReceiveMessage(Message msg) {
 
         switch (msg.getType()) {
             case Message.CLIENT_CONNECTED:
                 name = msg.getMessage();
+                System.out.println("New client connected: " + name);
         }
     }
 
