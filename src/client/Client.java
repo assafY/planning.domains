@@ -49,10 +49,19 @@ public class Client {
             InetAddress address = InetAddress.getLocalHost();
             clientName = address.getHostName();
         } catch (UnknownHostException e) {
-            //TODO : hanle excpetion
+            //TODO : handle exception
             System.out.println("Cannot resolve hostname");
         }
     }
+
+    /**
+     * closes all sockets and streams
+     */
+    public void close() throws IOException {
+        if (inputStream != null) inputStream.close();
+        if (outputStream != null) outputStream.close();
+    }
+
     /**
      * onReceiveMessage specifies the action the client needs to take depending
      * on the type of message received from the server.
@@ -60,7 +69,15 @@ public class Client {
      * @param msg The message from the server
      */
     public void onReceiveMessage(Message msg) {
-
+        switch (msg.getType()) {
+            case Message.DUPLICATE_THREAD: // if a thread is already running for this client
+                try {
+                    close();
+                } catch (IOException e) {
+                    System.err.println("Error closing streams");
+                }
+                System.exit(0);
+        }
     }
 
     /**
@@ -89,11 +106,15 @@ public class Client {
      * Send a message to the server
      *
      * @param msg The message to send
-     * @throws IOException
      */
-    public void sendMessage(Message msg) throws IOException {
-        outputStream.writeObject(msg);
-        outputStream.flush();
+    public void sendMessage(Message msg) {
+        try {
+            outputStream.writeObject(msg);
+            outputStream.flush();
+        } catch (IOException e) {
+            //TODO: handle exception
+            System.err.println("Error sending message to server");
+        }
     }
 
     public static void main(String[] args) {
