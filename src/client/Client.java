@@ -47,7 +47,7 @@ public class Client {
     private void setClientName() {
         try {
             InetAddress address = InetAddress.getLocalHost();
-            clientName = address.getHostName();
+            clientName = address.getHostName().replaceAll("\\s", "");
         } catch (UnknownHostException e) {
             //TODO : handle exception
             System.out.println("Cannot resolve hostname");

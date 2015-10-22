@@ -14,26 +14,33 @@ public class Server {
     private ArrayList<Cluster> clusterList;
 
     public Server() {
-        try {
-            startServer();
-        } catch (IOException e) {
-            // TODO: handle exception
-            System.out.println("Server failed to open socket");
-        }
         importClusterList();
+        startServer();
     }
 
     // start server and constantly listen for client connections
-    private void startServer() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(Settings.PORT_NUMBER);
-        Socket clientSocket;
-
-        while(true) {
-            System.out.println("waiting for client input");
-            clientSocket = serverSocket.accept();
-
-            ClientThread thread = new ClientThread(clientSocket);
-            thread.start();
+    private void startServer() {
+        try {
+            final ServerSocket serverSocket = new ServerSocket(Settings.PORT_NUMBER);
+            System.out.println("Server running. Waiting for clients to connect");
+            Thread awaitConnections = new Thread() {
+                public void run() {
+                    while (true) {
+                        try {
+                            Socket clientSocket = serverSocket.accept();
+                            ClientThread thread = new ClientThread(clientSocket);
+                            thread.start();
+                        } catch (IOException e) {
+                            // TODO: handle exception
+                            System.out.println("Server failed to open client socket");
+                        }
+                    }
+                }
+            };
+            awaitConnections.start();
+        } catch (IOException e) {
+            //TODO: handle exception
+            System.err.println("Error starting server");
         }
     }
 
@@ -53,7 +60,7 @@ public class Server {
     }
 
     /**
-     * Import list of clusters from the res folder into arraylist.
+     * Import list of clusters from text file in res folder into arraylist.
      */
     private void importClusterList() {
 
@@ -64,7 +71,7 @@ public class Server {
             br = new BufferedReader(new FileReader(Settings.CLUSTER_LIST_PATH));
 
             while ((currentClusterName = br.readLine()) != null) {
-                clusterList.add(new Cluster(currentClusterName));
+                clusterList.add(new Cluster(currentClusterName.replaceAll("\\s", "")));
             }
         } catch (IOException e) {
           //TODO: handle exception
