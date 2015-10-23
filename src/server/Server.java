@@ -33,6 +33,7 @@ public class Server {
                         } catch (IOException e) {
                             // TODO: handle exception
                             System.out.println("Server failed to open client socket");
+                            System.err.println(e.getStackTrace());
                         }
                     }
                 }
@@ -64,7 +65,7 @@ public class Server {
      */
     private void importClusterList() {
 
-        clusterList = new ArrayList<Cluster>();
+        clusterList = new ArrayList<>();
         BufferedReader br = null;
         try {
             String currentClusterName;
@@ -93,7 +94,6 @@ public class Server {
 
         // client identifier
         private Cluster cluster;
-        private boolean inUse;
 
         // server streams
         private Socket clientSocket;
@@ -105,8 +105,6 @@ public class Server {
 
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             inputStream = new ObjectInputStream(clientSocket.getInputStream());
-
-            inUse = false;
         }
 
         /**
@@ -149,6 +147,7 @@ public class Server {
                     }
             }
         }
+
         /**
          * listens for incoming messages from the client and decide what to do with them
          */
@@ -177,6 +176,8 @@ public class Server {
             }
             if (cluster != null) {
                 cluster.setConnected(false);
+                System.out.println(cluster.getName() + " disconnected.");
+                cluster = null;
             }
         }
     }

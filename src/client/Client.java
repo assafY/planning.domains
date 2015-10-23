@@ -76,6 +76,7 @@ public class Client {
                 } catch (IOException e) {
                     System.err.println("Error closing streams");
                 }
+                System.out.println("There is already a running thread for this client");
                 System.exit(0);
         }
     }
