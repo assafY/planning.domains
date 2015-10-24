@@ -1,14 +1,14 @@
 package server;
 
 /**
- * Class for every single cluster in the distributed system.
+ * Class for every single node in the cluster.
  */
-public class Cluster {
+public class Node {
 
     private String name;
     private boolean connected = false;
 
-    public Cluster(String name) {
+    public Node(String name) {
         this.name = name;
     }
 

@@ -7,8 +7,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Client class to run independently on clusters in the system. Clusters
- * connect to the server and communicate with it using Message objects. Clusters
+ * Client class to run independently on nodes in the system. Nodes
+ * connect to the server and communicate with it using Message objects. Nodes
  * run planners on domains locally and update the server with progress and results.
  */
 public class Client {

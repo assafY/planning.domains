@@ -10,12 +10,15 @@ import java.util.ArrayList;
 
 public class Server {
 
-    // list of all possible clusters in system
-    private ArrayList<Cluster> clusterList;
+    // list of all possible nodes in system
+    private ArrayList<Node> nodeList;
+    // process builder to run OS jobs
+    ProcessBuilder pBuilder;
 
     public Server() {
-        importClusterList();
+        importNodeList();
         startServer();
+        startNodes();
     }
 
     // start server and constantly listen for client connections
@@ -46,54 +49,91 @@ public class Server {
     }
 
     /**
-     * Returns a cluster object matching a String with a name
-     *
-     * @param clusterName name of the cluster
-     * @return cluster if found a match, null if no match is found
+     * Uses process builder to run a script SSHing into all nodes in list
+     * and running the client Java files on them.
      */
-    public Cluster getCluster(String clusterName) {
-        for (Cluster c: clusterList) {
-            if (c.getName().equals(clusterName)) {
-                return c;
+    private void startNodes() {
+        pBuilder = new ProcessBuilder(Settings.NODE_START_SCRIPT, Settings.NODE_LIST_PATH);
+        System.out.println("Starting up nodes...");
+        try {
+            // start the process
+            Process process = pBuilder.start();
+
+            // wait for process to finish running and get result code
+            int resultCode = process.waitFor();
+
+            // if no errors, notify and get number of online nodes
+            if (resultCode == 0) {
+                int numOfNodes = 0;
+                for (Node n: nodeList) {
+                    if (n.isConnected()) { ++numOfNodes; }
+                }
+                Thread.sleep(1000); // wait for final node to connect
+                System.out.println("Successfully started " + numOfNodes +
+                        " out of " + nodeList.size() + " nodes.");
+            } else {
+                // error running script
+                System.err.println("Error starting nodes. Check for existence" +
+                        " of script and node list as well as paths in Settings.java");
+            }
+        } catch (IOException e) {
+            //TODO: handle exception
+            System.err.println("Error running node starting process");
+        } catch (InterruptedException e1) {
+            //TODO: handle exception
+            System.err.println("Waiting for process to end interrupted");
+        }
+    }
+
+    /**
+     * Returns a node object matching a String with a name
+     *
+     * @param nodeName String containing name of the node
+     * @return node if found a match, null if no match is found
+     */
+    public Node getNode(String nodeName) {
+        for (Node n: nodeList) {
+            if (n.getName().equals(nodeName)) {
+                return n;
             }
         }
         return null;
     }
 
     /**
-     * Import list of clusters from text file in res folder into arraylist.
+     * Import list of nodes from text file in res folder into arraylist.
      */
-    private void importClusterList() {
+    private void importNodeList() {
 
-        clusterList = new ArrayList<>();
+        nodeList = new ArrayList<>();
         BufferedReader br = null;
         try {
-            String currentClusterName;
-            br = new BufferedReader(new FileReader(Settings.CLUSTER_LIST_PATH));
+            String currentNodeName;
+            br = new BufferedReader(new FileReader(Settings.NODE_LIST_PATH));
 
-            while ((currentClusterName = br.readLine()) != null) {
-                clusterList.add(new Cluster(currentClusterName.replaceAll("\\s", "")));
+            while ((currentNodeName = br.readLine()) != null) {
+                nodeList.add(new Node(currentNodeName.replaceAll("\\s", "")));
             }
         } catch (IOException e) {
           //TODO: handle exception
-            System.err.println("Error importing cluster list file");
+            System.err.println("Error importing node list file");
         } finally {
             try {
                 if (br != null) br.close();
             } catch (IOException ex) {
                 //TODO: handle exception
-                System.err.println("Error closing cluster list file");
+                System.err.println("Error closing node list file");
             }
         }
     }
 
     /**
-     * A thread for every cluster that has a connected thread.
+     * A thread for every node that has a connected thread.
      */
     public class ClientThread extends Thread {
 
         // client identifier
-        private Cluster cluster;
+        private Node node;
 
         // server streams
         private Socket clientSocket;
@@ -137,12 +177,12 @@ public class Server {
         public void onReceiveMessage(Message msg) {
             switch (msg.getType()) {
                 case Message.CLIENT_CONNECTED: // if a client is trying to connect
-                    cluster = getCluster(msg.getMessage());
-                    if (!cluster.isConnected()) { // if client is not already connected
-                        cluster.setConnected(true);
-                        System.out.println("New client connected: " + cluster.getName());
+                    node = getNode(msg.getMessage());
+                    if (!node.isConnected()) { // if client is not already connected
+                        node.setConnected(true);
+                        System.out.println("New client connected: " + node.getName());
                     } else { // if a client already has a thread running
-                        cluster = null;
+                        node = null;
                         sendMessage(new Message(3)); // notify the client to end
                     }
             }
@@ -174,10 +214,10 @@ public class Server {
             } catch (IOException e) {
                 System.err.println("Error closing streams");
             }
-            if (cluster != null) {
-                cluster.setConnected(false);
-                System.out.println(cluster.getName() + " disconnected.");
-                cluster = null;
+            if (node != null) {
+                node.setConnected(false);
+                System.out.println(node.getName() + " disconnected.");
+                node = null;
             }
         }
     }

@@ -10,5 +10,8 @@ public class Settings {
     public static final int PORT_NUMBER = 8080;
 
     // resources
-    public static final String CLUSTER_LIST_PATH = "./res/cluster_list.txt";
+    public static final String NODE_LIST_PATH = "./res/node_list.txt";
+
+    // scripts
+    public static final String NODE_START_SCRIPT = "./res/start_all_nodes.sh";
 }
