@@ -54,6 +54,11 @@ public class Client {
         }
     }
 
+    private void runPlannerProcess(String plannerDomainNames) {
+        String[] pdn = plannerDomainNames.split(";");
+        
+    }
+
     /**
      * closes all sockets and streams
      */
@@ -78,6 +83,10 @@ public class Client {
                 }
                 System.out.println("There is already a running thread for this client");
                 System.exit(0);
+
+            case Message.RUN_PLANNER:
+                runPlannerProcess(msg.getMessage());
+                break;
         }
     }
 

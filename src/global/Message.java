@@ -6,8 +6,9 @@ public class Message implements Serializable {
 
     // message types
     public static final int CLIENT_CONNECTED = 1,
-            CLIENT_DISCONNECTED = 2,
-            DUPLICATE_THREAD = 3;
+            //CLIENT_DISCONNECTED = 2,
+            DUPLICATE_THREAD = 2,
+            RUN_PLANNER = 3;
 
     private int type;
     private String message;

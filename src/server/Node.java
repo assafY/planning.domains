@@ -6,18 +6,26 @@ package server;
 public class Node {
 
     private String name;
-    private boolean connected = false;
+    private Server.ClientThread clientThread = null;
 
     public Node(String name) {
         this.name = name;
     }
 
     public boolean isConnected() {
-        return connected;
+        return clientThread != null;
     }
 
-    public void setConnected(boolean connected) {
-        this.connected = connected;
+    public void setClientThread(Server.ClientThread thread) {
+        this.clientThread = thread;
+    }
+
+    public void removeClientThread() {
+        this.clientThread = null;
+    }
+
+    public Server.ClientThread getClientThread() {
+        return clientThread;
     }
 
     public String getName() {

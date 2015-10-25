@@ -11,6 +11,10 @@ public class Settings {
 
     // resources
     public static final String NODE_LIST_PATH = "./res/node_list.txt";
+    public static final String PLANNER_LIST_PATH = "./res/planner_list.txt";
+    public static final String DOMAIN_LIST_PATH = "./res/domain_list.txt";
+    public static final String PLANNER_DIR_PATH = "./res/planners/";
+    public static final String DOMAIN_DIR_PATH = "./res/domains/";
 
     // scripts
     public static final String NODE_START_SCRIPT = "./res/start_all_nodes.sh";

@@ -10,14 +10,25 @@ import java.util.ArrayList;
 
 public class Server {
 
-    // list of all possible nodes in system
+    // lists of all possible nodes, domains and planners in system
     private ArrayList<Node> nodeList;
+    private ArrayList<Domain> domainList;
+    private ArrayList<Planner> plannerList;
+
     // process builder to run OS jobs
     ProcessBuilder pBuilder;
 
     public Server() {
-        importNodeList();
+
+        // import text files into lists of objects
+        importList(Settings.NODE_LIST_PATH);
+        importList(Settings.DOMAIN_LIST_PATH);
+        importList(Settings.PLANNER_LIST_PATH);
+
+        // start the server
         startServer();
+
+        // start all nodes
         startNodes();
     }
 
@@ -33,6 +44,7 @@ public class Server {
                             Socket clientSocket = serverSocket.accept();
                             ClientThread thread = new ClientThread(clientSocket);
                             thread.start();
+
                         } catch (IOException e) {
                             // TODO: handle exception
                             System.out.println("Server failed to open client socket");
@@ -42,6 +54,7 @@ public class Server {
                 }
             };
             awaitConnections.start();
+
         } catch (IOException e) {
             //TODO: handle exception
             System.err.println("Error starting server");
@@ -62,20 +75,25 @@ public class Server {
             // wait for process to finish running and get result code
             int resultCode = process.waitFor();
 
-            // if no errors, notify and get number of online nodes
+            // if no errors, count online nodes and notify
             if (resultCode == 0) {
                 int numOfNodes = 0;
                 for (Node n: nodeList) {
                     if (n.isConnected()) { ++numOfNodes; }
                 }
-                Thread.sleep(1000); // wait for final node to connect
+
+                // wait for final node to connect
+                Thread.sleep(1000);
                 System.out.println("Successfully started " + numOfNodes +
                         " out of " + nodeList.size() + " nodes.");
-            } else {
-                // error running script
+            }
+
+            // error running script
+            else {
                 System.err.println("Error starting nodes. Check for existence" +
                         " of script and node list as well as paths in Settings.java");
             }
+
         } catch (IOException e) {
             //TODO: handle exception
             System.err.println("Error running node starting process");
@@ -101,28 +119,56 @@ public class Server {
     }
 
     /**
-     * Import list of nodes from text file in res folder into arraylist.
+     * This method imports text files to lists of objects.
+     *
+     * @param filePath the path to the file being imported
      */
-    private void importNodeList() {
+    private void importList(String filePath) {
 
-        nodeList = new ArrayList<>();
         BufferedReader br = null;
         try {
-            String currentNodeName;
-            br = new BufferedReader(new FileReader(Settings.NODE_LIST_PATH));
+            String currentLine;
+            br = new BufferedReader(new FileReader(filePath));
 
-            while ((currentNodeName = br.readLine()) != null) {
-                nodeList.add(new Node(currentNodeName.replaceAll("\\s", "")));
+            // determine what list this is based on list path
+            switch (filePath) {
+
+                // if importing the node list
+                case Settings.NODE_LIST_PATH:
+                    nodeList = new ArrayList<>();
+                    while ((currentLine = br.readLine()) != null) {
+                        nodeList.add(new Node(currentLine.replaceAll("\\s", "")));
+                        System.out.println(currentLine);
+                    }
+                    break;
+
+                // if importing the domain list
+                case Settings.DOMAIN_LIST_PATH:
+                    domainList = new ArrayList<>();
+                    while ((currentLine = br.readLine()) != null) {
+                        //domainList.add(new Domain(currentLine.replaceAll("\\s", "")));
+                        System.out.println(currentLine);
+                    }
+                    break;
+
+                // if importing the planner list
+                case Settings.PLANNER_LIST_PATH:
+                    plannerList = new ArrayList<>();
+                    while ((currentLine = br.readLine()) != null) {
+                        plannerList.add(new Planner(currentLine.replaceAll("\\s", "")));
+                        System.out.println(currentLine);
+                    }
+                    break;
             }
         } catch (IOException e) {
           //TODO: handle exception
-            System.err.println("Error importing node list file");
+            System.err.println("Error importing " + filePath + ".");
         } finally {
             try {
                 if (br != null) br.close();
             } catch (IOException ex) {
                 //TODO: handle exception
-                System.err.println("Error closing node list file");
+                System.err.println("Error closing " + filePath + ".");
             }
         }
     }
@@ -176,15 +222,22 @@ public class Server {
          */
         public void onReceiveMessage(Message msg) {
             switch (msg.getType()) {
-                case Message.CLIENT_CONNECTED: // if a client is trying to connect
+
+                // if a client is trying to connect
+                case Message.CLIENT_CONNECTED:
                     node = getNode(msg.getMessage());
-                    if (!node.isConnected()) { // if client is not already connected
-                        node.setConnected(true);
+
+                    // if client is not already connected
+                    if (!node.isConnected()) {
+                        node.setClientThread(this);
                         System.out.println("New client connected: " + node.getName());
-                    } else { // if a client already has a thread running
+
+                    // if a client already has a thread running
+                    } else {
                         node = null;
                         sendMessage(new Message(3)); // notify the client to end
                     }
+                    break;
             }
         }
 
@@ -208,14 +261,17 @@ public class Server {
                     break;
                 }
             }
+
             // loop finishes, therefore the client disconnected
             try {
                 close();
             } catch (IOException e) {
                 System.err.println("Error closing streams");
             }
+
+            // if this isn't an already connected client that tried to open another thread
             if (node != null) {
-                node.setConnected(false);
+                node.removeClientThread();
                 System.out.println(node.getName() + " disconnected.");
                 node = null;
             }
