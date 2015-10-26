@@ -1,0 +1,1137 @@
+.obj/planner.1.o: planner.cc best_first_search.h closed_list.h closed_list.cc \
+ open_lists/open_list.h open_lists/../evaluator.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h \
+ enforced_hill_climbing_search.h g_evaluator.h \
+ general_eager_best_first_search.h general_lazy_best_first_search.h \
+ iterated_search.h option_parser.h pref_evaluator.h sum_evaluator.h \
+ combining_evaluator.h utilities.h weighted_evaluator.h
+.obj/axioms.1.o: axioms.cc axioms.h globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/best_first_search.1.o: best_first_search.cc best_first_search.h \
+ closed_list.h closed_list.cc open_lists/open_list.h \
+ open_lists/../evaluator.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/open_list_buckets.h open_lists/open_list_buckets.cc
+.obj/causal_graph.1.o: causal_graph.cc causal_graph.h globals.h operator_cost.h
+.obj/closed_list.1.o: closed_list.cc
+.obj/combining_evaluator.1.o: combining_evaluator.cc combining_evaluator.h \
+ scalar_evaluator.h evaluator.h
+.obj/domain_transition_graph.1.o: domain_transition_graph.cc \
+ domain_transition_graph.h globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/enforced_hill_climbing_search.1.o: enforced_hill_climbing_search.cc \
+ enforced_hill_climbing_search.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h open_lists/open_list.h \
+ open_lists/../evaluator.h g_evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/tiebreaking_open_list.h open_lists/tiebreaking_open_list.cc \
+ pref_evaluator.h
+.obj/exact_timer.1.o: exact_timer.cc exact_timer.h
+.obj/g_evaluator.1.o: g_evaluator.cc g_evaluator.h scalar_evaluator.h \
+ evaluator.h option_parser.h state_var_t.h
+.obj/general_eager_best_first_search.1.o: general_eager_best_first_search.cc \
+ general_eager_best_first_search.h open_lists/open_list.h \
+ open_lists/../evaluator.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h open_list_parser.h open_list_parser.cc \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/open_list_buckets.h open_lists/open_list_buckets.cc \
+ open_lists/tiebreaking_open_list.h open_lists/tiebreaking_open_list.cc \
+ open_lists/alternation_open_list.h open_lists/alternation_open_list.cc \
+ open_lists/../open_list_parser.h open_lists/pareto_open_list.h \
+ open_lists/pareto_open_list.cc option_parser.h successor_generator.h \
+ g_evaluator.h sum_evaluator.h combining_evaluator.h
+.obj/general_lazy_best_first_search.1.o: general_lazy_best_first_search.cc \
+ general_lazy_best_first_search.h closed_list.h closed_list.cc \
+ open_lists/open_list.h open_lists/../evaluator.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/alternation_open_list.h open_lists/alternation_open_list.cc \
+ open_lists/../open_list_parser.h open_lists/../open_list_parser.cc \
+ open_lists/../open_lists/standard_scalar_open_list.h \
+ open_lists/../open_lists/open_list_buckets.h \
+ open_lists/../open_lists/open_list.h \
+ open_lists/../open_lists/../scalar_evaluator.h \
+ open_lists/../open_lists/open_list_buckets.cc \
+ open_lists/../open_lists/../option_parser.h \
+ open_lists/../open_lists/tiebreaking_open_list.h \
+ open_lists/../open_lists/../evaluator.h \
+ open_lists/../open_lists/tiebreaking_open_list.cc \
+ open_lists/../open_lists/alternation_open_list.h \
+ open_lists/../open_lists/pareto_open_list.h \
+ open_lists/../open_lists/pareto_open_list.cc \
+ open_lists/tiebreaking_open_list.h g_evaluator.h sum_evaluator.h \
+ combining_evaluator.h weighted_evaluator.h
+.obj/globals.1.o: globals.cc globals.h operator_cost.h axioms.h causal_graph.h \
+ domain_transition_graph.h operator.h state.h state_var_t.h \
+ successor_generator.h timer.h heuristic.h scalar_evaluator.h evaluator.h
+.obj/heuristic.1.o: heuristic.cc heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h
+.obj/ipc_max_heuristic.1.o: ipc_max_heuristic.cc ipc_max_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h option_parser.h \
+ state_var_t.h plugin.h
+.obj/iterated_search.1.o: iterated_search.cc iterated_search.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h option_parser.h
+.obj/max_evaluator.1.o: max_evaluator.cc max_evaluator.h combining_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h plugin.h
+.obj/operator.1.o: operator.cc globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/operator_cost.1.o: operator_cost.cc globals.h operator_cost.h operator.h \
+ state.h state_var_t.h
+.obj/option_parser.1.o: option_parser.cc option_parser.h state_var_t.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h
+.obj/plugin.1.o: plugin.cc plugin.h option_parser.h state_var_t.h
+.obj/pref_evaluator.1.o: pref_evaluator.cc pref_evaluator.h scalar_evaluator.h \
+ evaluator.h option_parser.h state_var_t.h
+.obj/relaxation_heuristic.1.o: relaxation_heuristic.cc relaxation_heuristic.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h globals.h \
+ operator.h state.h state_var_t.h
+.obj/search_engine.1.o: search_engine.cc globals.h operator_cost.h \
+ search_engine.h operator.h state.h state_var_t.h search_space.h \
+ state_proxy.h search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h option_parser.h
+.obj/search_node_info.1.o: search_node_info.cc search_node_info.h state.h \
+ state_var_t.h
+.obj/search_progress.1.o: search_progress.cc search_progress.h globals.h \
+ operator_cost.h timer.h heuristic.h scalar_evaluator.h evaluator.h
+.obj/search_space.1.o: search_space.cc search_space.h state.h state_var_t.h \
+ state_proxy.h globals.h operator_cost.h search_node_info.h operator.h
+.obj/state.1.o: state.cc state.h state_var_t.h axioms.h globals.h \
+ operator_cost.h operator.h
+.obj/successor_generator.1.o: successor_generator.cc globals.h operator_cost.h \
+ operator.h state.h state_var_t.h successor_generator.h
+.obj/sum_evaluator.1.o: sum_evaluator.cc sum_evaluator.h combining_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h plugin.h
+.obj/timer.1.o: timer.cc timer.h
+.obj/utilities.1.o: utilities.cc utilities.h
+.obj/weighted_evaluator.1.o: weighted_evaluator.cc weighted_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h
+.obj/open_lists/alternation_open_list.1.o: open_lists/alternation_open_list.cc
+.obj/open_lists/open_list_buckets.1.o: open_lists/open_list_buckets.cc
+.obj/open_lists/pareto_open_list.1.o: open_lists/pareto_open_list.cc
+.obj/open_lists/standard_scalar_open_list.1.o: open_lists/standard_scalar_open_list.cc
+.obj/open_lists/tiebreaking_open_list.1.o: open_lists/tiebreaking_open_list.cc
+.obj/additive_heuristic.1.o: additive_heuristic.cc additive_heuristic.h \
+ priority_queue.h relaxation_heuristic.h heuristic.h scalar_evaluator.h \
+ evaluator.h operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/blind_search_heuristic.1.o: blind_search_heuristic.cc \
+ blind_search_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/cea_heuristic.1.o: cea_heuristic.cc cea_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ domain_transition_graph.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/cg_heuristic.1.o: cg_heuristic.cc cg_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ cg_cache.h domain_transition_graph.h globals.h operator.h state.h \
+ state_var_t.h option_parser.h plugin.h
+.obj/cg_cache.1.o: cg_cache.cc cg_cache.h causal_graph.h globals.h \
+ operator_cost.h state.h state_var_t.h
+.obj/ff_heuristic.1.o: ff_heuristic.cc ff_heuristic.h additive_heuristic.h \
+ priority_queue.h relaxation_heuristic.h heuristic.h scalar_evaluator.h \
+ evaluator.h operator_cost.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/goal_count_heuristic.1.o: goal_count_heuristic.cc goal_count_heuristic.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h globals.h \
+ option_parser.h state_var_t.h plugin.h state.h
+.obj/hm_heuristic.1.o: hm_heuristic.cc hm_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h globals.h state.h \
+ state_var_t.h operator.h option_parser.h plugin.h
+.obj/lm_cut_heuristic.1.o: lm_cut_heuristic.cc lm_cut_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ globals.h operator.h state.h state_var_t.h option_parser.h plugin.h
+.obj/max_heuristic.1.o: max_heuristic.cc max_heuristic.h priority_queue.h \
+ relaxation_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/raz_mas_heuristic.1.o: raz_mas_heuristic.cc raz_mas_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h raz_abstraction.h \
+ globals.h operator.h state.h state_var_t.h option_parser.h plugin.h \
+ timer.h raz_variable_order_finder.h
+.obj/raz_abstraction.1.o: raz_abstraction.cc raz_abstraction.h \
+ raz_mas_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h globals.h operator.h state.h state_var_t.h \
+ raz_operator_registry.h timer.h
+.obj/raz_operator_registry.1.o: raz_operator_registry.cc globals.h \
+ operator_cost.h operator.h state.h state_var_t.h raz_operator_registry.h
+.obj/raz_variable_order_finder.1.o: raz_variable_order_finder.cc \
+ raz_variable_order_finder.h raz_mas_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h causal_graph.h globals.h
+.obj/landmarks/exploration.1.o: landmarks/exploration.cc landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../operator_cost.h \
+ landmarks/../globals.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/../state.h
+.obj/landmarks/h_m_landmarks.1.o: landmarks/h_m_landmarks.cc landmarks/h_m_landmarks.h \
+ landmarks/../globals.h landmarks/../operator_cost.h \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/exploration.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/lama_ff_synergy.1.o: landmarks/lama_ff_synergy.cc \
+ landmarks/lama_ff_synergy.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../operator_cost.h landmarks/exploration.h \
+ landmarks/../globals.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/landmark_count_heuristic.h \
+ landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../option_parser.h \
+ landmarks/landmark_status_manager.h landmarks/../state_proxy.h \
+ landmarks/landmark_cost_assignment.h landmarks/../plugin.h \
+ landmarks/../option_parser.h landmarks/landmarks_graph_rpg_sasp.h
+.obj/landmarks/landmark_cost_assignment.1.o: landmarks/landmark_cost_assignment.cc \
+ landmarks/landmark_cost_assignment.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h
+.obj/landmarks/landmark_count_heuristic.1.o: landmarks/landmark_count_heuristic.cc \
+ landmarks/landmark_count_heuristic.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/exploration.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/landmark_status_manager.h \
+ landmarks/../state_proxy.h landmarks/landmark_cost_assignment.h \
+ landmarks/h_m_landmarks.h landmarks/landmarks_graph_rpg_exhaust.h \
+ landmarks/landmarks_graph_rpg_sasp.h \
+ landmarks/landmarks_graph_rpg_search.h \
+ landmarks/landmarks_graph_zhu_givan.h landmarks/../plugin.h \
+ landmarks/../option_parser.h landmarks/../search_engine.h \
+ landmarks/../operator.h landmarks/../search_space.h \
+ landmarks/../state_proxy.h landmarks/../search_node_info.h \
+ landmarks/../search_progress.h landmarks/../timer.h \
+ landmarks/../heuristic.h landmarks/../successor_generator.h \
+ landmarks/../timer.h
+.obj/landmarks/landmark_status_manager.1.o: landmarks/landmark_status_manager.cc \
+ landmarks/landmark_status_manager.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../state_proxy.h
+.obj/landmarks/landmarks_graph_merged.1.o: landmarks/landmarks_graph_merged.cc \
+ landmarks/landmarks_graph_merged.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph.1.o: landmarks/landmarks_graph.cc \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/util.h landmarks/../exact_timer.h \
+ landmarks/../state.h
+.obj/landmarks/landmarks_graph_rpg_exhaust.1.o: landmarks/landmarks_graph_rpg_exhaust.cc \
+ landmarks/landmarks_graph_rpg_exhaust.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../state.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_rpg_sasp.1.o: landmarks/landmarks_graph_rpg_sasp.cc \
+ landmarks/landmarks_graph_rpg_sasp.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h \
+ landmarks/util.h landmarks/../state.h \
+ landmarks/../domain_transition_graph.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_rpg_search.1.o: landmarks/landmarks_graph_rpg_search.cc \
+ landmarks/landmarks_graph_rpg_search.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_zhu_givan.1.o: landmarks/landmarks_graph_zhu_givan.cc \
+ landmarks/landmarks_graph_zhu_givan.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h \
+ landmarks/../state.h landmarks/../plugin.h landmarks/../option_parser.h
+.obj/landmarks/util.1.o: landmarks/util.cc landmarks/util.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h
+.obj/learning/AODE.1.o: learning/AODE.cc learning/AODE.h learning/../globals.h \
+ learning/../operator_cost.h learning/classifier.h learning/../state.h \
+ learning/../state_var_t.h learning/feature_extractor.h
+.obj/learning/classifier.1.o: learning/classifier.cc learning/classifier.h \
+ learning/../state.h learning/../state_var_t.h \
+ learning/feature_extractor.h
+.obj/learning/composite_feature_extractor.1.o: learning/composite_feature_extractor.cc \
+ learning/composite_feature_extractor.h learning/feature_extractor.h \
+ learning/../state.h learning/../state_var_t.h
+.obj/learning/feature_extractor.1.o: learning/feature_extractor.cc \
+ learning/feature_extractor.h learning/state_vars_feature_extractor.h
+.obj/learning/maximum_heuristic.1.o: learning/maximum_heuristic.cc \
+ learning/maximum_heuristic.h learning/../globals.h \
+ learning/../operator_cost.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../state.h learning/../state_var_t.h learning/../search_space.h \
+ learning/../state.h learning/../state_proxy.h learning/../globals.h \
+ learning/../search_node_info.h
+.obj/learning/naive_bayes_classifier.1.o: learning/naive_bayes_classifier.cc \
+ learning/naive_bayes_classifier.h learning/../globals.h \
+ learning/../operator_cost.h learning/classifier.h learning/../state.h \
+ learning/../state_var_t.h learning/feature_extractor.h
+.obj/learning/PDB_state_space_sample.1.o: learning/PDB_state_space_sample.cc \
+ learning/PDB_state_space_sample.h learning/probe_state_space_sample.h \
+ learning/state_space_sample.h learning/../search_space.h \
+ learning/../state.h learning/../state_var_t.h learning/../state_proxy.h \
+ learning/../globals.h learning/../operator_cost.h \
+ learning/../search_node_info.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../exact_timer.h learning/../globals.h
+.obj/learning/probe_state_space_sample.1.o: learning/probe_state_space_sample.cc \
+ learning/probe_state_space_sample.h learning/state_space_sample.h \
+ learning/../search_space.h learning/../state.h learning/../state_var_t.h \
+ learning/../state_proxy.h learning/../globals.h \
+ learning/../operator_cost.h learning/../search_node_info.h \
+ learning/../heuristic.h learning/../scalar_evaluator.h \
+ learning/../evaluator.h learning/../exact_timer.h learning/../globals.h \
+ learning/../successor_generator.h
+.obj/learning/selective_max_heuristic.1.o: learning/selective_max_heuristic.cc \
+ learning/selective_max_heuristic.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../operator_cost.h learning/../globals.h \
+ learning/../search_space.h learning/../state.h learning/../state_var_t.h \
+ learning/../state_proxy.h learning/../globals.h \
+ learning/../search_node_info.h learning/../timer.h learning/classifier.h \
+ learning/../state.h learning/feature_extractor.h \
+ learning/state_space_sample.h learning/../exact_timer.h \
+ learning/../successor_generator.h learning/maximum_heuristic.h \
+ learning/naive_bayes_classifier.h \
+ learning/state_vars_feature_extractor.h \
+ learning/composite_feature_extractor.h learning/AODE.h \
+ learning/probe_state_space_sample.h learning/PDB_state_space_sample.h \
+ learning/../option_parser.h learning/../plugin.h \
+ learning/../option_parser.h
+.obj/learning/state_space_sample.1.o: learning/state_space_sample.cc \
+ learning/state_space_sample.h learning/../search_space.h \
+ learning/../state.h learning/../state_var_t.h learning/../state_proxy.h \
+ learning/../globals.h learning/../operator_cost.h \
+ learning/../search_node_info.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../exact_timer.h
+.obj/learning/state_vars_feature_extractor.1.o: learning/state_vars_feature_extractor.cc \
+ learning/state_vars_feature_extractor.h learning/feature_extractor.h \
+ learning/../globals.h learning/../operator_cost.h learning/../state.h \
+ learning/../state_var_t.h
+.obj/planner.1.debug.o: planner.cc best_first_search.h closed_list.h closed_list.cc \
+ open_lists/open_list.h open_lists/../evaluator.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h \
+ enforced_hill_climbing_search.h g_evaluator.h \
+ general_eager_best_first_search.h general_lazy_best_first_search.h \
+ iterated_search.h option_parser.h pref_evaluator.h sum_evaluator.h \
+ combining_evaluator.h utilities.h weighted_evaluator.h
+.obj/axioms.1.debug.o: axioms.cc axioms.h globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/best_first_search.1.debug.o: best_first_search.cc best_first_search.h \
+ closed_list.h closed_list.cc open_lists/open_list.h \
+ open_lists/../evaluator.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/open_list_buckets.h open_lists/open_list_buckets.cc
+.obj/causal_graph.1.debug.o: causal_graph.cc causal_graph.h globals.h operator_cost.h
+.obj/closed_list.1.debug.o: closed_list.cc
+.obj/combining_evaluator.1.debug.o: combining_evaluator.cc combining_evaluator.h \
+ scalar_evaluator.h evaluator.h
+.obj/domain_transition_graph.1.debug.o: domain_transition_graph.cc \
+ domain_transition_graph.h globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/enforced_hill_climbing_search.1.debug.o: enforced_hill_climbing_search.cc \
+ enforced_hill_climbing_search.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h open_lists/open_list.h \
+ open_lists/../evaluator.h g_evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/tiebreaking_open_list.h open_lists/tiebreaking_open_list.cc \
+ pref_evaluator.h
+.obj/exact_timer.1.debug.o: exact_timer.cc exact_timer.h
+.obj/g_evaluator.1.debug.o: g_evaluator.cc g_evaluator.h scalar_evaluator.h \
+ evaluator.h option_parser.h state_var_t.h
+.obj/general_eager_best_first_search.1.debug.o: general_eager_best_first_search.cc \
+ general_eager_best_first_search.h open_lists/open_list.h \
+ open_lists/../evaluator.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h open_list_parser.h open_list_parser.cc \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/open_list_buckets.h open_lists/open_list_buckets.cc \
+ open_lists/tiebreaking_open_list.h open_lists/tiebreaking_open_list.cc \
+ open_lists/alternation_open_list.h open_lists/alternation_open_list.cc \
+ open_lists/../open_list_parser.h open_lists/pareto_open_list.h \
+ open_lists/pareto_open_list.cc option_parser.h successor_generator.h \
+ g_evaluator.h sum_evaluator.h combining_evaluator.h
+.obj/general_lazy_best_first_search.1.debug.o: general_lazy_best_first_search.cc \
+ general_lazy_best_first_search.h closed_list.h closed_list.cc \
+ open_lists/open_list.h open_lists/../evaluator.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/alternation_open_list.h open_lists/alternation_open_list.cc \
+ open_lists/../open_list_parser.h open_lists/../open_list_parser.cc \
+ open_lists/../open_lists/standard_scalar_open_list.h \
+ open_lists/../open_lists/open_list_buckets.h \
+ open_lists/../open_lists/open_list.h \
+ open_lists/../open_lists/../scalar_evaluator.h \
+ open_lists/../open_lists/open_list_buckets.cc \
+ open_lists/../open_lists/../option_parser.h \
+ open_lists/../open_lists/tiebreaking_open_list.h \
+ open_lists/../open_lists/../evaluator.h \
+ open_lists/../open_lists/tiebreaking_open_list.cc \
+ open_lists/../open_lists/alternation_open_list.h \
+ open_lists/../open_lists/pareto_open_list.h \
+ open_lists/../open_lists/pareto_open_list.cc \
+ open_lists/tiebreaking_open_list.h g_evaluator.h sum_evaluator.h \
+ combining_evaluator.h weighted_evaluator.h
+.obj/globals.1.debug.o: globals.cc globals.h operator_cost.h axioms.h causal_graph.h \
+ domain_transition_graph.h operator.h state.h state_var_t.h \
+ successor_generator.h timer.h heuristic.h scalar_evaluator.h evaluator.h
+.obj/heuristic.1.debug.o: heuristic.cc heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h
+.obj/ipc_max_heuristic.1.debug.o: ipc_max_heuristic.cc ipc_max_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h option_parser.h \
+ state_var_t.h plugin.h
+.obj/iterated_search.1.debug.o: iterated_search.cc iterated_search.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h option_parser.h
+.obj/max_evaluator.1.debug.o: max_evaluator.cc max_evaluator.h combining_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h plugin.h
+.obj/operator.1.debug.o: operator.cc globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/operator_cost.1.debug.o: operator_cost.cc globals.h operator_cost.h operator.h \
+ state.h state_var_t.h
+.obj/option_parser.1.debug.o: option_parser.cc option_parser.h state_var_t.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h
+.obj/plugin.1.debug.o: plugin.cc plugin.h option_parser.h state_var_t.h
+.obj/pref_evaluator.1.debug.o: pref_evaluator.cc pref_evaluator.h scalar_evaluator.h \
+ evaluator.h option_parser.h state_var_t.h
+.obj/relaxation_heuristic.1.debug.o: relaxation_heuristic.cc relaxation_heuristic.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h globals.h \
+ operator.h state.h state_var_t.h
+.obj/search_engine.1.debug.o: search_engine.cc globals.h operator_cost.h \
+ search_engine.h operator.h state.h state_var_t.h search_space.h \
+ state_proxy.h search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h option_parser.h
+.obj/search_node_info.1.debug.o: search_node_info.cc search_node_info.h state.h \
+ state_var_t.h
+.obj/search_progress.1.debug.o: search_progress.cc search_progress.h globals.h \
+ operator_cost.h timer.h heuristic.h scalar_evaluator.h evaluator.h
+.obj/search_space.1.debug.o: search_space.cc search_space.h state.h state_var_t.h \
+ state_proxy.h globals.h operator_cost.h search_node_info.h operator.h
+.obj/state.1.debug.o: state.cc state.h state_var_t.h axioms.h globals.h \
+ operator_cost.h operator.h
+.obj/successor_generator.1.debug.o: successor_generator.cc globals.h operator_cost.h \
+ operator.h state.h state_var_t.h successor_generator.h
+.obj/sum_evaluator.1.debug.o: sum_evaluator.cc sum_evaluator.h combining_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h plugin.h
+.obj/timer.1.debug.o: timer.cc timer.h
+.obj/utilities.1.debug.o: utilities.cc utilities.h
+.obj/weighted_evaluator.1.debug.o: weighted_evaluator.cc weighted_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h
+.obj/open_lists/alternation_open_list.1.debug.o: open_lists/alternation_open_list.cc
+.obj/open_lists/open_list_buckets.1.debug.o: open_lists/open_list_buckets.cc
+.obj/open_lists/pareto_open_list.1.debug.o: open_lists/pareto_open_list.cc
+.obj/open_lists/standard_scalar_open_list.1.debug.o: open_lists/standard_scalar_open_list.cc
+.obj/open_lists/tiebreaking_open_list.1.debug.o: open_lists/tiebreaking_open_list.cc
+.obj/additive_heuristic.1.debug.o: additive_heuristic.cc additive_heuristic.h \
+ priority_queue.h relaxation_heuristic.h heuristic.h scalar_evaluator.h \
+ evaluator.h operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/blind_search_heuristic.1.debug.o: blind_search_heuristic.cc \
+ blind_search_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/cea_heuristic.1.debug.o: cea_heuristic.cc cea_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ domain_transition_graph.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/cg_heuristic.1.debug.o: cg_heuristic.cc cg_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ cg_cache.h domain_transition_graph.h globals.h operator.h state.h \
+ state_var_t.h option_parser.h plugin.h
+.obj/cg_cache.1.debug.o: cg_cache.cc cg_cache.h causal_graph.h globals.h \
+ operator_cost.h state.h state_var_t.h
+.obj/ff_heuristic.1.debug.o: ff_heuristic.cc ff_heuristic.h additive_heuristic.h \
+ priority_queue.h relaxation_heuristic.h heuristic.h scalar_evaluator.h \
+ evaluator.h operator_cost.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/goal_count_heuristic.1.debug.o: goal_count_heuristic.cc goal_count_heuristic.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h globals.h \
+ option_parser.h state_var_t.h plugin.h state.h
+.obj/hm_heuristic.1.debug.o: hm_heuristic.cc hm_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h globals.h state.h \
+ state_var_t.h operator.h option_parser.h plugin.h
+.obj/lm_cut_heuristic.1.debug.o: lm_cut_heuristic.cc lm_cut_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ globals.h operator.h state.h state_var_t.h option_parser.h plugin.h
+.obj/max_heuristic.1.debug.o: max_heuristic.cc max_heuristic.h priority_queue.h \
+ relaxation_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/raz_mas_heuristic.1.debug.o: raz_mas_heuristic.cc raz_mas_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h raz_abstraction.h \
+ globals.h operator.h state.h state_var_t.h option_parser.h plugin.h \
+ timer.h raz_variable_order_finder.h
+.obj/raz_abstraction.1.debug.o: raz_abstraction.cc raz_abstraction.h \
+ raz_mas_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h globals.h operator.h state.h state_var_t.h \
+ raz_operator_registry.h timer.h
+.obj/raz_operator_registry.1.debug.o: raz_operator_registry.cc globals.h \
+ operator_cost.h operator.h state.h state_var_t.h raz_operator_registry.h
+.obj/raz_variable_order_finder.1.debug.o: raz_variable_order_finder.cc \
+ raz_variable_order_finder.h raz_mas_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h causal_graph.h globals.h
+.obj/landmarks/exploration.1.debug.o: landmarks/exploration.cc landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../operator_cost.h \
+ landmarks/../globals.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/../state.h
+.obj/landmarks/h_m_landmarks.1.debug.o: landmarks/h_m_landmarks.cc landmarks/h_m_landmarks.h \
+ landmarks/../globals.h landmarks/../operator_cost.h \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/exploration.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/lama_ff_synergy.1.debug.o: landmarks/lama_ff_synergy.cc \
+ landmarks/lama_ff_synergy.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../operator_cost.h landmarks/exploration.h \
+ landmarks/../globals.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/landmark_count_heuristic.h \
+ landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../option_parser.h \
+ landmarks/landmark_status_manager.h landmarks/../state_proxy.h \
+ landmarks/landmark_cost_assignment.h landmarks/../plugin.h \
+ landmarks/../option_parser.h landmarks/landmarks_graph_rpg_sasp.h
+.obj/landmarks/landmark_cost_assignment.1.debug.o: landmarks/landmark_cost_assignment.cc \
+ landmarks/landmark_cost_assignment.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h
+.obj/landmarks/landmark_count_heuristic.1.debug.o: landmarks/landmark_count_heuristic.cc \
+ landmarks/landmark_count_heuristic.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/exploration.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/landmark_status_manager.h \
+ landmarks/../state_proxy.h landmarks/landmark_cost_assignment.h \
+ landmarks/h_m_landmarks.h landmarks/landmarks_graph_rpg_exhaust.h \
+ landmarks/landmarks_graph_rpg_sasp.h \
+ landmarks/landmarks_graph_rpg_search.h \
+ landmarks/landmarks_graph_zhu_givan.h landmarks/../plugin.h \
+ landmarks/../option_parser.h landmarks/../search_engine.h \
+ landmarks/../operator.h landmarks/../search_space.h \
+ landmarks/../state_proxy.h landmarks/../search_node_info.h \
+ landmarks/../search_progress.h landmarks/../timer.h \
+ landmarks/../heuristic.h landmarks/../successor_generator.h \
+ landmarks/../timer.h
+.obj/landmarks/landmark_status_manager.1.debug.o: landmarks/landmark_status_manager.cc \
+ landmarks/landmark_status_manager.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../state_proxy.h
+.obj/landmarks/landmarks_graph_merged.1.debug.o: landmarks/landmarks_graph_merged.cc \
+ landmarks/landmarks_graph_merged.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph.1.debug.o: landmarks/landmarks_graph.cc \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/util.h landmarks/../exact_timer.h \
+ landmarks/../state.h
+.obj/landmarks/landmarks_graph_rpg_exhaust.1.debug.o: landmarks/landmarks_graph_rpg_exhaust.cc \
+ landmarks/landmarks_graph_rpg_exhaust.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../state.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_rpg_sasp.1.debug.o: landmarks/landmarks_graph_rpg_sasp.cc \
+ landmarks/landmarks_graph_rpg_sasp.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h \
+ landmarks/util.h landmarks/../state.h \
+ landmarks/../domain_transition_graph.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_rpg_search.1.debug.o: landmarks/landmarks_graph_rpg_search.cc \
+ landmarks/landmarks_graph_rpg_search.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_zhu_givan.1.debug.o: landmarks/landmarks_graph_zhu_givan.cc \
+ landmarks/landmarks_graph_zhu_givan.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h \
+ landmarks/../state.h landmarks/../plugin.h landmarks/../option_parser.h
+.obj/landmarks/util.1.debug.o: landmarks/util.cc landmarks/util.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h
+.obj/learning/AODE.1.debug.o: learning/AODE.cc learning/AODE.h learning/../globals.h \
+ learning/../operator_cost.h learning/classifier.h learning/../state.h \
+ learning/../state_var_t.h learning/feature_extractor.h
+.obj/learning/classifier.1.debug.o: learning/classifier.cc learning/classifier.h \
+ learning/../state.h learning/../state_var_t.h \
+ learning/feature_extractor.h
+.obj/learning/composite_feature_extractor.1.debug.o: learning/composite_feature_extractor.cc \
+ learning/composite_feature_extractor.h learning/feature_extractor.h \
+ learning/../state.h learning/../state_var_t.h
+.obj/learning/feature_extractor.1.debug.o: learning/feature_extractor.cc \
+ learning/feature_extractor.h learning/state_vars_feature_extractor.h
+.obj/learning/maximum_heuristic.1.debug.o: learning/maximum_heuristic.cc \
+ learning/maximum_heuristic.h learning/../globals.h \
+ learning/../operator_cost.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../state.h learning/../state_var_t.h learning/../search_space.h \
+ learning/../state.h learning/../state_proxy.h learning/../globals.h \
+ learning/../search_node_info.h
+.obj/learning/naive_bayes_classifier.1.debug.o: learning/naive_bayes_classifier.cc \
+ learning/naive_bayes_classifier.h learning/../globals.h \
+ learning/../operator_cost.h learning/classifier.h learning/../state.h \
+ learning/../state_var_t.h learning/feature_extractor.h
+.obj/learning/PDB_state_space_sample.1.debug.o: learning/PDB_state_space_sample.cc \
+ learning/PDB_state_space_sample.h learning/probe_state_space_sample.h \
+ learning/state_space_sample.h learning/../search_space.h \
+ learning/../state.h learning/../state_var_t.h learning/../state_proxy.h \
+ learning/../globals.h learning/../operator_cost.h \
+ learning/../search_node_info.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../exact_timer.h learning/../globals.h
+.obj/learning/probe_state_space_sample.1.debug.o: learning/probe_state_space_sample.cc \
+ learning/probe_state_space_sample.h learning/state_space_sample.h \
+ learning/../search_space.h learning/../state.h learning/../state_var_t.h \
+ learning/../state_proxy.h learning/../globals.h \
+ learning/../operator_cost.h learning/../search_node_info.h \
+ learning/../heuristic.h learning/../scalar_evaluator.h \
+ learning/../evaluator.h learning/../exact_timer.h learning/../globals.h \
+ learning/../successor_generator.h
+.obj/learning/selective_max_heuristic.1.debug.o: learning/selective_max_heuristic.cc \
+ learning/selective_max_heuristic.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../operator_cost.h learning/../globals.h \
+ learning/../search_space.h learning/../state.h learning/../state_var_t.h \
+ learning/../state_proxy.h learning/../globals.h \
+ learning/../search_node_info.h learning/../timer.h learning/classifier.h \
+ learning/../state.h learning/feature_extractor.h \
+ learning/state_space_sample.h learning/../exact_timer.h \
+ learning/../successor_generator.h learning/maximum_heuristic.h \
+ learning/naive_bayes_classifier.h \
+ learning/state_vars_feature_extractor.h \
+ learning/composite_feature_extractor.h learning/AODE.h \
+ learning/probe_state_space_sample.h learning/PDB_state_space_sample.h \
+ learning/../option_parser.h learning/../plugin.h \
+ learning/../option_parser.h
+.obj/learning/state_space_sample.1.debug.o: learning/state_space_sample.cc \
+ learning/state_space_sample.h learning/../search_space.h \
+ learning/../state.h learning/../state_var_t.h learning/../state_proxy.h \
+ learning/../globals.h learning/../operator_cost.h \
+ learning/../search_node_info.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../exact_timer.h
+.obj/learning/state_vars_feature_extractor.1.debug.o: learning/state_vars_feature_extractor.cc \
+ learning/state_vars_feature_extractor.h learning/feature_extractor.h \
+ learning/../globals.h learning/../operator_cost.h learning/../state.h \
+ learning/../state_var_t.h
+.obj/planner.1.profile.o: planner.cc best_first_search.h closed_list.h closed_list.cc \
+ open_lists/open_list.h open_lists/../evaluator.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h \
+ enforced_hill_climbing_search.h g_evaluator.h \
+ general_eager_best_first_search.h general_lazy_best_first_search.h \
+ iterated_search.h option_parser.h pref_evaluator.h sum_evaluator.h \
+ combining_evaluator.h utilities.h weighted_evaluator.h
+.obj/axioms.1.profile.o: axioms.cc axioms.h globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/best_first_search.1.profile.o: best_first_search.cc best_first_search.h \
+ closed_list.h closed_list.cc open_lists/open_list.h \
+ open_lists/../evaluator.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/open_list_buckets.h open_lists/open_list_buckets.cc
+.obj/causal_graph.1.profile.o: causal_graph.cc causal_graph.h globals.h operator_cost.h
+.obj/closed_list.1.profile.o: closed_list.cc
+.obj/combining_evaluator.1.profile.o: combining_evaluator.cc combining_evaluator.h \
+ scalar_evaluator.h evaluator.h
+.obj/domain_transition_graph.1.profile.o: domain_transition_graph.cc \
+ domain_transition_graph.h globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/enforced_hill_climbing_search.1.profile.o: enforced_hill_climbing_search.cc \
+ enforced_hill_climbing_search.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h open_lists/open_list.h \
+ open_lists/../evaluator.h g_evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/tiebreaking_open_list.h open_lists/tiebreaking_open_list.cc \
+ pref_evaluator.h
+.obj/exact_timer.1.profile.o: exact_timer.cc exact_timer.h
+.obj/g_evaluator.1.profile.o: g_evaluator.cc g_evaluator.h scalar_evaluator.h \
+ evaluator.h option_parser.h state_var_t.h
+.obj/general_eager_best_first_search.1.profile.o: general_eager_best_first_search.cc \
+ general_eager_best_first_search.h open_lists/open_list.h \
+ open_lists/../evaluator.h search_engine.h operator.h globals.h \
+ operator_cost.h state.h state_var_t.h search_space.h state_proxy.h \
+ search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h open_list_parser.h open_list_parser.cc \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/open_list_buckets.h open_lists/open_list_buckets.cc \
+ open_lists/tiebreaking_open_list.h open_lists/tiebreaking_open_list.cc \
+ open_lists/alternation_open_list.h open_lists/alternation_open_list.cc \
+ open_lists/../open_list_parser.h open_lists/pareto_open_list.h \
+ open_lists/pareto_open_list.cc option_parser.h successor_generator.h \
+ g_evaluator.h sum_evaluator.h combining_evaluator.h
+.obj/general_lazy_best_first_search.1.profile.o: general_lazy_best_first_search.cc \
+ general_lazy_best_first_search.h closed_list.h closed_list.cc \
+ open_lists/open_list.h open_lists/../evaluator.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h successor_generator.h \
+ open_lists/standard_scalar_open_list.h open_lists/open_list.h \
+ open_lists/standard_scalar_open_list.cc open_lists/../scalar_evaluator.h \
+ open_lists/../option_parser.h open_lists/../state_var_t.h \
+ open_lists/alternation_open_list.h open_lists/alternation_open_list.cc \
+ open_lists/../open_list_parser.h open_lists/../open_list_parser.cc \
+ open_lists/../open_lists/standard_scalar_open_list.h \
+ open_lists/../open_lists/open_list_buckets.h \
+ open_lists/../open_lists/open_list.h \
+ open_lists/../open_lists/../scalar_evaluator.h \
+ open_lists/../open_lists/open_list_buckets.cc \
+ open_lists/../open_lists/../option_parser.h \
+ open_lists/../open_lists/tiebreaking_open_list.h \
+ open_lists/../open_lists/../evaluator.h \
+ open_lists/../open_lists/tiebreaking_open_list.cc \
+ open_lists/../open_lists/alternation_open_list.h \
+ open_lists/../open_lists/pareto_open_list.h \
+ open_lists/../open_lists/pareto_open_list.cc \
+ open_lists/tiebreaking_open_list.h g_evaluator.h sum_evaluator.h \
+ combining_evaluator.h weighted_evaluator.h
+.obj/globals.1.profile.o: globals.cc globals.h operator_cost.h axioms.h causal_graph.h \
+ domain_transition_graph.h operator.h state.h state_var_t.h \
+ successor_generator.h timer.h heuristic.h scalar_evaluator.h evaluator.h
+.obj/heuristic.1.profile.o: heuristic.cc heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h
+.obj/ipc_max_heuristic.1.profile.o: ipc_max_heuristic.cc ipc_max_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h option_parser.h \
+ state_var_t.h plugin.h
+.obj/iterated_search.1.profile.o: iterated_search.cc iterated_search.h search_engine.h \
+ operator.h globals.h operator_cost.h state.h state_var_t.h \
+ search_space.h state_proxy.h search_node_info.h search_progress.h \
+ timer.h heuristic.h scalar_evaluator.h evaluator.h option_parser.h
+.obj/max_evaluator.1.profile.o: max_evaluator.cc max_evaluator.h combining_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h plugin.h
+.obj/operator.1.profile.o: operator.cc globals.h operator_cost.h operator.h state.h \
+ state_var_t.h
+.obj/operator_cost.1.profile.o: operator_cost.cc globals.h operator_cost.h operator.h \
+ state.h state_var_t.h
+.obj/option_parser.1.profile.o: option_parser.cc option_parser.h state_var_t.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h
+.obj/plugin.1.profile.o: plugin.cc plugin.h option_parser.h state_var_t.h
+.obj/pref_evaluator.1.profile.o: pref_evaluator.cc pref_evaluator.h scalar_evaluator.h \
+ evaluator.h option_parser.h state_var_t.h
+.obj/relaxation_heuristic.1.profile.o: relaxation_heuristic.cc relaxation_heuristic.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h globals.h \
+ operator.h state.h state_var_t.h
+.obj/search_engine.1.profile.o: search_engine.cc globals.h operator_cost.h \
+ search_engine.h operator.h state.h state_var_t.h search_space.h \
+ state_proxy.h search_node_info.h search_progress.h timer.h heuristic.h \
+ scalar_evaluator.h evaluator.h option_parser.h
+.obj/search_node_info.1.profile.o: search_node_info.cc search_node_info.h state.h \
+ state_var_t.h
+.obj/search_progress.1.profile.o: search_progress.cc search_progress.h globals.h \
+ operator_cost.h timer.h heuristic.h scalar_evaluator.h evaluator.h
+.obj/search_space.1.profile.o: search_space.cc search_space.h state.h state_var_t.h \
+ state_proxy.h globals.h operator_cost.h search_node_info.h operator.h
+.obj/state.1.profile.o: state.cc state.h state_var_t.h axioms.h globals.h \
+ operator_cost.h operator.h
+.obj/successor_generator.1.profile.o: successor_generator.cc globals.h operator_cost.h \
+ operator.h state.h state_var_t.h successor_generator.h
+.obj/sum_evaluator.1.profile.o: sum_evaluator.cc sum_evaluator.h combining_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h plugin.h
+.obj/timer.1.profile.o: timer.cc timer.h
+.obj/utilities.1.profile.o: utilities.cc utilities.h
+.obj/weighted_evaluator.1.profile.o: weighted_evaluator.cc weighted_evaluator.h \
+ scalar_evaluator.h evaluator.h option_parser.h state_var_t.h
+.obj/open_lists/alternation_open_list.1.profile.o: open_lists/alternation_open_list.cc
+.obj/open_lists/open_list_buckets.1.profile.o: open_lists/open_list_buckets.cc
+.obj/open_lists/pareto_open_list.1.profile.o: open_lists/pareto_open_list.cc
+.obj/open_lists/standard_scalar_open_list.1.profile.o: open_lists/standard_scalar_open_list.cc
+.obj/open_lists/tiebreaking_open_list.1.profile.o: open_lists/tiebreaking_open_list.cc
+.obj/additive_heuristic.1.profile.o: additive_heuristic.cc additive_heuristic.h \
+ priority_queue.h relaxation_heuristic.h heuristic.h scalar_evaluator.h \
+ evaluator.h operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/blind_search_heuristic.1.profile.o: blind_search_heuristic.cc \
+ blind_search_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/cea_heuristic.1.profile.o: cea_heuristic.cc cea_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ domain_transition_graph.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/cg_heuristic.1.profile.o: cg_heuristic.cc cg_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ cg_cache.h domain_transition_graph.h globals.h operator.h state.h \
+ state_var_t.h option_parser.h plugin.h
+.obj/cg_cache.1.profile.o: cg_cache.cc cg_cache.h causal_graph.h globals.h \
+ operator_cost.h state.h state_var_t.h
+.obj/ff_heuristic.1.profile.o: ff_heuristic.cc ff_heuristic.h additive_heuristic.h \
+ priority_queue.h relaxation_heuristic.h heuristic.h scalar_evaluator.h \
+ evaluator.h operator_cost.h globals.h operator.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/goal_count_heuristic.1.profile.o: goal_count_heuristic.cc goal_count_heuristic.h \
+ heuristic.h scalar_evaluator.h evaluator.h operator_cost.h globals.h \
+ option_parser.h state_var_t.h plugin.h state.h
+.obj/hm_heuristic.1.profile.o: hm_heuristic.cc hm_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h globals.h state.h \
+ state_var_t.h operator.h option_parser.h plugin.h
+.obj/lm_cut_heuristic.1.profile.o: lm_cut_heuristic.cc lm_cut_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h priority_queue.h \
+ globals.h operator.h state.h state_var_t.h option_parser.h plugin.h
+.obj/max_heuristic.1.profile.o: max_heuristic.cc max_heuristic.h priority_queue.h \
+ relaxation_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h operator.h globals.h state.h state_var_t.h \
+ option_parser.h plugin.h
+.obj/raz_mas_heuristic.1.profile.o: raz_mas_heuristic.cc raz_mas_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h raz_abstraction.h \
+ globals.h operator.h state.h state_var_t.h option_parser.h plugin.h \
+ timer.h raz_variable_order_finder.h
+.obj/raz_abstraction.1.profile.o: raz_abstraction.cc raz_abstraction.h \
+ raz_mas_heuristic.h heuristic.h scalar_evaluator.h evaluator.h \
+ operator_cost.h globals.h operator.h state.h state_var_t.h \
+ raz_operator_registry.h timer.h
+.obj/raz_operator_registry.1.profile.o: raz_operator_registry.cc globals.h \
+ operator_cost.h operator.h state.h state_var_t.h raz_operator_registry.h
+.obj/raz_variable_order_finder.1.profile.o: raz_variable_order_finder.cc \
+ raz_variable_order_finder.h raz_mas_heuristic.h heuristic.h \
+ scalar_evaluator.h evaluator.h operator_cost.h causal_graph.h globals.h
+.obj/landmarks/exploration.1.profile.o: landmarks/exploration.cc landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../operator_cost.h \
+ landmarks/../globals.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/../state.h
+.obj/landmarks/h_m_landmarks.1.profile.o: landmarks/h_m_landmarks.cc landmarks/h_m_landmarks.h \
+ landmarks/../globals.h landmarks/../operator_cost.h \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/exploration.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/lama_ff_synergy.1.profile.o: landmarks/lama_ff_synergy.cc \
+ landmarks/lama_ff_synergy.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../operator_cost.h landmarks/exploration.h \
+ landmarks/../globals.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/landmark_count_heuristic.h \
+ landmarks/../state.h landmarks/../state_var_t.h \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../state.h landmarks/../option_parser.h \
+ landmarks/landmark_status_manager.h landmarks/../state_proxy.h \
+ landmarks/landmark_cost_assignment.h landmarks/../plugin.h \
+ landmarks/../option_parser.h landmarks/landmarks_graph_rpg_sasp.h
+.obj/landmarks/landmark_cost_assignment.1.profile.o: landmarks/landmark_cost_assignment.cc \
+ landmarks/landmark_cost_assignment.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h
+.obj/landmarks/landmark_count_heuristic.1.profile.o: landmarks/landmark_count_heuristic.cc \
+ landmarks/landmark_count_heuristic.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/../heuristic.h \
+ landmarks/../scalar_evaluator.h landmarks/../evaluator.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/exploration.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/landmark_status_manager.h \
+ landmarks/../state_proxy.h landmarks/landmark_cost_assignment.h \
+ landmarks/h_m_landmarks.h landmarks/landmarks_graph_rpg_exhaust.h \
+ landmarks/landmarks_graph_rpg_sasp.h \
+ landmarks/landmarks_graph_rpg_search.h \
+ landmarks/landmarks_graph_zhu_givan.h landmarks/../plugin.h \
+ landmarks/../option_parser.h landmarks/../search_engine.h \
+ landmarks/../operator.h landmarks/../search_space.h \
+ landmarks/../state_proxy.h landmarks/../search_node_info.h \
+ landmarks/../search_progress.h landmarks/../timer.h \
+ landmarks/../heuristic.h landmarks/../successor_generator.h \
+ landmarks/../timer.h
+.obj/landmarks/landmark_status_manager.1.profile.o: landmarks/landmark_status_manager.cc \
+ landmarks/landmark_status_manager.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../state_proxy.h
+.obj/landmarks/landmarks_graph_merged.1.profile.o: landmarks/landmarks_graph_merged.cc \
+ landmarks/landmarks_graph_merged.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph.1.profile.o: landmarks/landmarks_graph.cc \
+ landmarks/landmarks_graph.h landmarks/../operator.h \
+ landmarks/../globals.h landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/util.h landmarks/../exact_timer.h \
+ landmarks/../state.h
+.obj/landmarks/landmarks_graph_rpg_exhaust.1.profile.o: landmarks/landmarks_graph_rpg_exhaust.cc \
+ landmarks/landmarks_graph_rpg_exhaust.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../state.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_rpg_sasp.1.profile.o: landmarks/landmarks_graph_rpg_sasp.cc \
+ landmarks/landmarks_graph_rpg_sasp.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h \
+ landmarks/util.h landmarks/../state.h \
+ landmarks/../domain_transition_graph.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_rpg_search.1.profile.o: landmarks/landmarks_graph_rpg_search.cc \
+ landmarks/landmarks_graph_rpg_search.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h landmarks/../plugin.h \
+ landmarks/../option_parser.h
+.obj/landmarks/landmarks_graph_zhu_givan.1.profile.o: landmarks/landmarks_graph_zhu_givan.cc \
+ landmarks/landmarks_graph_zhu_givan.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../priority_queue.h \
+ landmarks/landmarks_types.h landmarks/../option_parser.h \
+ landmarks/../state.h landmarks/../plugin.h landmarks/../option_parser.h
+.obj/landmarks/util.1.profile.o: landmarks/util.cc landmarks/util.h landmarks/landmarks_graph.h \
+ landmarks/../operator.h landmarks/../globals.h \
+ landmarks/../operator_cost.h landmarks/../state.h \
+ landmarks/../state_var_t.h landmarks/exploration.h \
+ landmarks/../heuristic.h landmarks/../scalar_evaluator.h \
+ landmarks/../evaluator.h landmarks/../globals.h \
+ landmarks/../priority_queue.h landmarks/landmarks_types.h \
+ landmarks/../option_parser.h
+.obj/learning/AODE.1.profile.o: learning/AODE.cc learning/AODE.h learning/../globals.h \
+ learning/../operator_cost.h learning/classifier.h learning/../state.h \
+ learning/../state_var_t.h learning/feature_extractor.h
+.obj/learning/classifier.1.profile.o: learning/classifier.cc learning/classifier.h \
+ learning/../state.h learning/../state_var_t.h \
+ learning/feature_extractor.h
+.obj/learning/composite_feature_extractor.1.profile.o: learning/composite_feature_extractor.cc \
+ learning/composite_feature_extractor.h learning/feature_extractor.h \
+ learning/../state.h learning/../state_var_t.h
+.obj/learning/feature_extractor.1.profile.o: learning/feature_extractor.cc \
+ learning/feature_extractor.h learning/state_vars_feature_extractor.h
+.obj/learning/maximum_heuristic.1.profile.o: learning/maximum_heuristic.cc \
+ learning/maximum_heuristic.h learning/../globals.h \
+ learning/../operator_cost.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../state.h learning/../state_var_t.h learning/../search_space.h \
+ learning/../state.h learning/../state_proxy.h learning/../globals.h \
+ learning/../search_node_info.h
+.obj/learning/naive_bayes_classifier.1.profile.o: learning/naive_bayes_classifier.cc \
+ learning/naive_bayes_classifier.h learning/../globals.h \
+ learning/../operator_cost.h learning/classifier.h learning/../state.h \
+ learning/../state_var_t.h learning/feature_extractor.h
+.obj/learning/PDB_state_space_sample.1.profile.o: learning/PDB_state_space_sample.cc \
+ learning/PDB_state_space_sample.h learning/probe_state_space_sample.h \
+ learning/state_space_sample.h learning/../search_space.h \
+ learning/../state.h learning/../state_var_t.h learning/../state_proxy.h \
+ learning/../globals.h learning/../operator_cost.h \
+ learning/../search_node_info.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../exact_timer.h learning/../globals.h
+.obj/learning/probe_state_space_sample.1.profile.o: learning/probe_state_space_sample.cc \
+ learning/probe_state_space_sample.h learning/state_space_sample.h \
+ learning/../search_space.h learning/../state.h learning/../state_var_t.h \
+ learning/../state_proxy.h learning/../globals.h \
+ learning/../operator_cost.h learning/../search_node_info.h \
+ learning/../heuristic.h learning/../scalar_evaluator.h \
+ learning/../evaluator.h learning/../exact_timer.h learning/../globals.h \
+ learning/../successor_generator.h
+.obj/learning/selective_max_heuristic.1.profile.o: learning/selective_max_heuristic.cc \
+ learning/selective_max_heuristic.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../operator_cost.h learning/../globals.h \
+ learning/../search_space.h learning/../state.h learning/../state_var_t.h \
+ learning/../state_proxy.h learning/../globals.h \
+ learning/../search_node_info.h learning/../timer.h learning/classifier.h \
+ learning/../state.h learning/feature_extractor.h \
+ learning/state_space_sample.h learning/../exact_timer.h \
+ learning/../successor_generator.h learning/maximum_heuristic.h \
+ learning/naive_bayes_classifier.h \
+ learning/state_vars_feature_extractor.h \
+ learning/composite_feature_extractor.h learning/AODE.h \
+ learning/probe_state_space_sample.h learning/PDB_state_space_sample.h \
+ learning/../option_parser.h learning/../plugin.h \
+ learning/../option_parser.h
+.obj/learning/state_space_sample.1.profile.o: learning/state_space_sample.cc \
+ learning/state_space_sample.h learning/../search_space.h \
+ learning/../state.h learning/../state_var_t.h learning/../state_proxy.h \
+ learning/../globals.h learning/../operator_cost.h \
+ learning/../search_node_info.h learning/../heuristic.h \
+ learning/../scalar_evaluator.h learning/../evaluator.h \
+ learning/../exact_timer.h
+.obj/learning/state_vars_feature_extractor.1.profile.o: learning/state_vars_feature_extractor.cc \
+ learning/state_vars_feature_extractor.h learning/feature_extractor.h \
+ learning/../globals.h learning/../operator_cost.h learning/../state.h \
+ learning/../state_var_t.h

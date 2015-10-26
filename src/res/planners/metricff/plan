@@ -1,0 +1,35 @@
+#!/usr/bin/perl -w
+
+if (scalar(@ARGV) != 3) {
+	print "Usage: plan domain.pddl problem.pddl solutionfilename\n";
+	exit(1);
+}
+
+$dom = shift @ARGV;
+$pfile = shift @ARGV;
+$soln = shift @ARGV;
+
+use File::Basename;
+my $dirname = dirname(__FILE__);
+
+open IN, "$dirname/ff -o '$dom' -f '$pfile' |";
+
+while (<IN>) {
+	print;
+	if (m/found legal plan/) {
+		open OUT, "> $soln.0";
+		while (<IN>) {
+			print;
+			if (m/:/) {
+				print OUT;
+			} else {
+				close OUT;
+				last;
+			}
+		}
+	}
+}
+
+
+close IN;
+

@@ -12,11 +12,14 @@ public class Server {
 
     // lists of all possible nodes, domains and planners in system
     private ArrayList<Node> nodeList;
-    private ArrayList<Domain> domainList;
+    private ArrayList<XmlDomain> domainList;
     private ArrayList<Planner> plannerList;
 
     // process builder to run OS jobs
     ProcessBuilder pBuilder;
+
+    // Xml file parser
+    XmlParser xmlParser = new XmlParser();
 
     public Server() {
 
@@ -138,7 +141,6 @@ public class Server {
                     nodeList = new ArrayList<>();
                     while ((currentLine = br.readLine()) != null) {
                         nodeList.add(new Node(currentLine.replaceAll("\\s", "")));
-                        System.out.println(currentLine);
                     }
                     break;
 
@@ -146,8 +148,7 @@ public class Server {
                 case Settings.DOMAIN_LIST_PATH:
                     domainList = new ArrayList<>();
                     while ((currentLine = br.readLine()) != null) {
-                        //domainList.add(new Domain(currentLine.replaceAll("\\s", "")));
-                        System.out.println(currentLine);
+                        domainList.add(xmlParser.getDomain(currentLine.replaceAll("\\s", "")));
                     }
                     break;
 
@@ -156,7 +157,6 @@ public class Server {
                     plannerList = new ArrayList<>();
                     while ((currentLine = br.readLine()) != null) {
                         plannerList.add(new Planner(currentLine.replaceAll("\\s", "")));
-                        System.out.println(currentLine);
                     }
                     break;
             }
