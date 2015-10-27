@@ -7,12 +7,14 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Server {
 
     // lists of all possible nodes, domains and planners in system
     private ArrayList<Node> nodeList;
-    private ArrayList<XmlDomain> domainList;
+    private ArrayList<Domain> domainList;
     private ArrayList<Planner> plannerList;
 
     // process builder to run OS jobs

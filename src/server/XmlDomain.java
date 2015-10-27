@@ -13,14 +13,14 @@ import java.util.Date;
 @XmlRootElement(name="metadata")
 public class XmlDomain {
 
-    private Domain domain;
+    private XmlDomain.Domain domain;
 
-    public Domain getDomain() {
+    public XmlDomain.Domain getDomain() {
         return domain;
     }
 
     @XmlElement
-    public void setDomain(Domain domain) {
+    public void setDomain(XmlDomain.Domain domain) {
         this.domain = domain;
     }
 
