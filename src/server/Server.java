@@ -7,8 +7,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 
 public class Server {
 
@@ -18,17 +16,19 @@ public class Server {
     private ArrayList<Planner> plannerList;
 
     // process builder to run OS jobs
-    ProcessBuilder pBuilder;
+    private ProcessBuilder pBuilder;
 
     // Xml file parser
-    XmlParser xmlParser = new XmlParser();
+    private XmlParser xmlParser = new XmlParser();
 
     public Server() {
 
         // import text files into lists of objects
         importList(Settings.NODE_LIST_PATH);
-        importList(Settings.DOMAIN_LIST_PATH);
         importList(Settings.PLANNER_LIST_PATH);
+
+        // import all domains in the domain directory
+        domainList = xmlParser.getDomainList();
 
         // start the server
         startServer();
@@ -143,14 +143,6 @@ public class Server {
                     nodeList = new ArrayList<>();
                     while ((currentLine = br.readLine()) != null) {
                         nodeList.add(new Node(currentLine.replaceAll("\\s", "")));
-                    }
-                    break;
-
-                // if importing the domain list
-                case Settings.DOMAIN_LIST_PATH:
-                    domainList = new ArrayList<>();
-                    while ((currentLine = br.readLine()) != null) {
-                        domainList.add(xmlParser.getDomain(currentLine.replaceAll("\\s", "")));
                     }
                     break;
 

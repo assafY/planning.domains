@@ -1,35 +1,35 @@
 package server;
 
-import java.util.HashMap;
+import java.io.File;
 
 /**
- * Wrapper class containing a list of one or more
- * formulations of a single domain.
+ * Wrapper class containing an XmlDomain and its directory
  */
 
 public class Domain {
 
-    private String name;
-    private HashMap<String,XmlDomain> domainMap;
+    private File domainDir;
+    private XmlDomain domain;
 
-    public Domain(String name) {
-        this.name = name;
-        domainMap = new HashMap<>();
+    public Domain(File domainDir, XmlDomain domain) {
+        this.domainDir = domainDir;
+        this.domain = domain;
     }
 
-    public void addDomain(String name, XmlDomain domain) {
-        domainMap.put(name, domain);
+    public File getFile() {
+        return domainDir;
     }
 
-    public HashMap<String, XmlDomain> getDomainList() {
-        return domainMap;
+    public String getPath() {
+        return domainDir.getPath();
     }
 
-    public String getName() {
-        return name;
+    public XmlDomain getDomain() {
+        return domain;
     }
 
-    public int getSize() {
-        return domainMap.size();
+    @Override
+    public String toString() {
+        return domain.getDomain().getTitle();
     }
 }

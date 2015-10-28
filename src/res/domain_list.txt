@@ -1,7 +1,0 @@
-depots
-driverlog
-rovers
-satellite
-settlers
-umt2
-zenotravel
