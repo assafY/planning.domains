@@ -5,15 +5,14 @@ import java.io.File;
 /**
  * Wrapper class containing an XmlDomain and its directory
  */
-
 public class Domain {
 
     private File domainDir;
-    private XmlDomain domain;
+    private XmlDomain xmlDomain;
 
     public Domain(File domainDir, XmlDomain domain) {
         this.domainDir = domainDir;
-        this.domain = domain;
+        this.xmlDomain = domain;
     }
 
     public File getFile() {
@@ -24,12 +23,12 @@ public class Domain {
         return domainDir.getPath();
     }
 
-    public XmlDomain getDomain() {
-        return domain;
+    public XmlDomain getXmlDomain() {
+        return xmlDomain;
     }
 
     @Override
     public String toString() {
-        return domain.getDomain().getTitle();
+        return xmlDomain.getDomain().getTitle();
     }
 }

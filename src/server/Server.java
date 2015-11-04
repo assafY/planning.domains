@@ -31,10 +31,15 @@ public class Server {
         domainList = xmlParser.getDomainList();
 
         // start the server
-        startServer();
+        //startServer();
 
         // start all nodes
-        startNodes();
+        //startNodes();
+
+        String newpath = domainList.get(2).getPath();
+        XmlDomain.Domain.Problems.Problem prob = domainList.get(2).getXmlDomain().getDomain().getProblems().getProblem().get(0);
+        Planner plan = plannerList.get(1);
+
     }
 
     // start server and constantly listen for client connections
@@ -231,6 +236,10 @@ public class Server {
                         node = null;
                         sendMessage(new Message(3)); // notify the client to end
                     }
+                    break;
+
+                case Message.PLAN_RESULT:
+                    System.out.println(msg.getMessage());
                     break;
             }
         }

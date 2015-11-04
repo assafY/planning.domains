@@ -1,19 +1,19 @@
-
 package server;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Class for every planning domain that exists in the system.
  * Domain objects are created from xml metadata files.
  */
-
-@XmlRootElement(name="metadata")
+@XmlRootElement(name="metadata", namespace="http://planning.domains/")
 public class XmlDomain {
 
     private XmlDomain.Domain domain;
+    private HashMap<Planner, Result> resultMap = new HashMap<>();
 
     public XmlDomain.Domain getDomain() {
         return domain;
@@ -239,12 +239,17 @@ public class XmlDomain {
 
             /**
              * This class handles the attributes in every problem element.
+             * Each problem contains a map containing pairs of planners which
+             * were ran on it and its result.
              */
             public static class Problem {
 
                 private String domainFile;
                 private int number;
                 private String problemFile;
+
+                // a map for results of running different planners on this problem
+                private HashMap<Planner, Double> resultMap = new HashMap<>();
 
                 public String getDomain_file() {
                     return domainFile;
@@ -271,6 +276,18 @@ public class XmlDomain {
                 @XmlAttribute(name = "problem_file")
                 public void setProblem_file(String problemFile) {
                     this.problemFile = problemFile;
+                }
+
+                public void addResult(Planner planner, double result) {
+                    resultMap.put(planner, result);
+                }
+
+                public double getResult(Planner planner) {
+                    return resultMap.get(planner);
+                }
+
+                public HashMap<Planner, Double> getResultMap() {
+                    return resultMap;
                 }
 
                 @Override

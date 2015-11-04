@@ -1,6 +1,10 @@
 package client;
 
 import global.*;
+import server.Domain;
+import server.Planner;
+import server.XmlDomain;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.InetAddress;
@@ -17,6 +21,8 @@ public class Client {
     private ObjectOutputStream outputStream;
 
     private String clientName;
+
+    private ProcessBuilder pBuilder;
 
     /**
      * Opens a socket to the server, and gets object input and output streams. Starts
@@ -54,9 +60,43 @@ public class Client {
         }
     }
 
-    private void runPlannerProcess(String plannerDomainNames) {
-        String[] pdn = plannerDomainNames.split(";");
-        
+    private void runPlannerProcess(String domainPath, XmlDomain.Domain.Problems.Problem problem, Planner planner) {
+
+        domainPath += "/";
+
+        String[] arguments = {"./plan", domainPath + problem.getDomain_file(),
+                domainPath + problem.getProblem_file(), "result"};
+
+        pBuilder = new ProcessBuilder(arguments);
+        Process process;
+
+        try {
+            process = pBuilder.start();
+
+            // print the result, later this must record the result
+            System.out.println(processOutput(process.getInputStream()));
+
+        } catch (IOException e) {
+            //TODO: handle exception
+            System.err.println("error starting planner");
+            e.printStackTrace();
+        }
+    }
+
+    private String processOutput(InputStream is) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(is));
+            String currentLine = null;
+            while ((currentLine = reader.readLine()) != null) {
+                stringBuilder.append(currentLine + System.getProperty("line.separator"));
+            }
+        } finally {
+            reader.close();
+        }
+
+        return stringBuilder.toString();
     }
 
     /**
@@ -75,7 +115,9 @@ public class Client {
      */
     public void onReceiveMessage(Message msg) {
         switch (msg.getType()) {
-            case Message.DUPLICATE_THREAD: // if a thread is already running for this client
+
+            // if a thread is already running for this client
+            case Message.DUPLICATE_THREAD:
                 try {
                     close();
                 } catch (IOException e) {
@@ -84,8 +126,9 @@ public class Client {
                 System.out.println("There is already a running thread for this client");
                 System.exit(0);
 
+            // if requested to run a planner on a domain
             case Message.RUN_PLANNER:
-                runPlannerProcess(msg.getMessage());
+                runPlannerProcess(msg.getMessage(), msg.getProblem(), msg.getPlanner());
                 break;
         }
     }
