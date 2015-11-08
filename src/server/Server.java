@@ -292,7 +292,7 @@ public class Server {
 
                 case Message.JOB_INTERRUPTED:
                     if (currentJob != null) {
-                        jobQueue.put(new Job(currentJob, 2);
+                        jobQueue.put(new Job(currentJob, 2));
                         currentJob = null;
                     }
                     break;
@@ -347,7 +347,7 @@ public class Server {
                 if (currentJob != null) {
                     jobQueue.put(new Job(currentJob, 2));
                 }
-                
+
                 node.removeClientThread();
                 System.out.println(node.getName() + " disconnected.");
                 node = null;
