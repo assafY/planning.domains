@@ -1,7 +1,7 @@
 package client;
 
 import global.*;
-import server.Domain;
+import server.Job;
 import server.Planner;
 import server.XmlDomain;
 
@@ -60,12 +60,22 @@ public class Client {
         }
     }
 
-    private void runPlannerProcess(String domainPath, XmlDomain.Domain.Problems.Problem problem, Planner planner) {
+    private void runPlannerProcess(Job job) {
 
-        domainPath += "/";
+        String domainPath = job.getDomain().getPath() + "/";
+        String domainId = job.getDomain().getXmlDomain().getDomain().getId().replaceAll("/", "-");
+        String plannerPath = job.getPlanner().getPath();
+        XmlDomain.Domain.Problems.Problem problem = job.getProblem();
 
-        String[] arguments = {"./plan", domainPath + problem.getDomain_file(),
-                domainPath + problem.getProblem_file(), "result"};
+        /*
+            The arguments for the process builder. Run the plan script in the planner path,
+            with the following parameters:
+                the path and file name of the domain.pddl file
+                the path and file name of the problem file
+                the name of the result file to create, in the format of domainId:problemNum
+         */
+        String[] arguments = {plannerPath + "/plan", domainPath + problem.getDomain_file(),
+                domainPath + problem.getProblem_file(), plannerPath + "/" + domainId + ":" + problem};
 
         pBuilder = new ProcessBuilder(arguments);
         Process process;
@@ -75,11 +85,22 @@ public class Client {
 
             // print the result, later this must record the result
             System.out.println(processOutput(process.getInputStream()));
+            int result = process.waitFor();
+
+            // if the run finished successfully, reset the process builder to run result sending script
+            if (result == 0) {
+                //TODO
+                // start process for sending results
+                pBuilder.command();
+            }
 
         } catch (IOException e) {
             //TODO: handle exception
             System.err.println("error starting planner");
             e.printStackTrace();
+
+        } catch (InterruptedException e1) {
+            sendMessage(new Message(Message.JOB_INTERRUPTED));
         }
     }
 
@@ -118,17 +139,19 @@ public class Client {
 
             // if a thread is already running for this client
             case Message.DUPLICATE_THREAD:
+
                 try {
                     close();
                 } catch (IOException e) {
                     System.err.println("Error closing streams");
                 }
+
                 System.out.println("There is already a running thread for this client");
                 System.exit(0);
 
             // if requested to run a planner on a domain
-            case Message.RUN_PLANNER:
-                runPlannerProcess(msg.getMessage(), msg.getProblem(), msg.getPlanner());
+            case Message.RUN_JOB:
+                runPlannerProcess(msg.getJob());
                 break;
         }
     }

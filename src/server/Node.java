@@ -31,4 +31,8 @@ public class Node {
     public String getName() {
         return name;
     }
+
+    public boolean isBusy() {
+        return clientThread.isBusy();
+    }
 }

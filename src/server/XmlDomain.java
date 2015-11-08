@@ -292,7 +292,7 @@ public class XmlDomain {
 
                 @Override
                 public String toString() {
-                    return domainFile + ", " + number + ", " + problemFile + "\n";
+                    return problemFile.replaceAll(".pddl", "");
                 }
             }
 

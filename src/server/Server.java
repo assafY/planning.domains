@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class Server {
 
@@ -21,6 +22,9 @@ public class Server {
     // Xml file parser
     private XmlParser xmlParser = new XmlParser();
 
+    // Queue for jobs waiting to run on nodes
+    private JobQueue jobQueue;
+
     public Server() {
 
         // import text files into lists of objects
@@ -30,15 +34,20 @@ public class Server {
         // import all domains in the domain directory
         domainList = xmlParser.getDomainList();
 
+        // initialise job queue and add listener
+        jobQueue = new JobQueue();
+        jobQueue.addJobCreatedListener(new JobCreatedListener() {
+            @Override
+            public void onJobCreated(Job newJob) {
+
+            }
+        });
+
         // start the server
-        //startServer();
+        startServer();
 
         // start all nodes
-        //startNodes();
-
-        String newpath = domainList.get(2).getPath();
-        XmlDomain.Domain.Problems.Problem prob = domainList.get(2).getXmlDomain().getDomain().getProblems().getProblem().get(0);
-        Planner plan = plannerList.get(1);
+        startNodes();
 
     }
 
@@ -114,7 +123,7 @@ public class Server {
     }
 
     /**
-     * Returns a node object matching a String with a name
+     * Returns a node object matching a String with a name.
      *
      * @param nodeName String containing name of the node
      * @return node if found a match, null if no match is found
@@ -126,6 +135,31 @@ public class Server {
             }
         }
         return null;
+    }
+
+    /**
+     * Create one new job and add it to the job queue.
+     *
+     * @param planner the planner to run
+     * @param problem the problem to run it on
+     * @param domain the domain the problem belongs to
+     */
+    public void createJob(Planner planner, XmlDomain.Domain.Problems.Problem problem, Domain domain) {
+        jobQueue.put(new Job(planner, problem, domain));
+    }
+
+    /**
+     * Create new jobs from a list of problems and add them to the
+     * job queue.
+     *
+     * @param planner the planner to run
+     * @param problems a list of problems to run it on
+     * @param domain the domain the problems belong to
+     */
+    public void createJob(Planner planner, ArrayList<XmlDomain.Domain.Problems.Problem> problems, Domain domain) {
+        for (XmlDomain.Domain.Problems.Problem p: problems) {
+            jobQueue.put(new Job(planner, p, domain));
+        }
     }
 
     /**
@@ -180,6 +214,9 @@ public class Server {
         // client identifier
         private Node node;
 
+        // current job being executed
+        private Job currentJob;
+
         // server streams
         private Socket clientSocket;
         private ObjectInputStream inputStream;
@@ -190,6 +227,15 @@ public class Server {
 
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             inputStream = new ObjectInputStream(clientSocket.getInputStream());
+        }
+
+        /**
+         * checks whether this node is currently processing a job
+         *
+         * @return true if node is busy
+         */
+        public boolean isBusy() {
+            return (currentJob != null);
         }
 
         /**
@@ -234,12 +280,32 @@ public class Server {
                     // if a client already has a thread running
                     } else {
                         node = null;
-                        sendMessage(new Message(3)); // notify the client to end
+                        sendMessage(new Message(Message.DUPLICATE_THREAD)); // notify the client to end
                     }
                     break;
 
                 case Message.PLAN_RESULT:
+                    // handle result, send new job
                     System.out.println(msg.getMessage());
+                    currentJob = null;
+                    break;
+
+                case Message.JOB_INTERRUPTED:
+                    if (currentJob != null) {
+                        jobQueue.put(new Job(currentJob, 2);
+                        currentJob = null;
+                    }
+                    break;
+
+                case Message.JOB_REQUEST:
+                    try {
+                        // this method blocks the thread if the queue is empty
+                        currentJob = jobQueue.take();
+                        sendMessage(new Message(jobQueue.poll(), Message.RUN_JOB));
+                    } catch (InterruptedException e) {
+                        //TODO: handle exception
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
@@ -274,6 +340,14 @@ public class Server {
 
             // if this isn't an already connected client that tried to open another thread
             if (node != null) {
+
+                // if there was a job assigned to this thread when it ended
+                // the job did not complete and is sent back to the queue
+                // with a higher priority
+                if (currentJob != null) {
+                    jobQueue.put(new Job(currentJob, 2));
+                }
+                
                 node.removeClientThread();
                 System.out.println(node.getName() + " disconnected.");
                 node = null;
