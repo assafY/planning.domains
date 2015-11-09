@@ -1,47 +1,57 @@
 package server;
 
-public class Job implements Comparable<Job> {
+import java.io.Serializable;
+
+public class Job implements Comparable<Job>, Serializable {
 
     private static final int DEFAULT_PRIORITY = 1;
 
-    private Planner planner;
+    private String plannerPath;
     private XmlDomain.Domain.Problems.Problem problem;
-    private Domain domain;
+    private String domainPath;
+    private String domainId;
     private int priority;
 
     public Job (Planner planner, XmlDomain.Domain.Problems.Problem problem,
                     Domain domain) {
-        this.planner = planner;
+        this.plannerPath = planner.getPath();
         this.problem = problem;
-        this.domain = domain;
+        this.domainPath = domain.getPath();
+        this.domainId = domain.getXmlDomain().getDomain().getId();
         this.priority = DEFAULT_PRIORITY;
     }
 
     public Job (Planner planner, XmlDomain.Domain.Problems.Problem problem,
                 Domain domain, int priority) {
-        this.planner = planner;
+        this.plannerPath = planner.getPath();
         this.problem = problem;
-        this.domain = domain;
+        this.domainPath = domain.getPath();
+        this.domainId = domain.getXmlDomain().getDomain().getId();
         this.priority = priority;
     }
 
     public Job (Job job, int priority) {
-        this.planner = job.getPlanner();
+        this.plannerPath = job.getPlannerPath();
         this. problem = job.getProblem();
-        this.domain = job.getDomain();
+        this.domainPath = job.getDomainPath();
+        this.domainId = job.getDomainId();
         this.priority = priority;
     }
 
-    public Planner getPlanner() {
-        return planner;
+    public String getPlannerPath() {
+        return plannerPath;
     }
 
     public XmlDomain.Domain.Problems.Problem getProblem() {
         return problem;
     }
 
-    public Domain getDomain() {
-        return domain;
+    public String getDomainPath() {
+        return domainPath;
+    }
+
+    public String getDomainId() {
+        return domainId;
     }
 
     public int getPriority() {

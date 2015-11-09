@@ -46,8 +46,17 @@ public class Server {
         // start the server
         startServer();
 
+        Domain someDomain = domainList.get(20);
+        ArrayList<XmlDomain.Domain.Problems.Problem> someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            someprobs.add(p);
+            System.out.println(p);
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+
         // start all nodes
-        startNodes();
+        //startNodes();
 
     }
 
@@ -157,8 +166,10 @@ public class Server {
      * @param domain the domain the problems belong to
      */
     public void createJob(Planner planner, ArrayList<XmlDomain.Domain.Problems.Problem> problems, Domain domain) {
+        System.out.println("Creating jobs...");
         for (XmlDomain.Domain.Problems.Problem p: problems) {
             jobQueue.put(new Job(planner, p, domain));
+            System.out.println("Created job for problem " + p);
         }
     }
 
@@ -301,7 +312,7 @@ public class Server {
                     try {
                         // this method blocks the thread if the queue is empty
                         currentJob = jobQueue.take();
-                        sendMessage(new Message(jobQueue.poll(), Message.RUN_JOB));
+                        sendMessage(new Message(currentJob, Message.RUN_JOB));
                     } catch (InterruptedException e) {
                         //TODO: handle exception
                         e.printStackTrace();

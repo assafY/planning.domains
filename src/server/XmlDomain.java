@@ -1,6 +1,7 @@
 package server;
 
 import javax.xml.bind.annotation.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.HashMap;
  * Domain objects are created from xml metadata files.
  */
 @XmlRootElement(name="metadata", namespace="http://planning.domains/")
-public class XmlDomain {
+public class XmlDomain implements Serializable{
 
     private XmlDomain.Domain domain;
     private HashMap<Planner, Result> resultMap = new HashMap<>();
@@ -29,7 +30,7 @@ public class XmlDomain {
         return domain.toString();
     }
 
-    public static class Domain {
+    public static class Domain implements Serializable {
         private String id;
         private String title;
         private Date filesModifiedDate;
@@ -124,7 +125,7 @@ public class XmlDomain {
          * The elements in the sequence don't contain information, so we
          * simply check which elements exist out of all possible requirements.
          */
-        public static class Requirements {
+        public static class Requirements implements Serializable {
 
             // Strings representing domain requirements
             private String strips = null;
@@ -225,7 +226,7 @@ public class XmlDomain {
         /**
          * This class handles the problems sequence.
          */
-        public static class Problems {
+        public static class Problems implements Serializable{
 
             private ArrayList<Problem> problems;
 
@@ -242,7 +243,7 @@ public class XmlDomain {
              * Each problem contains a map containing pairs of planners which
              * were ran on it and its result.
              */
-            public static class Problem {
+            public static class Problem implements Serializable {
 
                 private String domainFile;
                 private int number;

@@ -2,7 +2,6 @@ package client;
 
 import global.*;
 import server.Job;
-import server.Planner;
 import server.XmlDomain;
 
 import java.io.*;
@@ -43,6 +42,7 @@ public class Client {
 
             // listen for incoming messages from the server
             new ListenFromServer().start();
+            sendMessage(new Message(Message.JOB_REQUEST));
 
         } catch (IOException e) {
             //TODO: handle exception
@@ -62,10 +62,11 @@ public class Client {
 
     private void runPlannerProcess(Job job) {
 
-        String domainPath = job.getDomain().getPath() + "/";
-        String domainId = job.getDomain().getXmlDomain().getDomain().getId().replaceAll("/", "-");
-        String plannerPath = job.getPlanner().getPath();
+        String domainPath = job.getDomainPath() + "/";
+        String domainId = job.getDomainId().replaceAll("/", "-");
+        String plannerPath = job.getPlannerPath();
         XmlDomain.Domain.Problems.Problem problem = job.getProblem();
+        String resultFile = plannerPath + "/" + domainId + ":" + problem;
 
         /*
             The arguments for the process builder. Run the plan script in the planner path,
@@ -75,7 +76,7 @@ public class Client {
                 the name of the result file to create, in the format of domainId:problemNum
          */
         String[] arguments = {plannerPath + "/plan", domainPath + problem.getDomain_file(),
-                domainPath + problem.getProblem_file(), plannerPath + "/" + domainId + ":" + problem};
+                domainPath + problem.getProblem_file(), resultFile};
 
         pBuilder = new ProcessBuilder(arguments);
         Process process;
@@ -91,16 +92,22 @@ public class Client {
             if (result == 0) {
                 //TODO
                 // start process for sending results
-                pBuilder.command();
+                String[] resultArgs = {"scp", resultFile + ".0", Settings.USER_NAME + "@" + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR};
+                pBuilder.command(resultArgs);
+                process = pBuilder.start();
+                int newResult = process.waitFor();
+                if (newResult == 0) {
+                    sendMessage(new Message(Message.JOB_REQUEST));
+                }
             }
 
         } catch (IOException e) {
-            //TODO: handle exception
-            System.err.println("error starting planner");
+            sendMessage(new Message(Message.JOB_INTERRUPTED));
             e.printStackTrace();
 
         } catch (InterruptedException e1) {
             sendMessage(new Message(Message.JOB_INTERRUPTED));
+            e1.printStackTrace();
         }
     }
 
