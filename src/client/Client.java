@@ -92,7 +92,7 @@ public class Client {
             if (result == 0) {
                 //TODO
                 // start process for sending results
-                String[] resultArgs = {"scp", resultFile + ".0", Settings.USER_NAME + "@" + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR};
+                String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@" + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR};
                 pBuilder.command(resultArgs);
                 process = pBuilder.start();
                 int newResult = process.waitFor();

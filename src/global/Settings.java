@@ -19,4 +19,5 @@ public class Settings {
 
     // scripts
     public static final String NODE_START_SCRIPT = "res/start_all_nodes.sh";
+    public static final String RESULT_COPY_SCRIPT = "res/copy_results_files.sh";
 }
