@@ -15,6 +15,7 @@ public class Settings {
     public static final String PLANNER_LIST_PATH = "res/planner_list.txt";
     public static final String PLANNER_DIR_PATH = "res/planners/";
     public static final String DOMAIN_DIR_PATH = "res/domains/";
+    public static final String LOCAL_RESULT_DIR = "res/results/";
     public static final String REMOTE_RESULT_DIR = "~/planning_domains/res/results/";
 
     // scripts

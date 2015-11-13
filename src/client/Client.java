@@ -92,12 +92,14 @@ public class Client {
             if (result == 0) {
                 //TODO
                 // start process for sending results
-                String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@" + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR};
+                String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@" + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlannerName()};
                 pBuilder.command(resultArgs);
                 process = pBuilder.start();
                 int newResult = process.waitFor();
                 if (newResult == 0) {
                     sendMessage(new Message(Message.JOB_REQUEST));
+                } else {
+                    sendMessage(new Message(job, Message.JOB_INTERRUPTED));
                 }
             }
 

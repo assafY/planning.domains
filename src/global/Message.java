@@ -11,9 +11,8 @@ public class Message implements Serializable {
             //CLIENT_DISCONNECTED = 2,
             DUPLICATE_THREAD = 2,
             RUN_JOB = 3,
-            PLAN_RESULT = 4,
-            JOB_INTERRUPTED = 5,
-            JOB_REQUEST = 6;
+            JOB_INTERRUPTED = 4,
+            JOB_REQUEST = 5;
 
     private int type;
     private String message;

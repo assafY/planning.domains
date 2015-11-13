@@ -174,6 +174,16 @@ public class Server {
     }
 
     /**
+     * Processes result files sent to the server by a node after
+     * receiving a notification that a job completed successfuly.
+     *
+     * @param job the job which was completed
+     */
+    public void processResults(Job job) {
+
+    }
+
+    /**
      * This method imports text files to lists of objects.
      *
      * @param filePath the path to the file being imported
@@ -200,7 +210,10 @@ public class Server {
                 case Settings.PLANNER_LIST_PATH:
                     plannerList = new ArrayList<>();
                     while ((currentLine = br.readLine()) != null) {
-                        plannerList.add(new Planner(currentLine.replaceAll("\\s", "")));
+                        String plannerName = currentLine.replaceAll("\\s", "");
+                        plannerList.add(new Planner(plannerName));
+                        // create results folder if it does not exist
+                        (new ProcessBuilder("mkdir", "-p", Settings.LOCAL_RESULT_DIR + plannerName)).start();
                     }
                     break;
             }
@@ -295,23 +308,26 @@ public class Server {
                     }
                     break;
 
-                case Message.PLAN_RESULT:
-                    // handle result, send new job
-                    System.out.println(msg.getMessage());
-                    currentJob = null;
-                    break;
-
                 case Message.JOB_INTERRUPTED:
                     if (currentJob != null) {
+                        System.out.println("Error running " + currentJob + " on " + node.getName()
+                                + ".\nadding job back to queue with higher priority");
                         jobQueue.put(new Job(currentJob, 2));
                         currentJob = null;
                     }
                     break;
 
                 case Message.JOB_REQUEST:
+                    // if currentJob is not null, the node completed a job successfully
+                    if (currentJob != null) {
+                        System.out.println("Successfully completed running " + currentJob + " on " + node.getName());
+                        processResults(currentJob);
+                        currentJob = null;
+                    }
                     try {
                         // this method blocks the thread if the queue is empty
                         currentJob = jobQueue.take();
+                        System.out.println("Attempting to run " + currentJob + " on " + node.getName());
                         sendMessage(new Message(currentJob, Message.RUN_JOB));
                     } catch (InterruptedException e) {
                         //TODO: handle exception
@@ -356,6 +372,8 @@ public class Server {
                 // the job did not complete and is sent back to the queue
                 // with a higher priority
                 if (currentJob != null) {
+                    System.out.println("Error running " + currentJob + " on " + node.getName()
+                            + ".\nadding job back to queue with higher priority");
                     jobQueue.put(new Job(currentJob, 2));
                 }
 

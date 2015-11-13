@@ -24,4 +24,8 @@ public class Planner {
     public File getFile() {
         return plannerDir;
     }
+
+    public String getName() {
+        return name;
+    }
 }
