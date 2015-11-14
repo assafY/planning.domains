@@ -13,7 +13,8 @@ public class Message implements Serializable {
             RUN_JOB = 3,
             JOB_INTERRUPTED = 4,
             JOB_REQUEST = 5,
-            INCOMPATIBLE_PLANNER = 6;
+            INCOMPATIBLE_PLANNER = 6,
+            PLAN_NOT_FOUND = 7;
 
     private int type;
     private String message;

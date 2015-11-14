@@ -66,7 +66,7 @@ public class Client {
         String domainId = job.getDomainId().replaceAll("/", "-");
         String plannerPath = job.getPlannerPath();
         XmlDomain.Domain.Problems.Problem problem = job.getProblem();
-        String resultFile = plannerPath + "/" + domainId + ":" + problem;
+        String resultFile = plannerPath + "/" + domainId + "-" + problem;
 
         /*
             The arguments for the process builder. Run the plan script in the planner path,
@@ -107,11 +107,15 @@ public class Client {
 
                     // if results file doesn't exist and run time was
                     // extremely short, the planner is incompatible with domain
-                } else if (error.contains("no such file") && totalTime < 30) {
-                    sendMessage(new Message(Message.INCOMPATIBLE_PLANNER));
-
-                    // otherwise the job was probably interrupted
+                } else if (error.contains("no such file")) {
+                    if (totalTime < 30) {
+                        sendMessage(new Message(Message.INCOMPATIBLE_PLANNER));
+                    } else {
+                        // if job time wasn't short, a plan wasn't found
+                        sendMessage(new Message(Message.PLAN_NOT_FOUND));
+                    }
                 } else {
+                    // otherwise the job was probably interrupted
                     sendMessage(new Message(job, Message.JOB_INTERRUPTED));
                 }
             }
