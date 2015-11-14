@@ -12,7 +12,8 @@ public class Message implements Serializable {
             DUPLICATE_THREAD = 2,
             RUN_JOB = 3,
             JOB_INTERRUPTED = 4,
-            JOB_REQUEST = 5;
+            JOB_REQUEST = 5,
+            INCOMPATIBLE_PLANNER = 6;
 
     private int type;
     private String message;

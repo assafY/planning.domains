@@ -82,11 +82,13 @@ public class Client {
         Process process;
 
         try {
+            long startTime = System.currentTimeMillis();
             process = pBuilder.start();
 
             // print the result, later this must record the result
             System.out.println(processOutput(process.getInputStream()));
             int result = process.waitFor();
+            long totalTime = System.currentTimeMillis() - startTime;
 
             // if the run finished successfully, reset the process builder to run result sending script
             if (result == 0) {
@@ -95,9 +97,20 @@ public class Client {
                 String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@" + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlannerName()};
                 pBuilder.command(resultArgs);
                 process = pBuilder.start();
+                String error = processOutput(process.getErrorStream()).toLowerCase();
                 int newResult = process.waitFor();
+
+                    // if the results were sent to the server successfully,
+                    // request a new job.
                 if (newResult == 0) {
                     sendMessage(new Message(Message.JOB_REQUEST));
+
+                    // if results file doesn't exist and run time was
+                    // extremely short, the planner is incompatible with domain
+                } else if (error.contains("no such file") && totalTime < 30) {
+                    sendMessage(new Message(Message.INCOMPATIBLE_PLANNER));
+
+                    // otherwise the job was probably interrupted
                 } else {
                     sendMessage(new Message(job, Message.JOB_INTERRUPTED));
                 }
