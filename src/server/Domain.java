@@ -1,11 +1,12 @@
 package server;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Wrapper class containing an XmlDomain and its directory
  */
-public class Domain {
+public class Domain implements Serializable {
 
     private File domainDir;
     private XmlDomain xmlDomain;

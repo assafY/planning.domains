@@ -9,8 +9,8 @@ public class Job implements Comparable<Job>, Serializable {
     private String plannerPath;
     private String plannerName;
     private XmlDomain.Domain.Problems.Problem problem;
-    private String domainPath;
-    private String domainId;
+    private Domain domain;
+
     private int priority;
 
     public Job (Planner planner, XmlDomain.Domain.Problems.Problem problem,
@@ -18,26 +18,15 @@ public class Job implements Comparable<Job>, Serializable {
         this.plannerPath = planner.getPath();
         this.plannerName = planner.getName();
         this.problem = problem;
-        this.domainPath = domain.getPath();
-        this.domainId = domain.getXmlDomain().getDomain().getId();
+        this.domain = domain;
         this.priority = DEFAULT_PRIORITY;
     }
-
-    /*public Job (Planner planner, XmlDomain.Domain.Problems.Problem problem,
-                Domain domain, int priority) {
-        this.plannerPath = planner.getPath();
-        this.problem = problem;
-        this.domainPath = domain.getPath();
-        this.domainId = domain.getXmlDomain().getDomain().getId();
-        this.priority = priority;
-    }*/
 
     public Job (Job job, int priority) {
         this.plannerPath = job.getPlannerPath();
         this.plannerName = job.getPlannerName();
         this.problem = job.getProblem();
-        this.domainPath = job.getDomainPath();
-        this.domainId = job.getDomainId();
+        this.domain = job.getDomain();
         this.priority = priority;
     }
 
@@ -53,11 +42,16 @@ public class Job implements Comparable<Job>, Serializable {
         return problem;
     }
 
+    public Domain getDomain() {
+        return domain;
+    }
+
     public String getDomainPath() {
-        return domainPath;
+        return domain.getPath();
     }
 
     public String getDomainId() {
+        String domainId = domain.getXmlDomain().getDomain().getId();
         return domainId.substring(domainId.indexOf(':') + 1);
     }
 

@@ -13,12 +13,13 @@ public class Message implements Serializable {
             RUN_JOB = 3,
             JOB_INTERRUPTED = 4,
             JOB_REQUEST = 5,
-            INCOMPATIBLE_PLANNER = 6,
+            INCOMPATIBLE_DOMAIN = 6,
             PLAN_NOT_FOUND = 7;
 
     private int type;
     private String message;
     private Job job;
+    private Exception exception;
 
 
     public Message(int type) {
@@ -35,6 +36,11 @@ public class Message implements Serializable {
         this.job = job;
     }
 
+    public Message(Exception e, int type) {
+        this.type = type;
+        exception = e;
+    }
+
     public int getType() {
         return type;
     }
@@ -45,6 +51,10 @@ public class Message implements Serializable {
 
     public Job getJob() {
         return job;
+    }
+
+    public Exception getException() {
+        return exception;
     }
 
 }

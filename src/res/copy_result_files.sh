@@ -7,4 +7,4 @@
 # $1 - name of the result file prefix
 # $2 - username, server address, remote directory
 
-scp $1.* $2
+scp $1.* $2 && scp $1_log $2

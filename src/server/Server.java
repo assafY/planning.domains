@@ -314,6 +314,12 @@ public class Server {
                                 + ".\nadding job back to queue with higher priority");
                         jobQueue.put(new Job(currentJob, 2));
                         currentJob = null;
+
+                        // if an exception was sent, print it.
+                        if (msg.getException() != null) {
+                            System.out.println("The client produced the following exception:\n");
+                            msg.getException().printStackTrace();
+                        }
                     }
                     break;
 
@@ -329,9 +335,20 @@ public class Server {
                         currentJob = jobQueue.take();
                         System.out.println("Attempting to run " + currentJob + " on " + node.getName());
                         sendMessage(new Message(currentJob, Message.RUN_JOB));
+
                     } catch (InterruptedException e) {
-                        //TODO: handle exception
+                        System.err.println("Error getting a job from the queue:\n");
                         e.printStackTrace();
+                    }
+                    break;
+
+                case Message.INCOMPATIBLE_DOMAIN:
+                    for (Planner p: plannerList) {
+                        if (p.equals(currentJob.getPlannerName()) &&
+                                !p.getIncompatibleDomains().contains(currentJob.getDomain())) {
+                            p.addIncompatibleDomain(currentJob.getDomain());
+                        }
+                        break;
                     }
                     break;
             }
