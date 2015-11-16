@@ -64,7 +64,7 @@ public class Client {
 
         String domainPath = job.getDomainPath() + "/";
         String domainId = job.getDomainId().replaceAll("/", "-");
-        String plannerPath = job.getPlannerPath();
+        String plannerPath = job.getPlanner().getPath();
         XmlDomain.Domain.Problems.Problem problem = job.getProblem();
         String resultFile = plannerPath + "/" + domainId + "-" + problem;
 
@@ -95,7 +95,7 @@ public class Client {
                 //TODO
                 // start process for sending results
                 String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@"
-                        + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlannerName()};
+                        + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlanner().getName()};
                 pBuilder.command(resultArgs);
                 process = pBuilder.start();
                 String error = processOutput(process.getErrorStream()).toLowerCase();

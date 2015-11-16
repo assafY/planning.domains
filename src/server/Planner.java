@@ -3,13 +3,14 @@ package server;
 import global.Settings;
 
 import java.io.File;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * Class for every planner used in the system.
  */
-public class Planner {
+public class Planner implements Serializable {
 
     private String name;
     private File plannerDir;

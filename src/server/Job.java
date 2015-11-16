@@ -6,8 +6,7 @@ public class Job implements Comparable<Job>, Serializable {
 
     private static final int DEFAULT_PRIORITY = 1;
 
-    private String plannerPath;
-    private String plannerName;
+    private Planner planner;
     private XmlDomain.Domain.Problems.Problem problem;
     private Domain domain;
 
@@ -15,27 +14,17 @@ public class Job implements Comparable<Job>, Serializable {
 
     public Job (Planner planner, XmlDomain.Domain.Problems.Problem problem,
                     Domain domain) {
-        this.plannerPath = planner.getPath();
-        this.plannerName = planner.getName();
+        this.planner = planner;
         this.problem = problem;
         this.domain = domain;
         this.priority = DEFAULT_PRIORITY;
     }
 
     public Job (Job job, int priority) {
-        this.plannerPath = job.getPlannerPath();
-        this.plannerName = job.getPlannerName();
+        this.planner = job.getPlanner();
         this.problem = job.getProblem();
         this.domain = job.getDomain();
         this.priority = priority;
-    }
-
-    public String getPlannerPath() {
-        return plannerPath;
-    }
-
-    public String getPlannerName() {
-        return plannerName;
     }
 
     public XmlDomain.Domain.Problems.Problem getProblem() {
@@ -48,6 +37,10 @@ public class Job implements Comparable<Job>, Serializable {
 
     public String getDomainPath() {
         return domain.getPath();
+    }
+
+    public Planner getPlanner() {
+        return planner;
     }
 
     public String getDomainId() {
@@ -66,6 +59,6 @@ public class Job implements Comparable<Job>, Serializable {
 
     @Override
     public String toString() {
-        return plannerName + " on " + getDomainId() + ", problem file " + problem;
+        return planner.getName() + " on " + getDomainId() + ", problem file " + problem;
     }
 }

@@ -284,6 +284,28 @@ public class Server {
         }
 
         /**
+         * Removes a job from the queue or waits for the queue
+         * to contain a job if it is currently empty, then sends the
+         * job to the thread's node.
+         */
+        public void takeJob() {
+            try {
+                // this method blocks the thread if the queue is empty
+                currentJob = jobQueue.take();
+
+                // if the planner is not known to be
+                // incompatible with this job's domain
+                if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain())) {
+                    System.out.println("Attempting to run " + currentJob + " on " + node.getName());
+                    sendMessage(new Message(currentJob, Message.RUN_JOB));
+                }
+            } catch(InterruptedException e){
+                System.err.println("Error getting a job from the queue:\n");
+                e.printStackTrace();
+            }
+        }
+
+        /**
          * onReceiveMessage specifies the action the server needs to take depending
          * on the type of message received from the client.
          *
@@ -321,6 +343,8 @@ public class Server {
                             msg.getException().printStackTrace();
                         }
                     }
+
+                    takeJob();
                     break;
 
                 case Message.JOB_REQUEST:
@@ -330,26 +354,24 @@ public class Server {
                         processResults(currentJob);
                         currentJob = null;
                     }
-                    try {
-                        // this method blocks the thread if the queue is empty
-                        currentJob = jobQueue.take();
-                        System.out.println("Attempting to run " + currentJob + " on " + node.getName());
-                        sendMessage(new Message(currentJob, Message.RUN_JOB));
 
-                    } catch (InterruptedException e) {
-                        System.err.println("Error getting a job from the queue:\n");
-                        e.printStackTrace();
-                    }
+                    takeJob();
                     break;
 
                 case Message.INCOMPATIBLE_DOMAIN:
-                    for (Planner p: plannerList) {
-                        if (p.equals(currentJob.getPlannerName()) &&
-                                !p.getIncompatibleDomains().contains(currentJob.getDomain())) {
-                            p.addIncompatibleDomain(currentJob.getDomain());
-                        }
-                        break;
+                    if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain())) {
+                        currentJob.getPlanner().addIncompatibleDomain(currentJob.getDomain());
                     }
+                    currentJob = null;
+
+                    takeJob();
+                    break;
+
+                case Message.PLAN_NOT_FOUND:
+                    currentJob.getProblem().addResult(currentJob.getPlanner(), 0);
+                    currentJob = null;
+
+                    takeJob();
                     break;
             }
         }
