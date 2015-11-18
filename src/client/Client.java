@@ -62,7 +62,7 @@ public class Client {
 
     private void runPlannerProcess(Job job) {
 
-        String domainPath = job.getDomainPath() + "/";
+        String domainPath = job.getDomainPath();
         String domainId = job.getDomainId().replaceAll("/", "-");
         String plannerPath = job.getPlanner().getPath();
         XmlDomain.Domain.Problems.Problem problem = job.getProblem();

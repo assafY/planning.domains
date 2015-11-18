@@ -17,6 +17,7 @@ public class Settings {
     public static final String DOMAIN_DIR_PATH = "res/domains/";
     public static final String LOCAL_RESULT_DIR = "res/results/";
     public static final String REMOTE_RESULT_DIR = "~/planning_domains/res/results/";
+    public static final String VAL_FILES_DIR = "res/validation/";
 
     // scripts
     public static final String NODE_START_SCRIPT = "res/start_all_nodes.sh";

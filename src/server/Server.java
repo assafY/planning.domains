@@ -175,12 +175,12 @@ public class Server {
 
     /**
      * Processes result files sent to the server by a node after
-     * receiving a notification that a job completed successfuly.
+     * receiving a notification that a job completed successfully.
      *
      * @param job the job which was completed
      */
     public void processResults(Job job) {
-
+        pBuilder = new ProcessBuilder(Settings.VAL_FILES_DIR, job.getDomainPath() + "/" + , job.getProblem().getProblem_file())
     }
 
     /**
@@ -299,6 +299,11 @@ public class Server {
                     System.out.println("Attempting to run " + currentJob + " on " + node.getName());
                     sendMessage(new Message(currentJob, Message.RUN_JOB));
                 }
+                else {
+                    System.err.println(currentJob.getPlanner().getName() + " is incompatible with " + currentJob.getDomainId());
+                    currentJob = null;
+                    takeJob();
+                }
             } catch(InterruptedException e){
                 System.err.println("Error getting a job from the queue:\n");
                 e.printStackTrace();
@@ -361,6 +366,7 @@ public class Server {
                 case Message.INCOMPATIBLE_DOMAIN:
                     if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain())) {
                         currentJob.getPlanner().addIncompatibleDomain(currentJob.getDomain());
+                        System.err.println(currentJob.getPlanner().getName() + " is incompatible with " + currentJob.getDomainId());
                     }
                     currentJob = null;
 

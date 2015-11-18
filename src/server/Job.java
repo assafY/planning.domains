@@ -36,7 +36,7 @@ public class Job implements Comparable<Job>, Serializable {
     }
 
     public String getDomainPath() {
-        return domain.getPath();
+        return domain.getPath() + "/";
     }
 
     public Planner getPlanner() {
