@@ -24,4 +24,5 @@ public class Settings {
     public static final String RESULT_COPY_SCRIPT = "res/copy_result_files.sh";
     public static final String RESULT_DEL_SCRIPT = "res/del_result_files.sh";
     public static final String RUN_PLANNER_SCRIPT = "res/run_planner.sh";
+    public static final String RUN_VALIDATION_SCRIPT = "res/validate_plan.sh";
 }

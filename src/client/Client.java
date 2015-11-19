@@ -63,7 +63,7 @@ public class Client {
     private void runPlannerProcess(Job job) {
 
         String domainPath = job.getDomainPath();
-        String domainId = job.getDomainId().replaceAll("/", "-");
+        String domainId = job.getDomainId();
         String plannerPath = job.getPlanner().getPath();
         XmlDomain.Domain.Problems.Problem problem = job.getProblem();
         String resultFile = plannerPath + "/" + domainId + "-" + problem;
@@ -86,7 +86,7 @@ public class Client {
             process = pBuilder.start();
 
             // print the result, later this must record the result
-            System.out.println(processOutput(process.getInputStream()));
+            System.out.println(Global.getProcessOutput(process.getInputStream()));
             int result = process.waitFor();
             long totalTime = System.currentTimeMillis() - startTime;
 
@@ -98,7 +98,7 @@ public class Client {
                         + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlanner().getName()};
                 pBuilder.command(resultArgs);
                 process = pBuilder.start();
-                String error = processOutput(process.getErrorStream()).toLowerCase();
+                String error = Global.getProcessOutput(process.getErrorStream()).toLowerCase();
                 int newResult = process.waitFor();
 
                     // if the results were sent to the server successfully,
@@ -140,7 +140,7 @@ public class Client {
         }
     }
 
-    private String processOutput(InputStream is) throws IOException {
+    /*private String processOutput(InputStream is) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader reader = null;
         try {
@@ -154,7 +154,7 @@ public class Client {
         }
 
         return stringBuilder.toString();
-    }
+    }*/
 
     /**
      * closes all sockets and streams
