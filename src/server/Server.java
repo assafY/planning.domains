@@ -58,7 +58,7 @@ public class Server {
         createJob(plannerList.get(1), someprobs, someDomain);
 
         // start all nodes
-        startNodes();
+        //startNodes();
 
     }
 
