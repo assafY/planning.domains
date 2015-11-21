@@ -183,23 +183,25 @@ public class Server {
      */
     public void processResults(Job job) {
         pBuilder = new ProcessBuilder(Settings.RUN_VALIDATION_SCRIPT, Settings.VAL_FILES_DIR, job.getDomainPath() + job.getProblem().getDomain_file(),
-                job.getDomainPath() + job.getProblem().getProblem_file(), Settings.LOCAL_RESULT_DIR + job.getDomainId() + "-" + job.getProblem());
+                job.getDomainPath() + job.getProblem().getProblem_file(), Settings.LOCAL_RESULT_DIR + job.getPlanner().getName() + "/" + job.getDomainId() + "-" + job.getProblem());
         try {
             Process process = pBuilder.start();
-            String results = Global.getProcessOutput(process.getInputStream());
             int processResult = process.waitFor();
 
+            String results = Global.getProcessOutput(process.getInputStream());
             if (processResult == 0) {
                 ArrayList<String> resultList = new ArrayList<>(Arrays.asList(results.split(System.getProperty("line.separator"))));
                 int bestResult = -1;
                 for (String s: resultList) {
                     int result = Integer.parseInt(s.substring(s.indexOf(' ') + 1));
-                    System.out.println(s);
                     if (bestResult == -1 || result < bestResult) {
                         bestResult = result;
                     }
                 }
-                System.out.println("Best result is: " + bestResult);
+                System.out.println(job.getPlanner().getName() + " - " + job.getDomainId() + " - " + job.getProblem() + ": best result: " + bestResult);
+                job.getProblem().addResult(job.getPlanner(), bestResult);
+            } else {
+                System.out.println(Global.getProcessOutput(process.getErrorStream()));
             }
         } catch (IOException e) {
             //TODO: handle excpetion
