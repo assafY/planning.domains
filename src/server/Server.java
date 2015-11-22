@@ -25,7 +25,7 @@ public class Server {
     private XmlParser xmlParser = new XmlParser();
 
     // Queue for jobs waiting to run on nodes
-    private JobQueue jobQueue;
+    private PriorityBlockingQueue<Job> jobQueue;
 
     public Server() {
 
@@ -37,13 +37,7 @@ public class Server {
         domainList = xmlParser.getDomainList();
 
         // initialise job queue and add listener
-        jobQueue = new JobQueue();
-        jobQueue.addJobCreatedListener(new JobCreatedListener() {
-            @Override
-            public void onJobCreated(Job newJob) {
-
-            }
-        });
+        jobQueue = new PriorityBlockingQueue();
 
         // start the server
         startServer();
