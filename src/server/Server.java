@@ -178,6 +178,7 @@ public class Server {
     /**
      * Processes result files sent to the server by a node after
      * receiving a notification that a job completed successfully.
+     * Gets the best result and adds it to the problem's result map.
      *
      * @param job the job which was completed
      */

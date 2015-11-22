@@ -1,5 +1,7 @@
 package server;
 
+import global.Global;
+
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -250,7 +252,10 @@ public class XmlDomain implements Serializable{
                 private String problemFile;
 
                 // a map for results of running different planners on this problem
-                private HashMap<Planner, Double> resultMap = new HashMap<>();
+                private HashMap<Planner, Integer> resultMap = new HashMap<>();
+
+                // a map for the factorized results of planners on all problems
+                private HashMap<Planner, Double> leaderBoard;
 
                 public String getDomain_file() {
                     return domainFile;
@@ -279,21 +284,22 @@ public class XmlDomain implements Serializable{
                     this.problemFile = problemFile;
                 }
 
-                public void addResult(Planner planner, double result) {
+                /**
+                 * Adds the value of the best plan a planner produced for this
+                 * problem to a map of all results. Then calls a method creating
+                 * a new leader board and assigns it to the local leader board.
+                 *
+                 * @param planner the planner that produced the result
+                 * @param result the result produced by running the planner on this problem
+                 */
+                public void addResult(Planner planner, int result) {
                     resultMap.put(planner, result);
-                }
-
-                public double getResult(Planner planner) {
-                    return resultMap.get(planner);
-                }
-
-                public HashMap<Planner, Double> getResultMap() {
-                    return resultMap;
+                    leaderBoard = Global.getProblemLeaderboard(resultMap);
                 }
 
                 @Override
                 public String toString() {
-                    return problemFile.replaceAll(".pddl", "");
+                    return problemFile.replace(".pddl", "");
                 }
             }
 
