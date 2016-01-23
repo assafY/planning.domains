@@ -3,6 +3,7 @@ package server;
 import global.Global;
 
 import javax.xml.bind.annotation.*;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,11 +16,20 @@ import java.util.HashMap;
 @XmlRootElement(name="metadata", namespace="http://planning.domains/")
 public class XmlDomain implements Serializable{
 
+    private File xmlFile;
     private XmlDomain.Domain domain;
     private HashMap<Planner, Result> resultMap = new HashMap<>();
 
     public XmlDomain.Domain getDomain() {
         return domain;
+    }
+
+    public void setXmlFile(File file) {
+        xmlFile = file;
+    }
+
+    public File getXmlFile() {
+        return xmlFile;
     }
 
     @XmlElement
@@ -44,6 +54,10 @@ public class XmlDomain implements Serializable{
 
         public String getId() {
             return id;
+        }
+
+        public String getShortId() {
+            return id.substring(id.indexOf(':') + 1).replaceAll("/", "-");
         }
 
         @XmlAttribute

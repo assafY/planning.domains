@@ -44,8 +44,9 @@ public class Job implements Comparable<Job>, Serializable {
     }
 
     public String getDomainId() {
-        String domainId = domain.getXmlDomain().getDomain().getId();
-        return domainId.substring(domainId.indexOf(':') + 1).replaceAll("/", "-");
+        return domain.getXmlDomain().getDomain().getShortId();
+        //String domainId = domain.getXmlDomain().getDomain().getId();
+        //return domainId.substring(domainId.indexOf(':') + 1).replaceAll("/", "-");
     }
 
     public int getPriority() {

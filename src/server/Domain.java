@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * Wrapper class containing an XmlDomain and its directory
  */
-public class Domain implements Serializable {
+public class Domain implements Serializable, Comparable<Domain> {
 
     private File domainDir;
     private XmlDomain xmlDomain;
@@ -26,6 +26,11 @@ public class Domain implements Serializable {
 
     public XmlDomain getXmlDomain() {
         return xmlDomain;
+    }
+
+    @Override
+    public int compareTo(Domain d) {
+        return this.getXmlDomain().getDomain().getShortId().compareTo(d.getXmlDomain().getDomain().getShortId());
     }
 
     @Override
