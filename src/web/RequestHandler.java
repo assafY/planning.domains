@@ -6,18 +6,28 @@ import server.Server;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Class for handling GET and POST requests from web clients.
+ * The RequestHandler parses request parameters and returns requested
+ * XML files for GET requests and handles planner and domain submissions
+ * in POST requests.
+ */
 public class RequestHandler {
 
     // an instance of the running server
     private Server server;
 
+    /**
+     * Constructor accepts Server instance as parameter
+     *
+     * @param server the instance of the running server
+     */
     public RequestHandler(Server server) {
         this.server = server;
     }
 
-    public void handleRequest(Socket request) throws IOException {
+    private void doGet(Socket request, String domainRequested) throws IOException {
         StringBuilder builder = new StringBuilder();
-        String domainRequested = parseRequest(request);
 
         builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
@@ -52,9 +62,16 @@ public class RequestHandler {
         sendResponse(request, builder);
     }
 
-    private String parseRequest(Socket request) throws IOException {
+    /**
+     * Receives all http requests and parses them to determine their type,
+     * then routes the request parameters to either doGet or doPost.
+     *
+     * @param request Socket object containing the HTTP request
+     * @throws IOException
+     */
+    public void handleRequest(Socket request) throws IOException {
         BufferedReader requestReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String domainRequested = null;
+        String domainRequested;
         String input;
 
         while (!(input = requestReader.readLine()).equals("")) {
@@ -66,10 +83,11 @@ public class RequestHandler {
                 } else {
                     domainRequested = input.substring(0, input.indexOf(" "));
                 }
+
+                doGet(request, domainRequested);
+                break;
             }
         }
-
-        return domainRequested;
     }
 
     private void sendResponse(Socket request, StringBuilder response) throws IOException {
@@ -79,7 +97,7 @@ public class RequestHandler {
             "Content-Type: application/xml; charset=utf-8\n" +
             "Content-Length: " + response.toString().length() + "\n" +
             "");
-        
+
         responseWriter.println(response.toString());
         responseWriter.close();
 
