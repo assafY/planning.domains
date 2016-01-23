@@ -66,6 +66,7 @@ public class XmlParser {
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             XmlDomain domain = (XmlDomain) unmarshaller.unmarshal(domainMetadata);
 
+            domain.setXmlFile(domainMetadata);
             return domain;
 
         } catch (JAXBException e) {

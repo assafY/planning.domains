@@ -3,6 +3,7 @@ package server;
 import global.Global;
 import global.Message;
 import global.Settings;
+import web.RequestHandler;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -27,6 +28,8 @@ public class Server {
     // Queue for jobs waiting to run on nodes
     private PriorityBlockingQueue<Job> jobQueue;
 
+    private RequestHandler requestHandler = new RequestHandler(this);
+
     public Server() {
 
         // import text files into lists of objects
@@ -38,6 +41,8 @@ public class Server {
 
         // initialise job queue and add listener
         jobQueue = new PriorityBlockingQueue();
+
+
 
         // start the server
         startServer();
@@ -66,13 +71,22 @@ public class Server {
                     while (true) {
                         try {
                             Socket clientSocket = serverSocket.accept();
-                            ClientThread thread = new ClientThread(clientSocket);
-                            thread.start();
+
+                            //check if client is internal node or external web client
+                            if (clientSocket.getInetAddress().toString().startsWith("/137.73")) {
+                                ClientThread thread = new ClientThread(clientSocket);
+                                thread.start();
+                            } else {
+                                requestHandler.handleRequest(clientSocket);
+                            }
+                        }
+                        // catch exception if a web client sends server request
+                        catch (StreamCorruptedException e1) {
 
                         } catch (IOException e) {
                             // TODO: handle exception
                             System.out.println("Server failed to open client socket");
-                            System.err.println(e.getStackTrace());
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -140,6 +154,15 @@ public class Server {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns the list of all domains
+     *
+     * @return list of domains
+     */
+    public ArrayList<Domain> getDomainList() {
+        return domainList;
     }
 
     /**
