@@ -82,7 +82,7 @@ public class Server {
                         }
                         // catch exception if a web client sends server request
                         catch (StreamCorruptedException e1) {
-
+                            // TODO: handle exception
                         } catch (IOException e) {
                             // TODO: handle exception
                             System.out.println("Server failed to open client socket");

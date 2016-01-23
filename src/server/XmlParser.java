@@ -5,6 +5,7 @@ import global.Settings;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -23,6 +24,7 @@ public class XmlParser {
     public ArrayList<Domain> getDomainList() {
         domainList = new ArrayList<>();
         createXmlDomains(Settings.DOMAIN_DIR_PATH);
+        Collections.sort(domainList);
         return domainList;
     }
 

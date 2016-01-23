@@ -30,7 +30,7 @@ public class Domain implements Serializable, Comparable<Domain> {
 
     @Override
     public int compareTo(Domain d) {
-        return d.getXmlDomain().getDomain().getShortId().compareTo(this.getXmlDomain().getDomain().getShortId());
+        return this.getXmlDomain().getDomain().getShortId().compareTo(d.getXmlDomain().getDomain().getShortId());
     }
 
     @Override
