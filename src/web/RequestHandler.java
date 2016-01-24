@@ -62,6 +62,10 @@ public class RequestHandler {
         sendResponse(request, builder);
     }
 
+    private void doPost(Socket request, String requestBody) {
+        // handle request body
+    }
+
     /**
      * Receives all http requests and parses them to determine their type,
      * then routes the request parameters to either doGet or doPost.
@@ -71,7 +75,7 @@ public class RequestHandler {
      */
     public void handleRequest(Socket request) throws IOException {
         BufferedReader requestReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String domainRequested;
+        String requestBody;
         String input;
 
         while (!(input = requestReader.readLine()).equals("")) {
@@ -79,12 +83,22 @@ public class RequestHandler {
                 input = input.substring(input.indexOf('/') + 1);
 
                 if (input.startsWith(" ")) {
-                    domainRequested = "all";
+                    requestBody = "all";
                 } else {
-                    domainRequested = input.substring(0, input.indexOf(" "));
+                    requestBody = input.substring(0, input.indexOf(" "));
                 }
 
-                doGet(request, domainRequested);
+                doGet(request, requestBody);
+                break;
+            }
+            if (input.startsWith("POST")) {
+                requestBody = "";
+                while (!(requestReader.readLine()).startsWith("{")) {}
+                while((input = requestReader.readLine()).startsWith(" ")) {
+                    requestBody += input.replaceAll(" ", "");
+                }
+                doPost(request, requestBody);
+                requestReader.close();
                 break;
             }
         }

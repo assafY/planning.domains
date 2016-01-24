@@ -78,4 +78,8 @@ public class XmlParser {
 
         return null;
     }
+
+    public static void marshal(XmlDomain domain) {
+        // create xml file for new domain
+    }
 }
