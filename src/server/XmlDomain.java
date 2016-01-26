@@ -146,11 +146,14 @@ public class XmlDomain implements Serializable{
             // Strings representing domain requirements
             private String strips = null;
             private String typing = null;
-            private String durative = null; // durative-actions
+            private String durative = null; // durative_actions
             private String fluents = null;
-            private String timed = null; // time-initial-literal
+            private String timed = null; // timed_initial_literal
             private String equality = null;
             private String inequalities = null; // duration_inequalities
+            private String adl = null;
+            private String derived = null; //derived_predicates
+            private String conditional = null; // conditional_effects
 
             public String getStrips() {
                 return strips;
@@ -174,7 +177,7 @@ public class XmlDomain implements Serializable{
                 return durative;
             }
 
-            @XmlElement(name = "durative-actions")
+            @XmlElement(name = "durative_actions")
             public void setDurative(String durative) {
                 this.durative = durative;
             }
@@ -192,7 +195,7 @@ public class XmlDomain implements Serializable{
                 return timed;
             }
 
-            @XmlElement(name = "timed-initial-literals")
+            @XmlElement(name = "timed_initial_literals")
             public void setTimed(String timed) {
                 this.timed = timed;
             }
@@ -215,6 +218,33 @@ public class XmlDomain implements Serializable{
                 this.inequalities = inequalities;
             }
 
+            public String getAdl() {
+                return adl;
+            }
+
+            @XmlElement(name = "adl")
+            public void setAdl(String adl) {
+                this.adl = adl;
+            }
+
+            public String getDerived() {
+                return derived;
+            }
+
+            @XmlElement(name = "derived_predicates")
+            public void setDerived(String derived) {
+                this.derived = derived;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
 
 
             @Override
@@ -227,13 +257,28 @@ public class XmlDomain implements Serializable{
                     toReturn += "typing\n";
                 }
                 if (durative != null) {
-                    toReturn += "durative-actions\n";
+                    toReturn += "durative_actions\n";
                 }
                 if (fluents != null) {
                     toReturn += "fluents\n";
                 }
                 if (timed != null) {
-                    toReturn += "timed-initial-literals\n";
+                    toReturn += "timed_initial_literals\n";
+                }
+                if (equality != null) {
+                    toReturn += "equality\n";
+                }
+                if (inequalities != null) {
+                    toReturn += "duration_inequalities\n";
+                }
+                if (adl != null) {
+                    toReturn += "adl\n";
+                }
+                if (derived != null) {
+                    toReturn += "derived_predicates\n";
+                }
+                if (conditional != null) {
+                    toReturn += "conditional_effects\n";
                 }
                 return toReturn;
             }
