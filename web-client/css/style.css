@@ -1,0 +1,96 @@
+html {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	line-height: 22px;
+}
+
+h1, h2 {
+	text-align: center;
+	margin: 0;
+}
+
+ul {
+	list-style-type: none;
+	display: block;
+	text-align: center;
+}
+
+li {
+	display: inline-block;
+	padding-right: 50px;
+}
+
+a {
+	display: block;
+	padding: 8px;
+	text-decoration: none;
+}
+
+a:hover {
+	cursor: default;
+}
+
+.container {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.fixed-width {
+	width: 1300px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+#main-title {
+	background-color: gray;
+	margin: 0;
+	padding: 0;
+
+}
+
+#submission-form {
+	display: inline-block;
+	text-align: center;
+}
+
+#form-left {
+	float: left;
+}
+
+#form-right {
+	position: relative;
+	float: right;
+	left: 300px;
+	top: -32px;
+}
+
+.info-input {
+	padding-left: 20px;
+	display: inline-block;
+}
+
+.info-icon {
+	position: relative;
+	left: 10px;
+}
+
+#req-title {
+	position: relative;
+	left: -70px;
+	top: 30px;
+	color: rgba(0, 0, 0, .26);
+	font-size: 16px;
+}
+
+#requirements {
+	display: inline-block;
+	text-align: center;
+	position: relative;
+	left: 20px;
+}
