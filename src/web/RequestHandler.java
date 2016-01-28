@@ -72,13 +72,11 @@ public class RequestHandler {
                         builder.append(
                                 "<id>" + domainId + "</id>\n" +
                                 "<ipc>" + ipcCheck + "</ipc>\n" +
-                                "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</name>\n" +
-                                "<formulation> - </formulation>\n");
+                                "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</name>\n");
                     } else {
                         // if the domain was not part of an IPC
                         builder.append(
                                 "<id>" + domainId + "</id>\n" +
-                                "<ipc> - </ipc>\n" +
                                 "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
                                 "<formulation>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
                     }
