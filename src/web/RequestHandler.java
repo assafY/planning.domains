@@ -34,14 +34,30 @@ public class RequestHandler {
         if (domainRequested.equals("all")) {
             builder.append("<domains>\n");
             for (Domain d: server.getDomainList()) {
+
                 String domainId = d.getXmlDomain().getDomain().getShortId();
                 String[] domain = domainId.split("--");
+
                 builder.append("<domain>\n");
                 if (domain.length == 3) {
+                    String ipc = domain[0].substring(3);
+                    String name, formulation;
+
+                    // the information is derived from the domain id. In the
+                    // existing XMLs, the order between formulation and name
+                    // is reversed for domains from IPC 2008 and 2011
+                    if (ipc.equals("2008") || ipc.equals("2011")) {
+                        name = domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1);
+                        formulation = domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1);
+                    } else {
+                        name = domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1);
+                        formulation = domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1);
+                    }
+
                     builder.append(
-                            "<ipc>" + domain[0].substring(3) + "</ipc>\n" +
-                            "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</name>\n" +
-                            "<formulation>" + domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1) + "</formulation>\n");
+                            "<ipc>" + ipc + "</ipc>\n" +
+                            "<name>" + name + "</name>\n" +
+                            "<formulation>" + formulation + "</formulation>\n");
                 } else {
                     builder.append(
                             "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
