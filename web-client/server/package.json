@@ -1,0 +1,10 @@
+{
+  "name": "planning-domains",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.4",
+    "path": "^0.12.7",
+    "request": "^2.69.0",
+    "router": "^1.1.4"
+  }
+}
