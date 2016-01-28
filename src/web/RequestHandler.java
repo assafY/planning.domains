@@ -32,14 +32,22 @@ public class RequestHandler {
         builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
         if (domainRequested.equals("all")) {
-            builder.append("<domains>\n");
             for (Domain d: server.getDomainList()) {
-                builder.append("<domain>\n" +
-                        "<name>" + d + "</name>\n" +
-                        "<id>" + d.getXmlDomain().getDomain().getShortId() + "</id>\n" +
-                        "</domain>\n");
+                String domainId = d.getXmlDomain().getDomain().getShortId();
+                String[] domain = domainId.split("-");
+                builder.append("<domain>\n");
+                if (domain.length == 3) {
+                    builder.append(
+                            "<ipc>" + domain[0] + "</ipc>\n" +
+                            "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
+                            "<formulation>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
+                } else {
+                    builder.append(
+                            "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
+                            "<formulation>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
+                }
+                builder.append("</domain>\n");
             }
-            builder.append("</domains>\n");
         } else {
             File xmlFile = null;
             for (Domain d: server.getDomainList()) {
