@@ -39,14 +39,21 @@ public class RequestHandler {
                 String[] domain = domainId.split("--");
 
                 builder.append("<domain>\n");
-                if (domain.length == 3) {
+                if (domain.length > 2) {
                     String ipc = domain[0].substring(3);
                     String name, formulation;
 
                     // the information is derived from the domain id. In the
                     // existing XMLs, the order between formulation and name
-                    // is reversed for domains from IPC 2008 and 2011
-                    if (ipc.equals("2008") || ipc.equals("2011")) {
+                    // is reversed for domains from IPC 2008 and 2011. Also,
+                    // for domains of a longer id than 3 items, concatenate
+                    // the name and size to create a name
+                    if (domain.length == 4) {
+                        name = domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + " - " +
+                                domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1);
+                        formulation = domain[3].substring(0, 1).toUpperCase() + domain[3].substring(1);
+                    }
+                    else if (ipc.equals("2008") || ipc.equals("2011")) {
                         name = domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1);
                         formulation = domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1);
                     } else {
@@ -55,11 +62,14 @@ public class RequestHandler {
                     }
 
                     builder.append(
+                            "<id>" + domainId + "</id>\n" +
                             "<ipc>" + ipc + "</ipc>\n" +
                             "<name>" + name + "</name>\n" +
                             "<formulation>" + formulation + "</formulation>\n");
                 } else {
+                    // if the domain was not part of an IPC
                     builder.append(
+                            "<id>" + domainId + "</id>\n" +
                             "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
                             "<formulation>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
                 }
