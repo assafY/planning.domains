@@ -35,11 +35,11 @@ public class RequestHandler {
             builder.append("<domains>\n");
             for (Domain d: server.getDomainList()) {
                 String domainId = d.getXmlDomain().getDomain().getShortId();
-                String[] domain = domainId.split("-");
+                String[] domain = domainId.split("--");
                 builder.append("<domain>\n");
                 if (domain.length == 3) {
                     builder.append(
-                            "<ipc>" + domain[0] + "</ipc>\n" +
+                            "<ipc>" + domain[0].substring(3) + "</ipc>\n" +
                             "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</name>\n" +
                             "<formulation>" + domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1) + "</formulation>\n");
                 } else {

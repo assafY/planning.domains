@@ -57,7 +57,7 @@ public class XmlDomain implements Serializable{
         }
 
         public String getShortId() {
-            return id.substring(id.indexOf(':') + 1).replaceAll("/", "-");
+            return id.substring(id.indexOf(':') + 1).replaceAll("/", "--");
         }
 
         @XmlAttribute
