@@ -2,6 +2,7 @@ var app = angular.module('app', []);
 
 app.controller('DomainController', function($scope, DomainService) {
 	DomainService.fetch().success (function (domains) {
+		console.log('why');
 		$scope.domains = domains
 	});
 });

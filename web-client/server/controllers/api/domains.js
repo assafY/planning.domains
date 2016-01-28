@@ -18,19 +18,23 @@ var xmlParser = require('xml2js').parseString;
 ]*/
 
 var parseDomains = function(xml) {
+	var domains;
 	xmlParser(xml, function(err, result) {
-		console.dir(JSON.stringify(result));
+		domains = result.domains.domain;
 	});
+	return domains;
 };
 
 router.get('/', function(req, res) {
+	var domains;
 	request('http://calcium.inf.kcl.ac.uk:8080/', function(error, response, body) {
 		if (!error && response.statusCode == 200) {
-			parseDomains(body);
+			xmlParser(body, function(err, result) {
+			res.json(result.domains.domain);
+			});
 		}
 	});
-
-	res.json(domains);
+	//res.json(domains);
 });
 
 router.post('/', function(req, res) {
