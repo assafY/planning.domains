@@ -2,13 +2,13 @@
 
 var router = require('express').Router();
 var request = require('request');
-var xmlParser = require('xml2js').parseString;
+var xmlParser = require('xml2js').Parser({explicitArray: false});
 
 router.get('/', function(req, res) {
 	
 	request('http://calcium.inf.kcl.ac.uk:8080/', function(error, response, body) {
 		if (!error && response.statusCode == 200) {
-			xmlParser(body, function(err, result) {
+			xmlParser.parseString(body, function(err, result) {
 			res.json(result.domains.domain);
 			});
 		}
