@@ -39,8 +39,8 @@ public class RequestHandler {
                 if (domain.length == 3) {
                     builder.append(
                             "<ipc>" + domain[0] + "</ipc>\n" +
-                            "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
-                            "<formulation>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
+                            "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
+                            "<formulation>" + domain[2].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
                 } else {
                     builder.append(
                             "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
