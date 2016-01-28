@@ -32,6 +32,7 @@ public class RequestHandler {
         builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
         if (domainRequested.equals("all")) {
+            builder.append("<domains>\n");
             for (Domain d: server.getDomainList()) {
                 String domainId = d.getXmlDomain().getDomain().getShortId();
                 String[] domain = domainId.split("-");
@@ -39,8 +40,8 @@ public class RequestHandler {
                 if (domain.length == 3) {
                     builder.append(
                             "<ipc>" + domain[0] + "</ipc>\n" +
-                            "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
-                            "<formulation>" + domain[2].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
+                            "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</name>\n" +
+                            "<formulation>" + domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1) + "</formulation>\n");
                 } else {
                     builder.append(
                             "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
@@ -48,6 +49,7 @@ public class RequestHandler {
                 }
                 builder.append("</domain>\n");
             }
+            builder.append("</domains>");
         } else {
             File xmlFile = null;
             for (Domain d: server.getDomainList()) {
