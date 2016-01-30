@@ -8,18 +8,18 @@ router.get('/', function(req, res) {
 	request('http://calcium.inf.kcl.ac.uk:8080/', function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			xmlParser.parseString(body, function(err, result) {
-			res.json(result.domains.domain);
+				res.json(result.domains.domain);
 			});
 		}
 	});
 });
 
-// problem here domainId isn't sent in req
 router.get(/[a-z0-9-]+/, function(req, res) {
-	console.log(req.domainId)
-	request('http://calcium.inf.kcl.ac.uk:8080/' + req, function(error, response, body) {
+	request('http://calcium.inf.kcl.ac.uk:8080/' + req.query.domainId, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
-			res.body;
+			xmlParser.parseString(body, function(err, result) {
+				res.json(result['planning:metadata'].domain);
+			});
 		}
 	});
 })

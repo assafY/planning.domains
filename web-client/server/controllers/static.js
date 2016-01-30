@@ -24,4 +24,8 @@ router.get('/competition', function(req, res) {
 	res.sendfile('layouts/competition.html')
 });
 
+router.get('/view/domain', function(req, res) {
+	res.sendfile('layouts/domain-view.html')
+});
+
 module.exports = router;

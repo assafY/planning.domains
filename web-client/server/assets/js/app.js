@@ -1,13 +1,13 @@
 var app = angular.module('app', []);
 
-app.controller('DomainController', function($scope, DomainService) {
+app.controller('DomainController', function($scope, $location, DomainService) {
 	DomainService.fetchAll().success (function (domains) {
-		$scope.domains = domains
+		if (domains)
+			$scope.domains = domains
 	});
 	$scope.getDomain = function(domainId) {
 		DomainService.fetchDomain(domainId).success (function (domain) {
-			// What do I do here?
-			console.log(domain);
+			$scope.domain = domain;
 		})
 	}
 });
@@ -17,10 +17,10 @@ app.service('DomainService', function($http) {
 		return $http.get('/api/domains');
 	}
 	this.fetchDomain = function(domainId) {
-		return $http.get('/api/domains/' + domainId, {
-			params: {
-				'domainId': domainId
-			}
+		return $http({
+		    url: '/api/domains/' + domainId, 
+		    method: "GET",
+		    params: {'domainId': domainId}
 		});
-	}
+	};
 });
