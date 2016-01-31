@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Planning.Domains - The Online Planning Portal</title>
+		<link rel="stylesheet" href="/css/material.min.css" />
+		<link rel="stylesheet" href="/css/style.css" />
+		<script src="/js/material.min.js"></script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+	    <script src="/js/app.js"></script>
+	</head>
+	<body ng-app='app'>
+		<div class="container">
+			<div id="main-title">
+				<div class="fixed-width">
+					<h1>Planning.Domains</h1>
+				</div>
+			</div>
+			<br>
+			<div id="main-body">
+				<div class="fixed-width">
+					<ul id="main-buttons">
+						<li><a href="/#/view"><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Browse Domains</button></a></li>
+						<li><a href="/#/submit"><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Submit Domain</button></a></li>
+						<li><a href="/#/competition"><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Planning Competition</button></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div ng-view></div>
+	</body>
+</html>

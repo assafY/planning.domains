@@ -1,0 +1,28 @@
+<div class="container">
+	<div class="page-title">
+		<div class="fixed-width">
+			<h2>View Domains</h2>
+		</div>
+	</div>
+	<br>
+	<div id="view-table">
+		<div class="fixed-width">
+			<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+				<thead>
+					<tr>
+						<th class="mdl-data-table__cell--non-numeric">Domain</th>
+						<th class="mdl-data-table__cell--non-numeric">Formulation</th>
+						<th>IPC</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat='domain in domains' ng-click='getDomain(domain.id);'>
+						<td class="mdl-data-table__cell--non-numeric">{{ domain.name }}</td>
+						<td class="mdl-data-table__cell--non-numeric">{{ domain.formulation }}</td>
+						<td>{{ domain.ipc }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
