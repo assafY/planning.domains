@@ -88,8 +88,8 @@ public class RequestHandler {
                 domainRequested.startsWith("problem-file")) {
             // the web client is requesting a domain pddl file
             File pddlFile = null;
-            String domainId = domainRequested.substring(domainRequested.indexOf('/'), domainRequested.lastIndexOf('/') + 1);
-            String fileName = domainRequested.substring(domainRequested.lastIndexOf('/'));
+            String domainId = domainRequested.substring(domainRequested.indexOf('/') + 1, domainRequested.lastIndexOf('/'));
+            String fileName = domainRequested.substring(domainRequested.lastIndexOf('/') + 1);
 
             System.out.println("domainId: " + domainId + ", fileName: "+ fileName);
 
