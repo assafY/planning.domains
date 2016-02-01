@@ -84,8 +84,7 @@ public class RequestHandler {
                 builder.append("</domain>\n");
             }
             builder.append("</domains>");
-        } else if (domainRequested.startsWith("domain-file") ||
-                domainRequested.startsWith("problem-file")) {
+        } else if (domainRequested.startsWith("pddl-file")) {
             // the web client is requesting a domain pddl file
             File pddlFile = null;
             String domainId = domainRequested.substring(domainRequested.indexOf('/') + 1, domainRequested.lastIndexOf('/'));
