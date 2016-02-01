@@ -16,18 +16,18 @@ angular.module('app')
 		});
 	};
 
-	this.fetchProblemFile = function(problemFile) {
+	this.fetchPddlFile = function(fileName) {
 		return $http({
-			url: '/api/domains/' + localDomainId + '/' + problemFile,
+			url: '/api/domains/' + localDomainId + '/' + fileName,
 			method: "GET",
 			params: {
 				'domainId': localDomainId,
-				'problemFile': problemFile
+				'fileName': fileName
 			}
 		});
 	};
 
-	this.fetchDomainFile = function(domainFile) {
+	/*this.fetchDomainFile = function(domainFile) {
 		return $http({
 			url: '/api/domains/' + localDomainId + '/' + domainFile,
 			method: "GET",
@@ -36,18 +36,18 @@ angular.module('app')
 				'domainFile': domainFile
 			}
 		});
-	};
+	};*/
 
 	this.singleDomainView = function() {
 		$location.path('/view/domain')
 	};
 
 	this.problemView = function() {
-		$location.path('/view/domain/problem')
+		$location.path('/view/domain/pddl')
 	};
 	
 	this.domainView = function() {
-		$location.path('/view/domain/domain')
+		$location.path('/view/domain/pddl')
 	};
 
 });

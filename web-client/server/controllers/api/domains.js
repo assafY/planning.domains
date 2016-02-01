@@ -7,7 +7,7 @@ var xmlParser = require('xml2js').Parser({explicitArray: false});
 var SERVER_ADDRESS = 'http://calcium.inf.kcl.ac.uk:8080/';
 
 router.get('/', function (req, res) {
-	request('http://calcium.inf.kcl.ac.uk:8080/', function(error, response, body) {
+	request(SERVER_ADDRESS, function(error, response, body) {
 		if (!error && response.statusCode == 200) {
 			xmlParser.parseString(body, function (err, result) {
 				res.json(result.domains.domain);
@@ -16,23 +16,23 @@ router.get('/', function (req, res) {
 	});
 });
 
-router.get(/[a-z0-9-]+\/(p[0-9]{2}-)?domain\.pddl/, function (req, res) {
-	request(SERVER_ADDRESS + 'domain-file/' + req.query.domainId + '/' + req.query.domainFile,
+router.get(/[a-z0-9-]+\/(p[0-9]{2}-?)?(domain)?\.pddl/, function (req, res) {
+	request(SERVER_ADDRESS + 'pddl-file/' + req.query.domainId + '/' + req.query.fileName,
 		function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-
+				res.send(body)
 			}
 		});
 })
 
-router.get(/[a-z0-9-]+\/p[0-9]{2}/, function (req, res) {
+/*router.get(/[a-z0-9-]+\/p[0-9]{2}/, function (req, res) {
 	request(SERVER_ADDRESS + 'problem-file/' + req.query.domainId + '/' + req.query.problemFile,
 		function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				
+				res.send(body)
 			}
 		});	
-})
+})*/
 
 router.get(/[a-z0-9-]+/, function (req, res) {
 	request(SERVER_ADDRESS + req.query.domainId, function (error, response, body) {
