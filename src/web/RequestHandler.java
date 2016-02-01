@@ -29,10 +29,9 @@ public class RequestHandler {
     private void doGet(Socket request, String domainRequested) throws IOException {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-
         if (domainRequested.equals("all")) {
-            builder.append("<domains>\n");
+            builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<domains>\n");
             for (Domain d: server.getDomainList()) {
 
                 String domainId = d.getXmlDomain().getDomain().getShortId();
@@ -108,9 +107,9 @@ public class RequestHandler {
                 }
             }
 
-        } else if (domainRequested.startsWith("problem-file")) {
-
         } else {
+            builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            
             File xmlFile = null;
             for (Domain d: server.getDomainList()) {
                 if (d.getXmlDomain().getDomain().getShortId().equals(domainRequested)) {
