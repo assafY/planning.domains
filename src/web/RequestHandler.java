@@ -104,6 +104,7 @@ public class RequestHandler {
                 String currentLine;
                 while ((currentLine = fileBuffer.readLine()) != null) {
                     builder.append(currentLine + "\n");
+                    System.out.println(currentLine);
                 }
             }
 
