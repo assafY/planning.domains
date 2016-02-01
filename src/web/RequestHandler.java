@@ -84,6 +84,32 @@ public class RequestHandler {
                 builder.append("</domain>\n");
             }
             builder.append("</domains>");
+        } else if (domainRequested.startsWith("domain-file") ||
+                domainRequested.startsWith("problem-file")) {
+            // the web client is requesting a domain pddl file
+            File pddlFile = null;
+            String domainId = domainRequested.substring(domainRequested.indexOf('/'), domainRequested.lastIndexOf('/') + 1);
+            String fileName = domainRequested.substring(domainRequested.lastIndexOf('/'));
+
+            System.out.println("domainId: " + domainId + ", fileName: "+ fileName);
+
+            for (Domain d: server.getDomainList()) {
+                if (d.getXmlDomain().getDomain().getShortId().equals(domainId)) {
+                    pddlFile = new File(d.getPath() + "/" + fileName);
+                    break;
+                }
+            }
+            if (pddlFile != null) {
+                BufferedReader fileBuffer = new BufferedReader(new FileReader(pddlFile));
+
+                String currentLine;
+                while ((currentLine = fileBuffer.readLine()) != null) {
+                    builder.append(currentLine + "\n");
+                }
+            }
+
+        } else if (domainRequested.startsWith("problem-file")) {
+
         } else {
             File xmlFile = null;
             for (Domain d: server.getDomainList()) {
