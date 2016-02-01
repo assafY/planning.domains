@@ -27,17 +27,6 @@ angular.module('app')
 		});
 	};
 
-	/*this.fetchDomainFile = function(domainFile) {
-		return $http({
-			url: '/api/domains/' + localDomainId + '/' + domainFile,
-			method: "GET",
-			params: {
-				'domainId': localDomainId,
-				'domainFile': domainFile
-			}
-		});
-	};*/
-
 	this.singleDomainView = function() {
 		$location.path('/view/domain')
 	};
