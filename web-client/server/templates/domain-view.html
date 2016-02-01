@@ -1,3 +1,33 @@
 <div class='container'>
-	<p> {{ domain.title }} </p>
+	<div class='page-title'>
+		<div class='fixed-width'>
+			<h3> {{ domain.title._ }} </h3>
+		</div>
+	</div>
+	<div id='domain-view'>
+		<div class='fixed-width'>
+			<a href= '{{ domain.link }}'><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Visit Website</button></a>
+			<br><strong>Requirements:</strong><br>
+			<div ng-repeat="(key, data) in domain.requirements">
+				{{key}}
+			</div><br>
+			<strong>PDDLs:</strong> <br>
+			<div id='problem-table'>
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+					<thead>
+						<tr>
+							<th class="mdl-data-table__cell--non-numeric">Problem</th>
+							<th class="mdl-data-table__cell--non-numeric">Domain</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat='problem in domain.problems.problem'>
+							<td class="mdl-data-table__cell--non-numeric" ng-click='getProblemFile(problem.$.problem_file)'>{{ problem.$.problem_file }}</td>
+							<td class="mdl-data-table__cell--non-numeric" ng-click='getDomainFile(problem.$.domain_file)'>{{ problem.$.domain_file }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
