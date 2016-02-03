@@ -9,12 +9,72 @@ body {
 	line-height: 22px;
 }
 
-h1, h2 {
+h1, h2, h3, h4, h5 {
 	text-align: center;
 	margin: 0;
+	font-family: 'Vollkorn', serif;
+}
+
+.navbar-button {
+	color: #fbfbfb;
+}
+
+.transparent-layout {
+  	background: url('/img/states-min-grad-50.jpg') center / cover;
+}
+
+.transparent-layout .mdl-layout__header,
+.transparent-layout .mdl-layout__drawer-button {
+  	color: white;
+}
+
+.main-header {
+	position: relative;
+	top: 12px;
+}
+
+#competition-button.mdl-card {
+	width: 320px;
+	height: 320px;
+	border-radius: 15px;
+}
+
+#view-button.mdl-card {
+	width: 320px;
+	height: 320px;
+	border-radius: 15px;
+}
+
+#submit-button.mdl-card {
+	width: 320px;
+	height: 320px;
+	border-radius: 15px;
+}
+
+#competition-button > .mdl-card__title {
+	color: #fff;
+	background:
+	  url('/img/trophy.png') 20% 100% no-repeat #009DE1;
+	background-size: 175%;
+}
+
+#view-button > .mdl-card__title {
+	color: #fff;
+	background:
+      url('/img/rover-vector.png') 30% 100% no-repeat #F7B73D;
+ 	background-size: 180%;
+}
+
+#submit-button > .mdl-card__title {
+	color: #fff;
+	background:
+	  url('/img/rocket.png') 20% 100% no-repeat #10415A;
+	background-size: 175%;
 }
 
 ul {
+	position: relative;
+	top: 400px;
 	list-style-type: none;
 	display: block;
 	text-align: center;
@@ -22,7 +82,7 @@ ul {
 
 li {
 	display: inline-block;
-	padding-right: 50px;
+	padding-right: 70px;
 }
 
 a {
@@ -37,21 +97,60 @@ a:hover {
 
 .container {
 	width: 100%;
+	height: 100vh;
 	margin: 0;
 	padding: 0;
+	padding-top: 70px;
 }
+
+/*.page-background {
+	background: linear-gradient(white, #d2d2d2);
+}*/
 
 .fixed-width {
 	width: 1300px;
-	margin: 0 auto;
+	margin-left: auto;
+	margin-right: auto;
 	padding: 0;
 }
 
 #main-title {
-	background-color: gray;
 	margin: 0;
 	padding: 0;
+	position: relative;
+	color: black;
+	top: 200px;
+	font-size: 5.5em;
+}
 
+.page-title {
+	color: #fbfbfb;
+	text-align: center;
+}
+
+.view-table {
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 50px;
+}
+
+
+#domain-view {
+	margin-top: 40px;
+}
+
+#domain-details {
+	text-align: center;
+	color: #fbfbfb;
+}
+
+.domain-button-view {
+	display: inline-block;
+}
+
+.domain-button {
+	color: #fbfbfb;
 }
 
 #submission-form {

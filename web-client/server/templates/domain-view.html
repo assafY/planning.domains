@@ -1,19 +1,21 @@
 <div class='container'>
-	<div class='page-title'>
-		<div class='fixed-width'>
-			<h3> {{ domain.title._ }} </h3>
+	<div class='fixed-width'>
+		<div class='page-title'>
+			<h3 class="page-title"> {{ domain.title._ }} </h3>
+				<div class="domain-button-view"><a href= '{{ domain.link }}'><button class="mdl-button mdl-js-button domain-button">Visit Website</button></a></div>
+				<div class="domain-button-view"><button class="mdl-button mdl-js-button domain-button" ng-click='downloadDomain()'>Download Domain Files</button></div>
 		</div>
 	</div>
-	<div id='domain-view'>
-		<div class='fixed-width'>
-			<a href= '{{ domain.link }}'><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Visit Website</button></a>
-			<br><strong>Requirements:</strong><br>
-			<div ng-repeat="(key, data) in domain.requirements">
-				{{key}}
-			</div><br>
-			<strong>PDDLs:</strong> <br>
-			<div id='problem-table'>
-				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+	<div class='fixed-width'>
+		<div id='domain-view'>
+			<div id='domain-details'>
+				<br><strong>Requirements:</strong><br>
+				<div ng-repeat="(key, data) in domain.requirements">
+					{{ key }}
+				</div><br>
+			</div>
+			<div id='domain-table'>
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--8dp view-table">
 					<thead>
 						<tr>
 							<th class="mdl-data-table__cell--non-numeric">Problem</th>

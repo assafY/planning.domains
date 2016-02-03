@@ -6,28 +6,38 @@
 		<link rel="stylesheet" href="/css/style.css" />
 		<script src="/js/material.min.js"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link href='http://fonts.googleapis.com/css?family=Vollkorn:400italic,400,700d' rel='stylesheet' type='text/css'>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
 	    <script src="/js/app.js"></script>
 	</head>
 	<body ng-app='app'>
-		<div class="container">
-			<div id="main-title">
-				<div class="fixed-width">
-					<h1>Planning.Domains</h1>
-				</div>
-			</div>
-			<br>
-			<div id="main-body">
-				<div class="fixed-width">
-					<ul id="main-buttons">
-						<li><a href="/#/view"><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Browse Domains</button></a></li>
-						<li><a href="/#/submit"><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Submit Domain</button></a></li>
-						<li><a href="/#/competition"><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Planning Competition</button></a></li>
-					</ul>
-				</div>
-			</div>
+		<div class="transparent-layout mdl-layout mdl-js-layout">
+		  <header class="mdl-layout__header mdl-layout__header--transparent">
+		    <div class="mdl-layout__header-row">
+		      <a href="/#/"><span class="mdl-layout-title">Planning.Domains</span></a>
+		      <div class="mdl-layout-spacer"></div>
+		      <nav class="mdl-navigation">
+		        <a href="/#/view"><button class="mdl-button mdl-js-button navbar-button">View Domains</button></a>
+		        <a href="/#/submit"><button class="mdl-button mdl-js-button navbar-button">Submit Domain</button></a>
+		        <a href="/#/submit"><button class="mdl-button mdl-js-button navbar-button">Submit Planner</button></a>
+		        <a href="/#/competition"><button class="mdl-button mdl-js-button navbar-button">Competition</button></a>
+		      </nav>
+		    </div>
+		  </header>
+		  <div class="mdl-layout__drawer">
+		    <span class="mdl-layout-title">Planning.Domains</span>
+		    <nav class="mdl-navigation">
+		      <a class="mdl-navigation__link" href="/#/view">View Domains</a>
+		      <a class="mdl-navigation__link" href="/#/submit">Submit Domain</a>
+		      <a class="mdl-navigation__link" href="/#/submit">Submit Planner</a>
+		      <a class="mdl-navigation__link" href="/#/competition">Competition</a>
+		    </nav>
+		  </div>
+		  <main class="mdl-layout__content">
+		  	<div ng-view autoscroll></div>	
+		  </main>
+
 		</div>
-		<div ng-view></div>
 	</body>
 </html>
