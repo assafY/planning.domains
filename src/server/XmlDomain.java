@@ -148,12 +148,25 @@ public class XmlDomain implements Serializable{
             private String typing = null;
             private String durative = null; // durative_actions
             private String fluents = null;
-            private String timed = null; // timed_initial_literal
+            private String timed = null; // timed_initial_literals
             private String equality = null;
             private String inequalities = null; // duration_inequalities
             private String adl = null;
             private String derived = null; //derived_predicates
             private String conditional = null; // conditional_effects
+            private String action = null; // action_costs
+            private String continuous = null; // continuous_effects
+            private String constraints = null;
+            private String disjunctive = null; // disjunctive_preconditions
+            private String existential = null; // existential_preconditions
+            private String goal = null; // goal_utilities
+            private String negative = null; // negative_preconditions
+            private String numeric = null; // numeric_fluents
+            private String object = null; // object_fluents
+            private String preferences = null;
+            private String quantified = null; // quantified_preconditions
+            private String time = null;
+            private String universal = null; // universal_preconditions
 
             public String getStrips() {
                 return strips;
@@ -245,6 +258,122 @@ public class XmlDomain implements Serializable{
                 this.conditional = conditional;
             }
 
+            public String getAction() {
+                return action;
+            }
+
+            @XmlElement(name ="action_costs")
+            public void setAction(String action) {
+                this.action = action;
+            }
+
+            public String getContinuous() {
+                return continuous;
+            }
+
+            @XmlElement(name ="continuous_effects")
+            public void setContinuous(String continuous) {
+                this.continuous = continuous;
+            }
+
+            public String getConstraints() {
+                return constraints;
+            }
+
+            @XmlElement(name ="constraints")
+            public void setConstraints(String constraints) {
+                this.constraints = constraints;
+            }
+
+            public String getDisjunctive() {
+                return disjunctive;
+            }
+
+            @XmlElement(name ="disjunctive_preconditions")
+            public void setDisjunctive(String disjunctive) {
+                this.disjunctive = disjunctive;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
+
+            public String getConditional() {
+                return conditional;
+            }
+
+            @XmlElement(name ="conditional_effects")
+            public void setConditional(String conditional) {
+                this.conditional = conditional;
+            }
 
 
             @Override
