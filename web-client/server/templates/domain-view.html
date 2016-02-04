@@ -1,0 +1,35 @@
+<div class='container'>
+	<div class='fixed-width'>
+		<div class='page-title'>
+			<h3 class="page-title"> {{ domain.title._ }} </h3>
+				<div class="domain-button-view"><a href= '{{ domain.link }}'><button class="mdl-button mdl-js-button domain-button">Visit Website</button></a></div>
+				<div class="domain-button-view"><button class="mdl-button mdl-js-button domain-button" ng-click='downloadDomain()'>Download Domain Files</button></div>
+		</div>
+	</div>
+	<div class='fixed-width'>
+		<div id='domain-view'>
+			<div id='domain-details'>
+				<br><strong>Requirements:</strong><br>
+				<div ng-repeat="(key, data) in domain.requirements">
+					{{ key }}
+				</div><br>
+			</div>
+			<div id='domain-table'>
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--8dp view-table">
+					<thead>
+						<tr>
+							<th class="mdl-data-table__cell--non-numeric">Problem</th>
+							<th class="mdl-data-table__cell--non-numeric">Domain</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat='problem in domain.problems.problem'>
+							<td class="mdl-data-table__cell--non-numeric" ng-click='getPddlFile(problem.$.problem_file)'>{{ problem.$.problem_file }}</td>
+							<td class="mdl-data-table__cell--non-numeric" ng-click='getPddlFile(problem.$.domain_file)'>{{ problem.$.domain_file }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
