@@ -1,10 +1,14 @@
 package web;
 
 import data.Domain;
+import data.Planner;
 import server.Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Class for handling GET and POST requests from web clients.
@@ -107,6 +111,17 @@ public class RequestHandler {
                 }
             }
 
+        } else if (domainRequested.startsWith("leaderboard")) {
+            builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n +" +
+                    "<leaderboard>\n");
+            LinkedHashMap<Planner, Double> leaderboard = server.getLeaderboard().getSortedLeaderboard();
+
+            for (Map.Entry<Planner, Double> currentPlanner: leaderboard.entrySet()) {
+                builder.append("<planner>" + currentPlanner.getKey().getName() + "</planner>\n");
+                builder.append("<result>" + currentPlanner.getValue() + "</result>\n");
+            }
+
+            builder.append("</leaderboard>");
         } else {
             builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             

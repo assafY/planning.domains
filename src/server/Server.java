@@ -1,6 +1,7 @@
 package server;
 
 import data.Domain;
+import data.Leaderboard;
 import data.Planner;
 import data.XmlDomain;
 import global.Global;
@@ -21,6 +22,9 @@ public class Server {
     private ArrayList<Node> nodeList;
     private ArrayList<Domain> domainList;
     private ArrayList<Planner> plannerList;
+
+    // leaderboard of all existing planners
+    private Leaderboard leaderboard;
 
     // process builder to run OS jobs
     private ProcessBuilder pBuilder;
@@ -45,7 +49,9 @@ public class Server {
         // initialise job queue and add listener
         jobQueue = new PriorityBlockingQueue();
 
-
+        // initialise and set the leaderboard
+        leaderboard = new Leaderboard();
+        leaderboard.setLeaderboard(domainList);
 
         // start the server
         startServer();
@@ -142,6 +148,15 @@ public class Server {
             //TODO: handle exception
             System.err.println("Waiting for process to end interrupted");
         }
+    }
+
+    /**
+     * Get the server's existing leaderboard
+     *
+     * @return Leaderboard object
+     */
+    public Leaderboard getLeaderboard() {
+        return leaderboard;
     }
 
     /**
