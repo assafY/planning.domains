@@ -8,6 +8,7 @@
     "gulp-ng-annotate": "^1.1.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.1",
+    "mongoose": "^4.4.3",
     "path": "^0.12.7",
     "request": "^2.69.0",
     "router": "^1.1.4"

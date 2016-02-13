@@ -294,85 +294,85 @@ public class XmlDomain implements Serializable{
                 this.disjunctive = disjunctive;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getExistential() {
+                return existential;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="existential_preconditions")
+            public void setExistential(String existential) {
+                this.existential = existential;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getGoal() {
+                return goal;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="goal_utilities")
+            public void setGoal(String goal) {
+                this.goal = goal;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getNegative() {
+                return negative;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="negative_preconditions")
+            public void setNegative(String negative) {
+                this.negative = negative;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getNumeric() {
+                return numeric;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="numeric_fluents")
+            public void setNumeric(String conditional) {
+                this.numeric = numeric;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getObject() {
+                return object;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="object_fluents")
+            public void setObject(String object) {
+                this.object = object;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getPreferences() {
+                return preferences;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="preferences")
+            public void setPreferences(String preferences) {
+                this.preferences = preferences;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getQuantified() {
+                return quantified;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="quantified_preconditions")
+            public void setQuantified(String quantified) {
+                this.quantified = quantified;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getTime() {
+                return time;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="time")
+            public void setTime(String time) {
+                this.time = time;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getUniversal() {
+                return universal;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="universal_preconditions")
+            public void setUniversal(String universal) {
+                this.universal = universal;
             }
 
 
@@ -408,6 +408,45 @@ public class XmlDomain implements Serializable{
                 }
                 if (conditional != null) {
                     toReturn += "conditional_effects\n";
+                }
+                if (action != null) {
+                    toReturn += "action_costs\n";
+                }
+                if (continuous != null) {
+                    toReturn += "continuous_effects\n";
+                }
+                if (constraints != null) {
+                    toReturn += "constraints\n";
+                }
+                if (disjunctive != null) {
+                    toReturn += "disjunctive_preconditions\n";
+                }
+                if (existential != null) {
+                    toReturn += "existential_preconditions\n";
+                }
+                if (goal != null) {
+                    toReturn += "goal_utilities\n";
+                }
+                if (negative != null) {
+                    toReturn += "negative_preconditions\n";
+                }
+                if (numeric != null) {
+                    toReturn += "numeric_fluents\n";
+                }
+                if (object != null) {
+                    toReturn += "object_fluents\n";
+                }
+                if (preferences != null) {
+                    toReturn += "preferences\n";
+                }
+                if (quantified != null) {
+                    toReturn += "quantified_preconditions\n";
+                }
+                if (time != null) {
+                    toReturn += "time\n";
+                }
+                if (universal != null) {
+                    toReturn += "universal_preconditions\n";
                 }
                 return toReturn;
             }
