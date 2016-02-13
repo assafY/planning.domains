@@ -1,6 +1,5 @@
 package data;
 
-import com.sun.tools.jdi.DoubleValueImpl;
 import global.Global;
 
 import java.util.HashMap;
@@ -45,11 +44,13 @@ public class Leaderboard {
     }
 
     private void addProblemResults(HashMap<Planner, Double> problemResultsMap) {
-        Iterator iter = problemResultsMap.entrySet().iterator();
-        Map.Entry currentResult = null;
-        while (iter.hasNext()) {
-            currentResult = (Map.Entry) iter.next();
-            increaseResultBy((Planner) currentResult.getKey(), (Double) currentResult.getValue());
+        if (problemResultsMap != null) {
+            Iterator iter = problemResultsMap.entrySet().iterator();
+            Map.Entry currentResult = null;
+            while (iter.hasNext()) {
+                currentResult = (Map.Entry) iter.next();
+                increaseResultBy((Planner) currentResult.getKey(), (Double) currentResult.getValue());
+            }
         }
     }
 
@@ -59,21 +60,25 @@ public class Leaderboard {
     }
 
     private LinkedHashMap<Planner, Double> sortLeaderboard() {
-        ArrayList<Map.Entry<Planner, Double>> sortedList = new ArrayList<>(leaderboardMap.entrySet());
-        Collections.sort(sortedList, new Comparator<Map.Entry<Planner, Double>>() {
-            public int compare(Map.Entry<Planner, Double> planner1,
-                               Map.Entry<Planner, Double> planner2) {
-                return planner1.getValue().compareTo(planner2.getValue());
-            }
-        });
+        if (leaderboardMap != null) {
+            ArrayList<Map.Entry<Planner, Double>> sortedList = new ArrayList<>(leaderboardMap.entrySet());
+            Collections.sort(sortedList, new Comparator<Map.Entry<Planner, Double>>() {
+                public int compare(Map.Entry<Planner, Double> planner1,
+                                   Map.Entry<Planner, Double> planner2) {
+                    return planner1.getValue().compareTo(planner2.getValue());
+                }
+            });
 
-        LinkedHashMap<Planner, Double> sortedMap = new LinkedHashMap<>();
-        Iterator iter = sortedList.iterator();
-        while (iter.hasNext()) {
-            Map.Entry<Planner, Double> currentPlanner = (Map.Entry<Planner, Double>) iter.next();
-            sortedMap.put(currentPlanner.getKey(), currentPlanner.getValue());
+            LinkedHashMap<Planner, Double> sortedMap = new LinkedHashMap<>();
+            Iterator iter = sortedList.iterator();
+            while (iter.hasNext()) {
+                Map.Entry<Planner, Double> currentPlanner = (Map.Entry<Planner, Double>) iter.next();
+                sortedMap.put(currentPlanner.getKey(), currentPlanner.getValue());
+            }
+
+            return sortedMap;
         }
 
-        return sortedMap;
+        return null;
     }
 }
