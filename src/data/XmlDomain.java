@@ -5,9 +5,7 @@ import global.Global;
 import javax.xml.bind.annotation.*;
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Class for every planning domain that exists in the system.
@@ -18,7 +16,6 @@ public class XmlDomain implements Serializable{
 
     private File xmlFile;
     private XmlDomain.Domain domain;
-    private HashMap<Planner, Result> resultMap = new HashMap<>();
 
     public XmlDomain.Domain getDomain() {
         return domain;
@@ -481,9 +478,6 @@ public class XmlDomain implements Serializable{
                 // a map for results of running different planners on this problem
                 private HashMap<Planner, Integer> resultMap = new HashMap<>();
 
-                // a map for the factorized results of planners on all problems
-                private HashMap<Planner, Double> leaderBoard;
-
                 public String getDomain_file() {
                     return domainFile;
                 }
@@ -521,7 +515,30 @@ public class XmlDomain implements Serializable{
                  */
                 public void addResult(Planner planner, int result) {
                     resultMap.put(planner, result);
-                    leaderBoard = Global.getProblemLeaderboard(resultMap);
+                }
+
+                public HashMap<Planner, Integer> getResultMap() {
+                    return resultMap;
+                }
+
+                /**
+                 * Get the planner with the best result for this problem, as
+                 * well as the result
+                 *
+                 * @return Result, a planner integer pair
+                 */
+                public Result getBestResult() {
+
+                    Iterator iter = resultMap.entrySet().iterator();
+                    Map.Entry bestResult = (Map.Entry) iter.next();
+                    while (iter.hasNext()) {
+                        Map.Entry currentResult = (Map.Entry) iter.next();
+                        if ((Integer) currentResult.getValue() < (Integer) bestResult.getValue()) {
+                            bestResult = currentResult;
+                        }
+                    }
+
+                    return new Result((Planner) bestResult.getKey(), (Integer) bestResult.getValue());
                 }
 
                 @Override
