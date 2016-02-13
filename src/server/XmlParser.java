@@ -1,5 +1,7 @@
 package server;
 
+import data.Domain;
+import data.XmlDomain;
 import global.Settings;
 
 import java.io.File;

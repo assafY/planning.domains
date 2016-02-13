@@ -1,5 +1,9 @@
 package server;
 
+import data.Domain;
+import data.Planner;
+import data.XmlDomain;
+
 import java.io.Serializable;
 
 public class Job implements Comparable<Job>, Serializable {

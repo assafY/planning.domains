@@ -1,5 +1,8 @@
 package server;
 
+import data.Domain;
+import data.Planner;
+import data.XmlDomain;
 import global.Global;
 import global.Message;
 import global.Settings;

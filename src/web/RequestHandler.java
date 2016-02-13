@@ -1,6 +1,6 @@
 package web;
 
-import server.Domain;
+import data.Domain;
 import server.Server;
 
 import java.io.*;

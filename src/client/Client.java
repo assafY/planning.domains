@@ -2,7 +2,7 @@ package client;
 
 import global.*;
 import server.Job;
-import server.XmlDomain;
+import data.XmlDomain;
 
 import java.io.*;
 import java.net.Socket;
