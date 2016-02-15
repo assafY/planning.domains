@@ -518,6 +518,7 @@ public class XmlDomain implements Serializable{
                 }
 
                 public HashMap<Planner, Integer> getResultMap() {
+                    System.out.println("getting result map of size " + resultMap.size());
                     return resultMap;
                 }
 

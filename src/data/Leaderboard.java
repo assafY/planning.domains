@@ -35,16 +35,15 @@ public class Leaderboard {
             }
         }
 
-        // sort leaderboard and store copy
-        sortedLeaderboard = sortLeaderboard();
+        sortLeaderboard();
     }
 
     public LinkedHashMap<Planner, Double> getSortedLeaderboard() {
         return sortedLeaderboard;
     }
 
-    private void addProblemResults(HashMap<Planner, Double> problemResultsMap) {
-        if (problemResultsMap != null) {
+    public void addProblemResults(HashMap<Planner, Double> problemResultsMap) {
+        if (problemResultsMap != null && problemResultsMap.size() > 0) {
             Iterator iter = problemResultsMap.entrySet().iterator();
             Map.Entry currentResult = null;
             while (iter.hasNext()) {
@@ -55,11 +54,15 @@ public class Leaderboard {
     }
 
     private void increaseResultBy(Planner planner, double result) {
-        double previousResult = leaderboardMap.get(planner);
-        leaderboardMap.put(planner, result + previousResult);
+        Double previousResult = leaderboardMap.get(planner);
+        if (previousResult != null) {
+            leaderboardMap.put(planner, result + previousResult);
+        } else {
+            leaderboardMap.put(planner, result);
+        }
     }
 
-    private LinkedHashMap<Planner, Double> sortLeaderboard() {
+    public void sortLeaderboard() {
         if (leaderboardMap != null) {
             ArrayList<Map.Entry<Planner, Double>> sortedList = new ArrayList<>(leaderboardMap.entrySet());
             Collections.sort(sortedList, new Comparator<Map.Entry<Planner, Double>>() {
@@ -69,16 +72,12 @@ public class Leaderboard {
                 }
             });
 
-            LinkedHashMap<Planner, Double> sortedMap = new LinkedHashMap<>();
+            sortedLeaderboard = new LinkedHashMap<>();
             Iterator iter = sortedList.iterator();
             while (iter.hasNext()) {
                 Map.Entry<Planner, Double> currentPlanner = (Map.Entry<Planner, Double>) iter.next();
-                sortedMap.put(currentPlanner.getKey(), currentPlanner.getValue());
+                sortedLeaderboard.put(currentPlanner.getKey(), currentPlanner.getValue());
             }
-
-            return sortedMap;
         }
-
-        return null;
     }
 }

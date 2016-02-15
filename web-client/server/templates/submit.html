@@ -1,129 +1,117 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Planning.Domains - Submit A Domain</title>
-		<link rel="stylesheet" href="css/material.min.css" />
-		<link rel="stylesheet" href="css/style.css" />
-		<script src="js/material.min.js"></script>
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	</head>
-	<body>
-		<div class="container">
-			<div class="page-title">
-				<div class="fixed-width">
-					<h2>Submit A Domain</h2>
-				</div>
-			</div>
-			<br>
-			<div class="fixed-width">
-				<div id="submission-form">
-					<form id="domain-submit" method="post">
-						<div id="form-left">
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							    <input class="mdl-textfield__input" type="text" id="domain-name">
-							   	<label class="mdl-textfield__label" for="domain-name">name</label>
-							</div>
-							<br>
-							<div class="info-input">
-								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								    <input class="mdl-textfield__input" type="text" pattern="20[0-9][0-9]" id="ipc">
-								   	<label class="mdl-textfield__label" for="ipc">ipc</label>
-								   	<span class="mdl-textfield__error">Please enter a valid year or leave empty</span>
-								</div>
-								<img src="img/info_18dp.png" class="info-icon" id="ipc-info"/>
-								<div class="mdl-tooltip" for="ipc-info">
-									The IPC submission year. Leave blank if not submitted to IPC.
-								</div>
-							</div>
-							<br>
-							<div class="info-input">
-								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								    <input class="mdl-textfield__input" type="text" pattern="[a-zA-Z\-]*" id="formulation">
-								   	<label class="mdl-textfield__label" for="formulation">formulation</label>
-								   	<span class="mdl-textfield__error">No spaces or numbers allowed</span>
-								</div>
-								<img src="img/info_18dp.png" class="info-icon" id="formulation-info" />
-								<div class="mdl-tooltip" for="formulation-info">
-									The domain formulation, e.g. temporal or sequential-optimal.
-								</div>
-							</div>
-						</div>
-						<div id="form-right">
-							<div id="requirements">
-								<h5 id="req-title">Requirements</h5><br>
-								<table>
-									<tr><td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="strips-checkbox">
-											<input type="checkbox" id="strips-checkbox" class="mdl-checkbox__input" name="requirement" value="strips">
-											<span class="mdl-checkbox__label">Strips</span>
-										</label>
-										</td>
-									<td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="conditional-checkbox">
-											<input type="checkbox" id="conditional-checkbox" class="mdl-checkbox__input" name="requirement" value="conditional_effects">
-											<span class="mdl-checkbox__label">Conditional Effects</span>
-										</label>
-										</td>
-									</tr>
-									<tr><td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="fluents-checkbox">
-											<input type="checkbox" id="fluents-checkbox" class="mdl-checkbox__input" name="requirement" value="fluents">
-											<span class="mdl-checkbox__label">Fluents</span>
-										</label>
-										</td>
-									<td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="durative-checkbox">
-											<input type="checkbox" id="durative-checkbox" class="mdl-checkbox__input" name="requirement" value="durative_actions">
-											<span class="mdl-checkbox__label">Durative Actions</span>
-										</label>
-										</td>
-									</tr>
-									<tr><td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="equality-checkbox">
-											<input type="checkbox" id="equality-checkbox" class="mdl-checkbox__input" name="requirement" value="equality">
-											<span class="mdl-checkbox__label">Equality</span>
-										</label>
-										</td>
-									<td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="timed-checkbox">
-											<input type="checkbox" id="timed-checkbox" class="mdl-checkbox__input" name="requirement" value="timed_initial_literals">
-											<span class="mdl-checkbox__label">Timed Initial Literals</span>
-										</label>
-										</td>
-									</tr>
-									<tr><td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="typing-checkbox">
-											<input type="checkbox" id="typing-checkbox" class="mdl-checkbox__input" name="requirement" value="typing">
-											<span class="mdl-checkbox__label">Typing</span>
-										</label>
-										</td>
-									<td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="inequalities-checkbox">
-											<input type="checkbox" id="inequalities-checkbox" class="mdl-checkbox__input" name="requirement" value="duration_inequalities">
-											<span class="mdl-checkbox__label">Duration Inequalities</span>
-										</label>
-										</td>
-									</tr>
-									<tr><td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="adl-checkbox">
-											<input type="checkbox" id="adl-checkbox" class="mdl-checkbox__input" name="requirement" value="adl">
-											<span class="mdl-checkbox__label">ADL</span>
-										</label>
-										</td>
-									<td>
-										<label class="mdl-checkbox mdl-js-checkbox" for="derived-checkbox">
-											<input type="checkbox" id="derived-checkbox" class="mdl-checkbox__input" name="requirement" value="derived_predicates">
-											<span class="mdl-checkbox__label">Derived Predicates</span>
-										</label>
-										</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
+<link rel="stylesheet" href="/css/material.min.css" />
+<div class="container page-background">
+	<div class="page-title">
+		<div class="fixed-width">
+			<h2>Submit A Domain</h2>
 		</div>
-	</body>
-</html>
+	</div>
+	<br>
+	<div class="fixed-width">
+		<div id="submission-form">
+			<form id="domain-submit" method="post">
+				<div id="form-left">
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" type="text" id="domain-name">
+						<label class="mdl-textfield__label" for="domain-name">name</label>
+					</div>
+					<br>
+					<div class="info-input">
+						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<input class="mdl-textfield__input" type="text" pattern="20[0-9][0-9]" id="ipc">
+							<label class="mdl-textfield__label" for="ipc">ipc</label>
+							<span class="mdl-textfield__error">Please enter a valid year or leave empty</span>
+						</div>
+						<img src="img/info_18dp.png" class="info-icon" id="ipc-info"/>
+						<div class="mdl-tooltip" for="ipc-info">
+							The IPC submission year. Leave blank if not submitted to IPC.
+						</div>
+					</div>
+					<br>
+					<div class="info-input">
+						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<input class="mdl-textfield__input" type="text" pattern="[a-zA-Z\-]*" id="formulation">
+							<label class="mdl-textfield__label" for="formulation">formulation</label>
+							<span class="mdl-textfield__error">No spaces or numbers allowed</span>
+						</div>
+						<img src="img/info_18dp.png" class="info-icon" id="formulation-info" />
+						<div class="mdl-tooltip" for="formulation-info">
+							The domain formulation, e.g. temporal or sequential-optimal.
+						</div>
+					</div>
+				</div>
+				<div id="form-right">
+					<div id="requirements">
+						<h5 id="req-title">Requirements</h5><br>
+						<table>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="strips-checkbox">
+									<input type="checkbox" id="strips-checkbox" class="mdl-checkbox__input" name="requirement" value="strips">
+									<span class="mdl-checkbox__label">Strips</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="conditional-checkbox">
+									<input type="checkbox" id="conditional-checkbox" class="mdl-checkbox__input" name="requirement" value="conditional_effects">
+									<span class="mdl-checkbox__label">Conditional Effects</span>
+								</label>
+								</td>
+							</tr>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="fluents-checkbox">
+									<input type="checkbox" id="fluents-checkbox" class="mdl-checkbox__input" name="requirement" value="fluents">
+									<span class="mdl-checkbox__label">Fluents</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="durative-checkbox">
+									<input type="checkbox" id="durative-checkbox" class="mdl-checkbox__input" name="requirement" value="durative_actions">
+									<span class="mdl-checkbox__label">Durative Actions</span>
+								</label>
+								</td>
+							</tr>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="equality-checkbox">
+									<input type="checkbox" id="equality-checkbox" class="mdl-checkbox__input" name="requirement" value="equality">
+									<span class="mdl-checkbox__label">Equality</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="timed-checkbox">
+									<input type="checkbox" id="timed-checkbox" class="mdl-checkbox__input" name="requirement" value="timed_initial_literals">
+									<span class="mdl-checkbox__label">Timed Initial Literals</span>
+								</label>
+								</td>
+							</tr>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="typing-checkbox">
+									<input type="checkbox" id="typing-checkbox" class="mdl-checkbox__input" name="requirement" value="typing">
+									<span class="mdl-checkbox__label">Typing</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="inequalities-checkbox">
+									<input type="checkbox" id="inequalities-checkbox" class="mdl-checkbox__input" name="requirement" value="duration_inequalities">
+									<span class="mdl-checkbox__label">Duration Inequalities</span>
+								</label>
+								</td>
+							</tr>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="adl-checkbox">
+									<input type="checkbox" id="adl-checkbox" class="mdl-checkbox__input" name="requirement" value="adl">
+									<span class="mdl-checkbox__label">ADL</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="derived-checkbox">
+									<input type="checkbox" id="derived-checkbox" class="mdl-checkbox__input" name="requirement" value="derived_predicates">
+									<span class="mdl-checkbox__label">Derived Predicates</span>
+								</label>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

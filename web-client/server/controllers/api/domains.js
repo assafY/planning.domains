@@ -25,22 +25,22 @@ router.get(/[a-z0-9-]+\/(p[0-9]{2}-?)?(domain)?\.pddl/, function (req, res) {
 		})
 });
 
-router.get(/[a-z0-9-]+/, function (req, res) {
-	request(SERVER_ADDRESS + req.query.domainId, function (error, response, body) {
+router.get('/leaderboard', function (req, res) {
+	request(SERVER_ADDRESS + 'leaderboard', function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			xmlParser.parseString(body, function (err, result) {
-				res.json(result['planning:metadata'].domain)
+				console.log(result)
+				res.json(result)
 			})
 		}
 	})
 });
 
-router.get('/leaderboard', function (req, res) {
-	request(SERVER_ADDRESS + 'leaderboard', function (error, response, body) {
-		if (!error && response.statusCode ==200) {
+router.get(/[a-z0-9-]+/, function (req, res) {
+	request(SERVER_ADDRESS + req.query.domainId, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
 			xmlParser.parseString(body, function (err, result) {
-				console.log(result)
-				res.json(result)
+				res.json(result['planning:metadata'].domain)
 			})
 		}
 	})
