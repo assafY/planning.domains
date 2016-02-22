@@ -10,6 +10,7 @@ import global.Settings;
 import web.RequestHandler;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -56,8 +57,66 @@ public class Server {
         // start the server
         startServer();
 
-        Domain someDomain = domainList.get(120);
+        Domain someDomain = domainList.get(110);
         ArrayList<XmlDomain.Domain.Problems.Problem> someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+
+        someDomain = domainList.get(111);
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+
+        someDomain = domainList.get(112);
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+        someDomain = domainList.get(113);
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+        someDomain = domainList.get(114);
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+
+        someDomain = domainList.get(115 );
+        someprobs = new ArrayList<>();
         System.out.println("Problems added to list:");
         for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
             if (p.getNumber() <= 5) {
@@ -220,7 +279,7 @@ public class Server {
      *
      * @param job the job which was completed
      */
-    public void processResults(Job job) {
+    public void processResults(Job job, ClientThread thread) {
         pBuilder = new ProcessBuilder(Settings.RUN_VALIDATION_SCRIPT, Settings.VAL_FILES_DIR, job.getDomainPath() + job.getProblem().getDomain_file(),
                 job.getDomainPath() + job.getProblem().getProblem_file(), Settings.LOCAL_RESULT_DIR + job.getPlanner().getName() + "/" + job.getDomainId() + "-" + job.getProblem());
         try {
@@ -230,18 +289,29 @@ public class Server {
             String results = Global.getProcessOutput(process.getInputStream());
             System.out.println("This plan's results:\n" + results);
             if (processResult == 0) {
-                ArrayList<String> resultList = new ArrayList<>(Arrays.asList(results.split(System.getProperty("line.separator"))));
-                int bestResult = -1;
-                for (String s: resultList) {
-                    int result = Integer.parseInt(s.substring(s.indexOf(' ') + 1));
-                    if (bestResult == -1 || result < bestResult) {
-                        bestResult = result;
+                if (results.contains("Value")) {
+                    ArrayList<String> resultList = new ArrayList<>(Arrays.asList(results.split(System.getProperty("line.separator"))));
+                    int bestResult = -1;
+                    for (String s : resultList) {
+                        int result;
+                        try {
+                            result = Integer.parseInt(s.substring(s.indexOf(' ') + 1));
+                        } catch (NumberFormatException e) {
+                            // if result is in scientific notation
+                            result = new BigDecimal(s.substring(s.indexOf(' ') + 1)).intValue();
+                        }
+                        if (bestResult == -1 || result < bestResult) {
+                            bestResult = result;
+                        }
                     }
+                    System.out.println(job.getPlanner().getName() + " - " + job.getDomainId() + " - " + job.getProblem() + ": best result: " + bestResult);
+                    job.getProblem().addResult(job.getPlanner(), bestResult);
+                    leaderboard.addProblemResults(Global.getProblemLeaderboard(job.getProblem().getResultMap()));
+                    leaderboard.sortLeaderboard();
+                    thread.onReceiveMessage(new Message(Message.PLAN_FOUND));
+                } else {
+                    thread.onReceiveMessage(new Message(Message.PLAN_NOT_FOUND));
                 }
-                System.out.println(job.getPlanner().getName() + " - " + job.getDomainId() + " - " + job.getProblem() + ": best result: " + bestResult);
-                job.getProblem().addResult(job.getPlanner(), bestResult);
-                leaderboard.addProblemResults(Global.getProblemLeaderboard(job.getProblem().getResultMap()));
-                leaderboard.sortLeaderboard();
             } else {
                 System.out.println(Global.getProcessOutput(process.getErrorStream()));
             }
@@ -428,8 +498,7 @@ public class Server {
                 case Message.JOB_REQUEST:
                     // if currentJob is not null, the node completed a job successfully
                     if (currentJob != null) {
-                        System.out.println(Settings.ANSI_GREEN + "Successfully completed running " + currentJob + " on " + node.getName() + Settings.ANSI_RESET);
-                        processResults(currentJob);
+                        processResults(currentJob, this);
                         currentJob = null;
                     }
 
@@ -443,6 +512,12 @@ public class Server {
                     }
                     currentJob = null;
 
+                    takeJob();
+                    break;
+
+                case Message.PLAN_FOUND:
+                    System.out.println(Settings.ANSI_GREEN + "Successfully completed running " + currentJob + " on " + node.getName() + Settings.ANSI_RESET);
+                    currentJob = null;
                     takeJob();
                     break;
 
