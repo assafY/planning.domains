@@ -92,9 +92,14 @@ public class RequestHandler {
                     "<leaderboard>\n");
             LinkedHashMap<Planner, Double> leaderboard = server.getLeaderboard().getSortedLeaderboard();
 
+            int rank = 1;
             for (Map.Entry<Planner, Double> currentPlanner: leaderboard.entrySet()) {
+                builder.append("<entry>\n");
                 builder.append("<planner>" + currentPlanner.getKey().getName() + "</planner>\n");
-                builder.append("<result>" + currentPlanner.getValue() + "</result>\n");
+                builder.append("<rank>" + rank + "</rank>\n");
+                builder.append("<score>" + currentPlanner.getValue() + "</score>\n");
+                builder.append("</entry>\n");
+                ++rank;
             }
 
             builder.append("</leaderboard>");
