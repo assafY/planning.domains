@@ -287,7 +287,7 @@ public class Server {
             int processResult = process.waitFor();
 
             String results = Global.getProcessOutput(process.getInputStream());
-            System.out.println("This plan's results:\n" + results);
+            System.out.println(job.toString() + " results:\n" + results);
             if (processResult == 0) {
                 if (results.contains("Value")) {
                     ArrayList<String> resultList = new ArrayList<>(Arrays.asList(results.split(System.getProperty("line.separator"))));
@@ -313,6 +313,7 @@ public class Server {
                     thread.onReceiveMessage(new Message(Message.PLAN_NOT_FOUND));
                 }
             } else {
+                System.out.println("something went wrong: (process failed)\n" + results);
                 System.out.println(Global.getProcessOutput(process.getErrorStream()));
             }
         } catch (IOException e) {
@@ -442,10 +443,7 @@ public class Server {
                     sendMessage(new Message(currentJob, Message.RUN_JOB));
                 }
                 else {
-                    System.err.println(Settings.ANSI_YELLOW + currentJob.getPlanner().getName() +
-                            " is incompatible with " + currentJob.getDomainId() + Settings.ANSI_RESET);
-                    currentJob = null;
-                    takeJob();
+                    onReceiveMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
                 }
             } catch(InterruptedException e){
                 System.err.println(Settings.ANSI_RED + "Error getting a job from the queue:\n" + Settings.ANSI_RESET);
@@ -518,7 +516,6 @@ public class Server {
                 case Message.PLAN_FOUND:
                     System.out.println(Settings.ANSI_GREEN + "Successfully completed running " + currentJob + " on " + node.getName() + Settings.ANSI_RESET);
                     currentJob = null;
-                    takeJob();
                     break;
 
                 case Message.PLAN_NOT_FOUND:
@@ -527,8 +524,6 @@ public class Server {
                     leaderboard.addProblemResults(Global.getProblemLeaderboard(currentJob.getProblem().getResultMap()));
                     leaderboard.sortLeaderboard();
                     currentJob = null;
-
-                    takeJob();
                     break;
             }
         }

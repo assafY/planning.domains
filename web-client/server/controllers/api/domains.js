@@ -29,7 +29,7 @@ router.get('/leaderboard', function (req, res) {
 	request(SERVER_ADDRESS + 'leaderboard', function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			xmlParser.parseString(body, function (err, result) {
-				res.json(result)
+				res.json(result.leaderboard)
 			})
 		}
 	})

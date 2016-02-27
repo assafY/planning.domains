@@ -68,7 +68,7 @@ public class Leaderboard {
             Collections.sort(sortedList, new Comparator<Map.Entry<Planner, Double>>() {
                 public int compare(Map.Entry<Planner, Double> planner1,
                                    Map.Entry<Planner, Double> planner2) {
-                    return planner1.getValue().compareTo(planner2.getValue());
+                    return planner2.getValue().compareTo(planner1.getValue());
                 }
             });
 

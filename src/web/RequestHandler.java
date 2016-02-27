@@ -6,6 +6,7 @@ import server.Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -94,10 +95,15 @@ public class RequestHandler {
 
             int rank = 1;
             for (Map.Entry<Planner, Double> currentPlanner: leaderboard.entrySet()) {
+
+                // format result to two decimal place
+                DecimalFormat df = new DecimalFormat("#.00");
+                double score = Double.parseDouble(df.format(currentPlanner.getValue()));
+
                 builder.append("<entry>\n");
                 builder.append("<planner>" + currentPlanner.getKey().getName() + "</planner>\n");
                 builder.append("<rank>" + rank + "</rank>\n");
-                builder.append("<score>" + currentPlanner.getValue() + "</score>\n");
+                builder.append("<score>" + score + "</score>\n");
                 builder.append("</entry>\n");
                 ++rank;
             }

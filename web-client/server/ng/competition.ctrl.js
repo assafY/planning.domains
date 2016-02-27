@@ -3,6 +3,7 @@ angular.module('app')
 	if (!$rootScope.leaderboard) {
         CompetitionService.fetchLeaderboard().success (function (leaderboard) {
             if (leaderboard) {
+            	console.log(leaderboard)
                 $scope.leaderboard = $rootScope.leaderboard = leaderboard
             }
         })
