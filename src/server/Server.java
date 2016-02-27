@@ -1,11 +1,16 @@
 package server;
 
+import data.Domain;
+import data.Leaderboard;
+import data.Planner;
+import data.XmlDomain;
 import global.Global;
 import global.Message;
 import global.Settings;
 import web.RequestHandler;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -18,6 +23,9 @@ public class Server {
     private ArrayList<Node> nodeList;
     private ArrayList<Domain> domainList;
     private ArrayList<Planner> plannerList;
+
+    // leaderboard of all existing planners
+    private Leaderboard leaderboard;
 
     // process builder to run OS jobs
     private ProcessBuilder pBuilder;
@@ -42,19 +50,82 @@ public class Server {
         // initialise job queue and add listener
         jobQueue = new PriorityBlockingQueue();
 
-
+        // initialise and set the leaderboard
+        leaderboard = new Leaderboard();
+        leaderboard.setLeaderboard(domainList);
 
         // start the server
         startServer();
 
-        Domain someDomain = domainList.get(20);
+        Domain someDomain = domainList.get(110);
         ArrayList<XmlDomain.Domain.Problems.Problem> someprobs = new ArrayList<>();
         System.out.println("Problems added to list:");
         for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
-            someprobs.add(p);
-            System.out.println(p);
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
         }
         createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+
+        someDomain = domainList.get(111);
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+
+        someDomain = domainList.get(112);
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+        someDomain = domainList.get(113);
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+        someDomain = domainList.get(114);
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
+
+        someDomain = domainList.get(115 );
+        someprobs = new ArrayList<>();
+        System.out.println("Problems added to list:");
+        for (XmlDomain.Domain.Problems.Problem p: someDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
+            if (p.getNumber() <= 5) {
+                someprobs.add(p);
+                System.out.println(p);
+            }
+        }
+        createJob(plannerList.get(1), someprobs, someDomain);
+        createJob(plannerList.get(0), someprobs, someDomain);
 
         // start all nodes
         //startNodes();
@@ -142,6 +213,15 @@ public class Server {
     }
 
     /**
+     * Get the server's existing leaderboard
+     *
+     * @return Leaderboard object
+     */
+    public Leaderboard getLeaderboard() {
+        return leaderboard;
+    }
+
+    /**
      * Returns a node object matching a String with a name.
      *
      * @param nodeName String containing name of the node
@@ -199,7 +279,7 @@ public class Server {
      *
      * @param job the job which was completed
      */
-    public void processResults(Job job) {
+    public void processResults(Job job, ClientThread thread) {
         pBuilder = new ProcessBuilder(Settings.RUN_VALIDATION_SCRIPT, Settings.VAL_FILES_DIR, job.getDomainPath() + job.getProblem().getDomain_file(),
                 job.getDomainPath() + job.getProblem().getProblem_file(), Settings.LOCAL_RESULT_DIR + job.getPlanner().getName() + "/" + job.getDomainId() + "-" + job.getProblem());
         try {
@@ -207,18 +287,33 @@ public class Server {
             int processResult = process.waitFor();
 
             String results = Global.getProcessOutput(process.getInputStream());
+            System.out.println(job.toString() + " results:\n" + results);
             if (processResult == 0) {
-                ArrayList<String> resultList = new ArrayList<>(Arrays.asList(results.split(System.getProperty("line.separator"))));
-                int bestResult = -1;
-                for (String s: resultList) {
-                    int result = Integer.parseInt(s.substring(s.indexOf(' ') + 1));
-                    if (bestResult == -1 || result < bestResult) {
-                        bestResult = result;
+                if (results.contains("Value")) {
+                    ArrayList<String> resultList = new ArrayList<>(Arrays.asList(results.split(System.getProperty("line.separator"))));
+                    int bestResult = -1;
+                    for (String s : resultList) {
+                        int result;
+                        try {
+                            result = Integer.parseInt(s.substring(s.indexOf(' ') + 1));
+                        } catch (NumberFormatException e) {
+                            // if result is in scientific notation
+                            result = new BigDecimal(s.substring(s.indexOf(' ') + 1)).intValue();
+                        }
+                        if (bestResult == -1 || result < bestResult) {
+                            bestResult = result;
+                        }
                     }
+                    System.out.println(job.getPlanner().getName() + " - " + job.getDomainId() + " - " + job.getProblem() + ": best result: " + bestResult);
+                    job.getProblem().addResult(job.getPlanner(), bestResult);
+                    leaderboard.addProblemResults(Global.getProblemLeaderboard(job.getProblem().getResultMap()));
+                    leaderboard.sortLeaderboard();
+                    thread.onReceiveMessage(new Message(Message.PLAN_FOUND));
+                } else {
+                    thread.onReceiveMessage(new Message(Message.PLAN_NOT_FOUND));
                 }
-                System.out.println(job.getPlanner().getName() + " - " + job.getDomainId() + " - " + job.getProblem() + ": best result: " + bestResult);
-                job.getProblem().addResult(job.getPlanner(), bestResult);
             } else {
+                System.out.println("something went wrong: (process failed)\n" + results);
                 System.out.println(Global.getProcessOutput(process.getErrorStream()));
             }
         } catch (IOException e) {
@@ -326,7 +421,7 @@ public class Server {
                 outputStream.writeObject(msg);
             } catch (IOException e) {
                 //TODO: handle exception
-                System.err.println("Error sending message to client");
+                System.err.println(Settings.ANSI_RED + "Error sending message to client" + Settings.ANSI_RESET);
             }
         }
 
@@ -343,16 +438,15 @@ public class Server {
                 // if the planner is not known to be
                 // incompatible with this job's domain
                 if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain())) {
-                    System.out.println("Attempting to run " + currentJob + " on " + node.getName());
+                    System.out.println(Settings.ANSI_YELLOW + "Attempting to run " + currentJob +
+                            " on " + node.getName() + Settings.ANSI_RESET);
                     sendMessage(new Message(currentJob, Message.RUN_JOB));
                 }
                 else {
-                    System.err.println(currentJob.getPlanner().getName() + " is incompatible with " + currentJob.getDomainId());
-                    currentJob = null;
-                    takeJob();
+                    onReceiveMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
                 }
             } catch(InterruptedException e){
-                System.err.println("Error getting a job from the queue:\n");
+                System.err.println(Settings.ANSI_RED + "Error getting a job from the queue:\n" + Settings.ANSI_RESET);
                 e.printStackTrace();
             }
         }
@@ -373,7 +467,7 @@ public class Server {
                     // if client is not already connected
                     if (!node.isConnected()) {
                         node.setClientThread(this);
-                        System.out.println("New client connected: " + node.getName());
+                        System.out.println(Settings.ANSI_GREEN + "New client connected: " + node.getName() + Settings.ANSI_RESET);
 
                     // if a client already has a thread running
                     } else {
@@ -384,14 +478,14 @@ public class Server {
 
                 case Message.JOB_INTERRUPTED:
                     if (currentJob != null) {
-                        System.out.println("Error running " + currentJob + " on " + node.getName()
-                                + ".\nadding job back to queue with higher priority");
+                        System.out.println(Settings.ANSI_RED + "Error running " + currentJob + " on " + node.getName()
+                                + ".\nadding job back to queue with higher priority" + Settings.ANSI_RESET);
                         jobQueue.put(new Job(currentJob, 2));
                         currentJob = null;
 
                         // if an exception was sent, print it.
                         if (msg.getException() != null) {
-                            System.out.println("The client produced the following exception:\n");
+                            System.err.println(Settings.ANSI_RED + "The client produced the following exception:\n" + Settings.ANSI_RESET);
                             msg.getException().printStackTrace();
                         }
                     }
@@ -402,8 +496,7 @@ public class Server {
                 case Message.JOB_REQUEST:
                     // if currentJob is not null, the node completed a job successfully
                     if (currentJob != null) {
-                        System.out.println("Successfully completed running " + currentJob + " on " + node.getName());
-                        processResults(currentJob);
+                        processResults(currentJob, this);
                         currentJob = null;
                     }
 
@@ -413,18 +506,24 @@ public class Server {
                 case Message.INCOMPATIBLE_DOMAIN:
                     if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain())) {
                         currentJob.getPlanner().addIncompatibleDomain(currentJob.getDomain());
-                        System.err.println(currentJob.getPlanner().getName() + " is incompatible with " + currentJob.getDomainId());
+                        System.err.println(Settings.ANSI_YELLOW + currentJob.getPlanner().getName() + " is incompatible with " + currentJob.getDomainId() + Settings.ANSI_RESET);
                     }
                     currentJob = null;
 
                     takeJob();
                     break;
 
-                case Message.PLAN_NOT_FOUND:
-                    currentJob.getProblem().addResult(currentJob.getPlanner(), 0);
+                case Message.PLAN_FOUND:
+                    System.out.println(Settings.ANSI_GREEN + "Successfully completed running " + currentJob + " on " + node.getName() + Settings.ANSI_RESET);
                     currentJob = null;
+                    break;
 
-                    takeJob();
+                case Message.PLAN_NOT_FOUND:
+                    System.err.println(Settings.ANSI_RED + "Did not find plan with " + currentJob + Settings.ANSI_RESET);
+                    currentJob.getProblem().addResult(currentJob.getPlanner(), 0);
+                    leaderboard.addProblemResults(Global.getProblemLeaderboard(currentJob.getProblem().getResultMap()));
+                    leaderboard.sortLeaderboard();
+                    currentJob = null;
                     break;
             }
         }
@@ -464,13 +563,13 @@ public class Server {
                 // the job did not complete and is sent back to the queue
                 // with a higher priority
                 if (currentJob != null) {
-                    System.out.println("Error running " + currentJob + " on " + node.getName()
-                            + ".\nadding job back to queue with higher priority");
+                    System.out.println(Settings.ANSI_RED + "Error running " + currentJob + " on " + node.getName()
+                            + ".\nadding job back to queue with higher priority" + Settings.ANSI_RESET);
                     jobQueue.put(new Job(currentJob, 2));
                 }
 
                 node.removeClientThread();
-                System.out.println(node.getName() + " disconnected.");
+                System.out.println(Settings.ANSI_YELLOW + node.getName() + " disconnected." + Settings.ANSI_RESET);
                 node = null;
             }
         }

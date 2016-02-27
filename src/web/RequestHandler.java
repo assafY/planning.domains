@@ -1,10 +1,15 @@
 package web;
 
-import server.Domain;
+import data.Domain;
+import data.Planner;
 import server.Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.text.DecimalFormat;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Class for handling GET and POST requests from web clients.
@@ -83,46 +88,58 @@ public class RequestHandler {
                 builder.append("</domain>\n");
             }
             builder.append("</domains>");
-        } else if (domainRequested.startsWith("pddl-file")) {
-            // the web client is requesting a domain pddl file
-            File pddlFile = null;
-            String domainId = domainRequested.substring(domainRequested.indexOf('/') + 1, domainRequested.lastIndexOf('/'));
-            String fileName = domainRequested.substring(domainRequested.lastIndexOf('/') + 1);
+        } else if (domainRequested.startsWith("leaderboard")) {
+            builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                    "<leaderboard>\n");
+            LinkedHashMap<Planner, Double> leaderboard = server.getLeaderboard().getSortedLeaderboard();
 
-            System.out.println("domainId: " + domainId + ", fileName: "+ fileName);
+            int rank = 1;
+            for (Map.Entry<Planner, Double> currentPlanner: leaderboard.entrySet()) {
 
-            for (Domain d: server.getDomainList()) {
-                if (d.getXmlDomain().getDomain().getShortId().equals(domainId)) {
-                    pddlFile = new File(d.getPath() + "/" + fileName);
-                    break;
-                }
-            }
-            if (pddlFile != null) {
-                BufferedReader fileBuffer = new BufferedReader(new FileReader(pddlFile));
+                // format result to two decimal place
+                DecimalFormat df = new DecimalFormat("#.00");
+                double score = Double.parseDouble(df.format(currentPlanner.getValue()));
 
-                String currentLine;
-                while ((currentLine = fileBuffer.readLine()) != null) {
-                    builder.append(currentLine + "\n");
-                    System.out.println(currentLine);
-                }
+                builder.append("<entry>\n");
+                builder.append("<planner>" + currentPlanner.getKey().getName() + "</planner>\n");
+                builder.append("<rank>" + rank + "</rank>\n");
+                builder.append("<score>" + score + "</score>\n");
+                builder.append("</entry>\n");
+                ++rank;
             }
 
+            builder.append("</leaderboard>");
         } else {
-            builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            
-            File xmlFile = null;
-            for (Domain d: server.getDomainList()) {
-                if (d.getXmlDomain().getDomain().getShortId().equals(domainRequested)) {
-                    xmlFile = d.getXmlDomain().getXmlFile();
-                    break;
+            File file = null;
+
+            if (domainRequested.startsWith("pddl-file")) {
+                // the web client is requesting a domain pddl file
+                String domainId = domainRequested.substring(domainRequested.indexOf('/') + 1, domainRequested.lastIndexOf('/'));
+                String fileName = domainRequested.substring(domainRequested.lastIndexOf('/') + 1);
+
+                for (Domain d : server.getDomainList()) {
+                    if (d.getXmlDomain().getDomain().getShortId().equals(domainId)) {
+                        file = new File(d.getPath() + "/" + fileName);
+                        break;
+                    }
+                }
+            } else {
+                // the web client is requesting a specific domain
+                builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+
+                for (Domain d : server.getDomainList()) {
+                    if (d.getXmlDomain().getDomain().getShortId().equals(domainRequested)) {
+                        file = d.getXmlDomain().getXmlFile();
+                        break;
+                    }
                 }
             }
-            if (xmlFile != null) {
+            if (file != null) {
 
-                BufferedReader xmlBuffer = new BufferedReader(new FileReader(xmlFile));
+                BufferedReader buffer = new BufferedReader(new FileReader(file));
 
                 String currentLine;
-                while ((currentLine = xmlBuffer.readLine()) != null) {
+                while ((currentLine = buffer.readLine()) != null) {
                     builder.append(currentLine + "\n");
                 }
             }

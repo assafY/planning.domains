@@ -1,13 +1,11 @@
-package server;
+package data;
 
 import global.Global;
 
 import javax.xml.bind.annotation.*;
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Class for every planning domain that exists in the system.
@@ -18,7 +16,6 @@ public class XmlDomain implements Serializable{
 
     private File xmlFile;
     private XmlDomain.Domain domain;
-    private HashMap<Planner, Result> resultMap = new HashMap<>();
 
     public XmlDomain.Domain getDomain() {
         return domain;
@@ -294,85 +291,85 @@ public class XmlDomain implements Serializable{
                 this.disjunctive = disjunctive;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getExistential() {
+                return existential;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="existential_preconditions")
+            public void setExistential(String existential) {
+                this.existential = existential;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getGoal() {
+                return goal;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="goal_utilities")
+            public void setGoal(String goal) {
+                this.goal = goal;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getNegative() {
+                return negative;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="negative_preconditions")
+            public void setNegative(String negative) {
+                this.negative = negative;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getNumeric() {
+                return numeric;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="numeric_fluents")
+            public void setNumeric(String conditional) {
+                this.numeric = numeric;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getObject() {
+                return object;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="object_fluents")
+            public void setObject(String object) {
+                this.object = object;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getPreferences() {
+                return preferences;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="preferences")
+            public void setPreferences(String preferences) {
+                this.preferences = preferences;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getQuantified() {
+                return quantified;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="quantified_preconditions")
+            public void setQuantified(String quantified) {
+                this.quantified = quantified;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getTime() {
+                return time;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="time")
+            public void setTime(String time) {
+                this.time = time;
             }
 
-            public String getConditional() {
-                return conditional;
+            public String getUniversal() {
+                return universal;
             }
 
-            @XmlElement(name ="conditional_effects")
-            public void setConditional(String conditional) {
-                this.conditional = conditional;
+            @XmlElement(name ="universal_preconditions")
+            public void setUniversal(String universal) {
+                this.universal = universal;
             }
 
 
@@ -409,6 +406,45 @@ public class XmlDomain implements Serializable{
                 if (conditional != null) {
                     toReturn += "conditional_effects\n";
                 }
+                if (action != null) {
+                    toReturn += "action_costs\n";
+                }
+                if (continuous != null) {
+                    toReturn += "continuous_effects\n";
+                }
+                if (constraints != null) {
+                    toReturn += "constraints\n";
+                }
+                if (disjunctive != null) {
+                    toReturn += "disjunctive_preconditions\n";
+                }
+                if (existential != null) {
+                    toReturn += "existential_preconditions\n";
+                }
+                if (goal != null) {
+                    toReturn += "goal_utilities\n";
+                }
+                if (negative != null) {
+                    toReturn += "negative_preconditions\n";
+                }
+                if (numeric != null) {
+                    toReturn += "numeric_fluents\n";
+                }
+                if (object != null) {
+                    toReturn += "object_fluents\n";
+                }
+                if (preferences != null) {
+                    toReturn += "preferences\n";
+                }
+                if (quantified != null) {
+                    toReturn += "quantified_preconditions\n";
+                }
+                if (time != null) {
+                    toReturn += "time\n";
+                }
+                if (universal != null) {
+                    toReturn += "universal_preconditions\n";
+                }
                 return toReturn;
             }
         }
@@ -441,9 +477,6 @@ public class XmlDomain implements Serializable{
 
                 // a map for results of running different planners on this problem
                 private HashMap<Planner, Integer> resultMap = new HashMap<>();
-
-                // a map for the factorized results of planners on all problems
-                private HashMap<Planner, Double> leaderBoard;
 
                 public String getDomain_file() {
                     return domainFile;
@@ -482,7 +515,31 @@ public class XmlDomain implements Serializable{
                  */
                 public void addResult(Planner planner, int result) {
                     resultMap.put(planner, result);
-                    leaderBoard = Global.getProblemLeaderboard(resultMap);
+                }
+
+                public HashMap<Planner, Integer> getResultMap() {
+                    System.out.println("getting result map of size " + resultMap.size());
+                    return resultMap;
+                }
+
+                /**
+                 * Get the planner with the best result for this problem, as
+                 * well as the result
+                 *
+                 * @return Result, a planner integer pair
+                 */
+                public Result getBestResult() {
+
+                    Iterator iter = resultMap.entrySet().iterator();
+                    Map.Entry bestResult = (Map.Entry) iter.next();
+                    while (iter.hasNext()) {
+                        Map.Entry currentResult = (Map.Entry) iter.next();
+                        if ((Integer) currentResult.getValue() < (Integer) bestResult.getValue()) {
+                            bestResult = currentResult;
+                        }
+                    }
+
+                    return new Result((Planner) bestResult.getKey(), (Integer) bestResult.getValue());
                 }
 
                 @Override

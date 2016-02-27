@@ -1,6 +1,6 @@
 package global;
 
-import server.Planner;
+import data.Planner;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,30 +50,51 @@ public class Global {
      * @return the leader board map calculated in the method
      */
     public static synchronized HashMap<Planner, Double> getProblemLeaderboard(HashMap<Planner, Integer> resultMap) {
-        HashMap<Planner, Double> leaderBoard = new HashMap<>();
-        Iterator iter = resultMap.entrySet().iterator();
-        Map.Entry bestResult = (Map.Entry) iter.next();
-        while (iter.hasNext()) {
-            Map.Entry currentResult = (Map.Entry) iter.next();
-            if ((Integer) currentResult.getValue() < (Integer) bestResult.getValue()) {
-                bestResult = currentResult;
+        if (resultMap != null && resultMap.size() > 0) {
+            System.out.println("running problem leaderboard getter");
+            HashMap<Planner, Double> leaderBoard = new HashMap<>();
+            Iterator iter = resultMap.entrySet().iterator();
+            Map.Entry bestResult = (Map.Entry) iter.next();
+            System.out.println("Looking at result: " + bestResult.getKey() + ", " + bestResult.getValue());
+            while (iter.hasNext()) {
+                Map.Entry currentResult = (Map.Entry) iter.next();
+                System.out.println("Looking at result: " + currentResult.getKey() + ", " + currentResult.getValue());
+                if ((Integer) currentResult.getValue() > 0 &&
+                        ((Integer) currentResult.getValue() < (Integer) bestResult.getValue() ||
+                                (Integer) bestResult.getValue() == 0)) {
+                    bestResult = currentResult;
+                }
             }
+
+            // put the best result in the leader board
+            if ((Integer) bestResult.getValue() == 0) {
+                leaderBoard.put((Planner) bestResult.getKey(), 0.0);
+            } else {
+                leaderBoard.put((Planner) bestResult.getKey(), 1.0);
+            }
+
+            // reset the iterator
+            iter = resultMap.entrySet().iterator();
+
+            while (iter.hasNext()) {
+                Map.Entry currentResult = (Map.Entry) iter.next();
+                if (!currentResult.equals(bestResult)) {
+                    if ((Integer) currentResult.getValue() == 0) {
+                        leaderBoard.put((Planner) currentResult.getKey(), 0.0);
+                    } else {
+                        double result = (double) (int) bestResult.getValue() / (double) (int) currentResult.getValue();
+                        System.out.println(currentResult.getValue());
+                        System.out.println(bestResult.getValue());
+                        System.out.println(result);
+                        leaderBoard.put((Planner) currentResult.getKey(), result);
+                    }
+                }
+            }
+
+            return leaderBoard;
         }
 
-        // put the best result in the leader board
-        leaderBoard.put((Planner) bestResult.getKey(), 1.0);
-        // remove the best result from the original result map
-        resultMap.remove((Planner) bestResult.getKey());
-        // reset the iterator
-        iter = resultMap.entrySet().iterator();
-
-        while (iter.hasNext()) {
-            Map.Entry currentResult = (Map.Entry) iter.next();
-            double result = (Integer) bestResult.getValue() / (Integer) currentResult.getValue();
-            leaderBoard.put((Planner) currentResult.getKey(), result);
-        }
-
-        return leaderBoard;
+        return null;
 
     }
 }

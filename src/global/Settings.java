@@ -5,7 +5,7 @@ package global;
  */
 public class Settings {
 
-    //server
+    // server
     public static final String USER_NAME = "k1333702";
     public static final String HOST_NAME = "calcium.inf.kcl.ac.uk";
     public static final int PORT_NUMBER = 8080;
@@ -25,4 +25,10 @@ public class Settings {
     public static final String RESULT_DEL_SCRIPT = "res/del_result_files.sh";
     public static final String RUN_PLANNER_SCRIPT = "res/run_planner.sh";
     public static final String RUN_VALIDATION_SCRIPT = "res/validate_plan.sh";
+
+    // ansi colour codes
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
 }

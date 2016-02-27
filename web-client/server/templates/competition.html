@@ -1,0 +1,24 @@
+<div class="container page-background">
+	<div class="page-title">
+		<h2 class="page-title">Leaderboard</h2>
+	</div>
+	<br>
+	<div class="fixed-width">
+		<table class="mdl-data-table mdl-js-data-table mdl-shadow--8dp view-table">
+			<thead>
+				<tr>
+					<th>Rank</th>
+					<th class="mdl-data-table__cell--non-numeric">Planner</th>
+					<th>Score</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat='entry in leaderboard' ng-click='getPlannerStats(entry.planner);'>
+					<td>{{ entry.rank }}</td>
+					<td class="mdl-data-table__cell--non-numeric">{{ entry.planner }}</td>
+					<td >{{ entry.score }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

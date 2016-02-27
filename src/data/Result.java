@@ -1,11 +1,11 @@
-package server;
+package data;
 
 public class Result {
 
     private Planner planner;
-    private double result;
+    private int result;
 
-    public Result(Planner planner, double result) {
+    public Result(Planner planner, int result) {
         this.planner = planner;
         this.result = result;
     }
@@ -14,7 +14,7 @@ public class Result {
         return planner;
     }
 
-    public double getResult() {
+    public int getResult() {
         return result;
     }
 }

@@ -2,7 +2,7 @@ package client;
 
 import global.*;
 import server.Job;
-import server.XmlDomain;
+import data.XmlDomain;
 
 import java.io.*;
 import java.net.Socket;
@@ -86,13 +86,12 @@ public class Client {
             process = pBuilder.start();
 
             // print the result, later this must record the result
-            System.out.println(Global.getProcessOutput(process.getInputStream()));
+            String runError = (Global.getProcessOutput(process.getErrorStream()));
             int result = process.waitFor();
             long totalTime = System.currentTimeMillis() - startTime;
 
             // if the run finished successfully, reset the process builder to run result sending script
             if (result == 0) {
-                //TODO
                 // start process for sending results
                 String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@"
                         + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlanner().getName()};
@@ -129,7 +128,11 @@ public class Client {
 
             // if the run did not finish successfully
             else {
-                sendMessage(new Message(Message.JOB_INTERRUPTED));
+                if (runError.contains("AssertionError")) {
+                    sendMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
+                } else {
+                    sendMessage(new Message(Message.JOB_INTERRUPTED));
+                }
             }
 
         } catch (IOException e) {
@@ -139,22 +142,6 @@ public class Client {
             sendMessage(new Message(e1, Message.JOB_INTERRUPTED));
         }
     }
-
-    /*private String processOutput(InputStream is) throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(is));
-            String currentLine = null;
-            while ((currentLine = reader.readLine()) != null) {
-                stringBuilder.append(currentLine + System.getProperty("line.separator"));
-            }
-        } finally {
-            reader.close();
-        }
-
-        return stringBuilder.toString();
-    }*/
 
     /**
      * closes all sockets and streams

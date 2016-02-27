@@ -14,7 +14,8 @@ public class Message implements Serializable {
             JOB_INTERRUPTED = 4,
             JOB_REQUEST = 5,
             INCOMPATIBLE_DOMAIN = 6,
-            PLAN_NOT_FOUND = 7;
+            PLAN_NOT_FOUND = 7,
+            PLAN_FOUND = 8;
 
     private int type;
     private String message;
