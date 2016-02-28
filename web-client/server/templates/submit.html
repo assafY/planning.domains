@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/css/material.min.css" />
 <div class="container page-background">
 	<div class="page-title">
 		<div class="fixed-width">
@@ -39,9 +38,10 @@
 						</div>
 					</div>
 				</div>
-				<div id="form-right">
+				<!--<div id="form-right">-->
+					<br>
 					<div id="requirements">
-						<h5 id="req-title">Requirements</h5><br>
+						<h5 id="req-title">Requirements</h5><br><br>
 						<table>
 							<tr><td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="strips-checkbox">
@@ -55,8 +55,7 @@
 									<span class="mdl-checkbox__label">Conditional Effects</span>
 								</label>
 								</td>
-							</tr>
-							<tr><td>
+								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="fluents-checkbox">
 									<input type="checkbox" id="fluents-checkbox" class="mdl-checkbox__input" name="requirement" value="fluents">
 									<span class="mdl-checkbox__label">Fluents</span>
@@ -81,8 +80,7 @@
 									<span class="mdl-checkbox__label">Timed Initial Literals</span>
 								</label>
 								</td>
-							</tr>
-							<tr><td>
+								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="typing-checkbox">
 									<input type="checkbox" id="typing-checkbox" class="mdl-checkbox__input" name="requirement" value="typing">
 									<span class="mdl-checkbox__label">Typing</span>
@@ -107,9 +105,90 @@
 									<span class="mdl-checkbox__label">Derived Predicates</span>
 								</label>
 								</td>
+								<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="continuous-checkbox">
+									<input type="checkbox" id="continuous-checkbox" class="mdl-checkbox__input" name="requirement" value="continuous_effects">
+									<span class="mdl-checkbox__label">Continuous Effects</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="action-checkbox">
+									<input type="checkbox" id="action-checkbox" class="mdl-checkbox__input" name="requirement" value="action_costs">
+									<span class="mdl-checkbox__label">Action Costs</span>
+								</label>
+								</td>
+							</tr>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="constraints-checkbox">
+									<input type="checkbox" id="constraints-checkbox" class="mdl-checkbox__input" name="requirement" value="constraints">
+									<span class="mdl-checkbox__label">Constraints</span>
+								</label>
+								</td>
+								<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="disjunctive-checkbox">
+									<input type="checkbox" id="disjunctive-checkbox" class="mdl-checkbox__input" name="requirement" value="disjunctive_preconditions">
+									<span class="mdl-checkbox__label">Disjunctive Preconditions</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="existential-checkbox">
+									<input type="checkbox" id="existential-checkbox" class="mdl-checkbox__input" name="requirement" value="existential_preconditions">
+									<span class="mdl-checkbox__label">Existential Preconditions</span>
+								</label>
+								</td>
+								<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="goal-checkbox">
+									<input type="checkbox" id="goal-checkbox" class="mdl-checkbox__input" name="requirement" value="goal_utilities">
+									<span class="mdl-checkbox__label">Goal Utilities</span>
+								</label>
+								</td>
+							</tr>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="negative-checkbox">
+									<input type="checkbox" id="negative-checkbox" class="mdl-checkbox__input" name="requirement" value="negative_preconditions">
+									<span class="mdl-checkbox__label">Negative Preconditions</span>
+								</label>
+								</td>
+								<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="numeric-checkbox">
+									<input type="checkbox" id="numeric-checkbox" class="mdl-checkbox__input" name="requirement" value="numeric_fluents">
+									<span class="mdl-checkbox__label">Numeric Fluents</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="object-checkbox">
+									<input type="checkbox" id="object-checkbox" class="mdl-checkbox__input" name="requirement" value="object_fluents">
+									<span class="mdl-checkbox__label">Object Fluents</span>
+								</label>
+								</td>
+								<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="preferences-checkbox">
+									<input type="checkbox" id="preferences-checkbox" class="mdl-checkbox__input" name="requirement" value="preferences">
+									<span class="mdl-checkbox__label">Preferences</span>
+								</label>
+								</td>
+							</tr>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="quantified-checkbox">
+									<input type="checkbox" id="quantified-checkbox" class="mdl-checkbox__input" name="requirement" value="quantified_preconditions">
+									<span class="mdl-checkbox__label">Quantified Preconditions</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="time-checkbox">
+									<input type="checkbox" id="time-checkbox" class="mdl-checkbox__input" name="requirement" value="time">
+									<span class="mdl-checkbox__label">Time</span>
+								</label>
+								</td>
+								<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="universal-checkbox">
+									<input type="checkbox" id="universal-checkbox" class="mdl-checkbox__input" name="requirement" value="universal_preconditions">
+									<span class="mdl-checkbox__label">Universal Preconditions</span>
+								</label>
+								</td>
 							</tr>
 						</table>
-					</div>
+					<!--</div>-->
 				</div>
 			</form>
 		</div>
