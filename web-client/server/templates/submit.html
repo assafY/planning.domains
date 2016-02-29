@@ -41,7 +41,7 @@
 				<!--<div id="form-right">-->
 					<br>
 					<div id="requirements">
-						<h5 id="req-title">Requirements</h5><br><br>
+						<h5 class="submit-title">Requirements</h5><br><br>
 						<table>
 							<tr><td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="strips-checkbox">
@@ -189,6 +189,42 @@
 							</tr>
 						</table>
 					<!--</div>-->
+				</div>
+				<div id="properties">
+					<h5 class="submit-title">Properties</h5><br><br>
+						<table>
+							<tr><td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="strips-checkbox">
+									<input type="checkbox" id="strips-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.strips">
+									<span class="mdl-checkbox__label">Dead ends</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="conditional-checkbox">
+									<input type="checkbox" id="conditional-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.conditional_effects">
+									<span class="mdl-checkbox__label">Solvable</span>
+								</label>
+								</td>
+								<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="fluents-checkbox">
+									<input type="checkbox" id="fluents-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.fluents">
+									<span class="mdl-checkbox__label">Zero-cost actions</span>
+								</label>
+								</td>
+							<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="durative-checkbox">
+									<input type="checkbox" id="durative-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.durative_actions">
+									<span class="mdl-checkbox__label">Required concurrency</span>
+								</label>
+								</td>
+								<td>
+								<label class="mdl-checkbox mdl-js-checkbox" for="equality-checkbox">
+									<input type="checkbox" id="equality-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.equality">
+									<span class="mdl-checkbox__label">Complexity</span>
+								</label>
+								</td>
+							</tr>
+						</table>
 				</div>
 				<md-datepicker ng-required="true" ng-model="publishDate" md-placeholder="Enter date"></md-datepicker>
 			</form>
