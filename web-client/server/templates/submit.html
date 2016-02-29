@@ -10,13 +10,13 @@
 			<form id="domain-submit" method="post">
 				<div id="form-left">
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="text" id="domain-name">
+						<input class="mdl-textfield__input" type="text" ng-model="form.domainName" id="domain-name">
 						<label class="mdl-textfield__label" for="domain-name">name</label>
 					</div>
 					<br>
 					<div class="info-input">
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" pattern="20[0-9][0-9]" id="ipc">
+							<input class="mdl-textfield__input" type="text" ng-model="form.ipcYear" pattern="20[0-9][0-9]" id="ipc">
 							<label class="mdl-textfield__label" for="ipc">ipc</label>
 							<span class="mdl-textfield__error">Please enter a valid year or leave empty</span>
 						</div>
@@ -28,7 +28,7 @@
 					<br>
 					<div class="info-input">
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" pattern="[a-zA-Z\-]*" id="formulation">
+							<input class="mdl-textfield__input" type="text" ng-model="form.formulation" pattern="[a-zA-Z\-]*" id="formulation">
 							<label class="mdl-textfield__label" for="formulation">formulation</label>
 							<span class="mdl-textfield__error">No spaces or numbers allowed</span>
 						</div>
@@ -45,144 +45,144 @@
 						<table>
 							<tr><td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="strips-checkbox">
-									<input type="checkbox" id="strips-checkbox" class="mdl-checkbox__input" name="requirement" value="strips">
+									<input type="checkbox" id="strips-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.strips">
 									<span class="mdl-checkbox__label">Strips</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="conditional-checkbox">
-									<input type="checkbox" id="conditional-checkbox" class="mdl-checkbox__input" name="requirement" value="conditional_effects">
+									<input type="checkbox" id="conditional-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.conditional_effects">
 									<span class="mdl-checkbox__label">Conditional Effects</span>
 								</label>
 								</td>
 								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="fluents-checkbox">
-									<input type="checkbox" id="fluents-checkbox" class="mdl-checkbox__input" name="requirement" value="fluents">
+									<input type="checkbox" id="fluents-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.fluents">
 									<span class="mdl-checkbox__label">Fluents</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="durative-checkbox">
-									<input type="checkbox" id="durative-checkbox" class="mdl-checkbox__input" name="requirement" value="durative_actions">
+									<input type="checkbox" id="durative-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.durative_actions">
 									<span class="mdl-checkbox__label">Durative Actions</span>
 								</label>
 								</td>
 							</tr>
 							<tr><td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="equality-checkbox">
-									<input type="checkbox" id="equality-checkbox" class="mdl-checkbox__input" name="requirement" value="equality">
+									<input type="checkbox" id="equality-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.equality">
 									<span class="mdl-checkbox__label">Equality</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="timed-checkbox">
-									<input type="checkbox" id="timed-checkbox" class="mdl-checkbox__input" name="requirement" value="timed_initial_literals">
+									<input type="checkbox" id="timed-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.timed_initial_literals">
 									<span class="mdl-checkbox__label">Timed Initial Literals</span>
 								</label>
 								</td>
 								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="typing-checkbox">
-									<input type="checkbox" id="typing-checkbox" class="mdl-checkbox__input" name="requirement" value="typing">
+									<input type="checkbox" id="typing-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.typing">
 									<span class="mdl-checkbox__label">Typing</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="inequalities-checkbox">
-									<input type="checkbox" id="inequalities-checkbox" class="mdl-checkbox__input" name="requirement" value="duration_inequalities">
+									<input type="checkbox" id="inequalities-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.duration_inequalities">
 									<span class="mdl-checkbox__label">Duration Inequalities</span>
 								</label>
 								</td>
 							</tr>
 							<tr><td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="adl-checkbox">
-									<input type="checkbox" id="adl-checkbox" class="mdl-checkbox__input" name="requirement" value="adl">
+									<input type="checkbox" id="adl-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.adl">
 									<span class="mdl-checkbox__label">ADL</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="derived-checkbox">
-									<input type="checkbox" id="derived-checkbox" class="mdl-checkbox__input" name="requirement" value="derived_predicates">
+									<input type="checkbox" id="derived-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.derived_predicates">
 									<span class="mdl-checkbox__label">Derived Predicates</span>
 								</label>
 								</td>
 								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="continuous-checkbox">
-									<input type="checkbox" id="continuous-checkbox" class="mdl-checkbox__input" name="requirement" value="continuous_effects">
+									<input type="checkbox" id="continuous-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.continuous_effects">
 									<span class="mdl-checkbox__label">Continuous Effects</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="action-checkbox">
-									<input type="checkbox" id="action-checkbox" class="mdl-checkbox__input" name="requirement" value="action_costs">
+									<input type="checkbox" id="action-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.action_costs">
 									<span class="mdl-checkbox__label">Action Costs</span>
 								</label>
 								</td>
 							</tr>
 							<tr><td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="constraints-checkbox">
-									<input type="checkbox" id="constraints-checkbox" class="mdl-checkbox__input" name="requirement" value="constraints">
+									<input type="checkbox" id="constraints-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.constraints">
 									<span class="mdl-checkbox__label">Constraints</span>
 								</label>
 								</td>
 								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="disjunctive-checkbox">
-									<input type="checkbox" id="disjunctive-checkbox" class="mdl-checkbox__input" name="requirement" value="disjunctive_preconditions">
+									<input type="checkbox" id="disjunctive-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.disjunctive_preconditions">
 									<span class="mdl-checkbox__label">Disjunctive Preconditions</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="existential-checkbox">
-									<input type="checkbox" id="existential-checkbox" class="mdl-checkbox__input" name="requirement" value="existential_preconditions">
+									<input type="checkbox" id="existential-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.existential_preconditions">
 									<span class="mdl-checkbox__label">Existential Preconditions</span>
 								</label>
 								</td>
 								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="goal-checkbox">
-									<input type="checkbox" id="goal-checkbox" class="mdl-checkbox__input" name="requirement" value="goal_utilities">
+									<input type="checkbox" id="goal-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.goal_utilities">
 									<span class="mdl-checkbox__label">Goal Utilities</span>
 								</label>
 								</td>
 							</tr>
 							<tr><td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="negative-checkbox">
-									<input type="checkbox" id="negative-checkbox" class="mdl-checkbox__input" name="requirement" value="negative_preconditions">
+									<input type="checkbox" id="negative-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.negative_preconditions">
 									<span class="mdl-checkbox__label">Negative Preconditions</span>
 								</label>
 								</td>
 								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="numeric-checkbox">
-									<input type="checkbox" id="numeric-checkbox" class="mdl-checkbox__input" name="requirement" value="numeric_fluents">
+									<input type="checkbox" id="numeric-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.numeric_fluents">
 									<span class="mdl-checkbox__label">Numeric Fluents</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="object-checkbox">
-									<input type="checkbox" id="object-checkbox" class="mdl-checkbox__input" name="requirement" value="object_fluents">
+									<input type="checkbox" id="object-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.object_fluents">
 									<span class="mdl-checkbox__label">Object Fluents</span>
 								</label>
 								</td>
 								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="preferences-checkbox">
-									<input type="checkbox" id="preferences-checkbox" class="mdl-checkbox__input" name="requirement" value="preferences">
+									<input type="checkbox" id="preferences-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.preferences">
 									<span class="mdl-checkbox__label">Preferences</span>
 								</label>
 								</td>
 							</tr>
 							<tr><td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="quantified-checkbox">
-									<input type="checkbox" id="quantified-checkbox" class="mdl-checkbox__input" name="requirement" value="quantified_preconditions">
+									<input type="checkbox" id="quantified-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.quantified_preconditions">
 									<span class="mdl-checkbox__label">Quantified Preconditions</span>
 								</label>
 								</td>
 							<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="time-checkbox">
-									<input type="checkbox" id="time-checkbox" class="mdl-checkbox__input" name="requirement" value="time">
+									<input type="checkbox" id="time-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.time">
 									<span class="mdl-checkbox__label">Time</span>
 								</label>
 								</td>
 								<td>
 								<label class="mdl-checkbox mdl-js-checkbox" for="universal-checkbox">
-									<input type="checkbox" id="universal-checkbox" class="mdl-checkbox__input" name="requirement" value="universal_preconditions">
+									<input type="checkbox" id="universal-checkbox" class="mdl-checkbox__input" ng-model="form.requirements.universal_preconditions">
 									<span class="mdl-checkbox__label">Universal Preconditions</span>
 								</label>
 								</td>
@@ -190,6 +190,7 @@
 						</table>
 					<!--</div>-->
 				</div>
+				<md-datepicker ng-required="true" ng-model="publishDate" md-placeholder="Enter date"></md-datepicker>
 			</form>
 		</div>
 	</div>
