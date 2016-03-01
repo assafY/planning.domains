@@ -20,6 +20,7 @@ app.get('/*', function(req, res, next) {
 //	Controllers
 //------------------------------
 app.use('/api/domains', require('./controllers/api/domains'));
+app.use('/api/upload', require('./controllers/api/upload'));
 app.use('/', require('./controllers/static'));
 
 //------------------------------

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Planning.Domains - The Online Planning Portal</title>
+		<title>Planning.Domains - The Online Planning Competition</title>
 		<link rel="stylesheet" href="/css/material.min.css" />
 		<link rel="stylesheet" href="/css/style.css" />
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
@@ -12,6 +12,9 @@
 		<script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+
+		<script src="/js/ng-file-upload-shim.min.js"></script> <!-- for no html5 browsers support -->
+		<script src="/js/ng-file-upload.min.js"></script>
 
 
 		  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
@@ -38,15 +41,7 @@
 		      </nav>
 		    </div>
 		  </header>
-		  <div class="mdl-layout__drawer">
-		    <span class="mdl-layout-title">Planning.Domains</span>
-		    <nav class="mdl-navigation">
-		      <a class="mdl-navigation__link" href="/#/view">View Domains</a>
-		      <!--<a class="mdl-navigation__link" href="/#/submit">Submit Domain</a>-->
-		      <a class="mdl-navigation__link" href="/#/submit">Submit Planner</a>
-		      <a class="mdl-navigation__link" href="/#/competition">Competition</a>
-		    </nav>
-		  </div>
+		  
 		  <main class="mdl-layout__content">
 		  	<div ng-view></div>
 		  </main>
