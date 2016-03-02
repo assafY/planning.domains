@@ -220,11 +220,11 @@ span.main-title-underline {
 	top: -32px;
 }
 
-#domain-selection {
+.domain-selection {
 	float: left;
 }
 
-#problem-selection {
+.problem-selection {
 	float: right;
 }
 

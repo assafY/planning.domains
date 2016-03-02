@@ -7,10 +7,10 @@
 	<br>
 	<div class="fixed-width">
 		<div id="submission-form">
-			<form id="domain-submit" method="post">
+			<form id='domain-submit' method="post" ng-submit="submitForm();">
 				<div id="form-fields">
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="text" ng-model="form.domainName" id="domain-name">
+						<input class="mdl-textfield__input" maxlength="25" type="text" ng-model="form.domainName" id="domain-name" required>
 						<label class="mdl-textfield__label" for="domain-name">name</label>
 					</div>
 					<br>
@@ -28,7 +28,7 @@
 					<br>
 					<div class="info-input">
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" ng-model="form.formulation" pattern="[a-zA-Z\-]*" id="formulation">
+							<input class="mdl-textfield__input" type="text" ng-model="form.formulation" pattern="[a-zA-Z\-]*" id="formulation" required>
 							<label class="mdl-textfield__label" for="formulation">formulation</label>
 							<span class="mdl-textfield__error">No spaces or numbers allowed</span>
 						</div>
@@ -39,8 +39,9 @@
 					</div>
 					<br>
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="text" ng-model="form.link" id="link">
+						<input class="mdl-textfield__input" type="text" ng-model="form.link" pattern="(https?://)?([a-zA-Z0-9]+\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,6}(\.[a-zA-Z]{2,6})?(/[a-zA-Z0-9\?\.]*)*" id="link">
 						<label class="mdl-textfield__label" for="domain-name">link</label>
+						<span class="mdl-textfield__error">Not a valid link</span>
 					</div>
 				</div>
 				<br>
@@ -239,16 +240,18 @@
 				<div id="file-selection">
 					<h5 class="submit-title">Files</h5><br>
 					
-					<div id="domain-selection">
-						<input id="domain-input" type="file" name="domainFile" ng-model="form.domainFile" class="ng-hide" ngf-select accept=".pddl" ngf-max-size="2MB">
-						<button class="mdl-button mdl-js-button domain-button" onclick="document.getElementById('domain-input').click();"> Choose Domain File </md-button>
+					<div class="domain-selection">
+						<input id="domain-input" type="file" name="domainFile" ng-model="domainFiles[0]" class="ng-hide" ngf-select accept=".pddl" ngf-max-size="2MB">
+						<button class="mdl-button mdl-js-button domain-button" onclick="document.getElementById('domain-input').click();"> Choose Domain File </button>
 					</div>
-					<div id="problem-selection">
-						<input id="problem-input" type="file" name="problemFiles" ng-model="form.problemFiles" class="ng-hide" ngf-select accept=".pddl" ngf-max-size="2MB" ngf-multiple="true">
-						<button class="mdl-button mdl-js-button domain-button" onclick="document.getElementById('problem-input').click();"> Choose Problem Files </md-button>
+					<div class="problem-selection">
+						<input id="problem-input" type="file" name="problemFiles" ng-model="problemFiles[0]" class="ng-hide" ngf-select accept=".pddl" ngf-max-size="2MB" ngf-multiple="true">
+						<button class="mdl-button mdl-js-button domain-button" onclick="document.getElementById('problem-input').click();"> Choose Problem Files </button>
 					</div>
 				</div>
 				<br>
+				<button type="submit" class="mdl-button mdl-js-button domain-button"> Submit </button>
+				<br> 
 			</form>
 		</div>
 	</div>
