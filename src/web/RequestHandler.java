@@ -7,9 +7,8 @@ import server.Server;
 import java.io.*;
 import java.net.Socket;
 import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Class for handling GET and POST requests from web clients.
@@ -150,6 +149,17 @@ public class RequestHandler {
 
     private void doPost(Socket request, String requestBody) {
         // handle request body
+        System.out.println(requestBody);
+        /*String[] requestAttributes = requestBody.split(",");
+        HashMap<String, String> attributeMap = new HashMap<>();
+
+        for (int i = 0; i < requestAttributes.length; ++i) {
+            String[] currentAttribute = requestAttributes[i].split(":");
+            attributeMap.put(currentAttribute[0].replaceAll("\"", ""),
+                    currentAttribute[1].replaceAll("\"", ""));
+        }
+
+        server.getXmlParser().addXmlDomain(attributeMap);*/
     }
 
     /**
@@ -161,8 +171,11 @@ public class RequestHandler {
      */
     public void handleRequest(Socket request) throws IOException {
         BufferedReader requestReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String requestBody;
+        String requestBody = "";
         String input;
+
+        int contentLength = 0;
+        boolean isPostRequest = false;
 
         while (!(input = requestReader.readLine()).equals("")) {
             if (input.startsWith("GET")) {
@@ -178,14 +191,35 @@ public class RequestHandler {
                 break;
             }
             if (input.startsWith("POST")) {
-                requestBody = "";
-                while (!(requestReader.readLine()).startsWith("{")) {}
-                while((input = requestReader.readLine()).startsWith(" ")) {
-                    requestBody += input.replaceAll(" ", "");
+                isPostRequest = true;
+
+                while((input = requestReader.readLine()) != null) {
+                    System.out.println(input);
+                    if (input.startsWith("content-length")) {
+                        contentLength = Integer.valueOf(input.substring(input.indexOf(' ')+1));
+                        break;
+                    }
                 }
-                doPost(request, requestBody);
-                requestReader.close();
                 break;
+            }
+        }
+
+        if (isPostRequest) {
+            if (contentLength > 0) {
+                int read;
+                while ((read = requestReader.read()) != -1) {
+                    requestBody += (char) read;
+                    if (requestBody.length() == contentLength + 21) {
+                        break;
+                    }
+                }
+                requestBody = requestBody.replaceAll("%5B", "[");
+                requestBody = requestBody.replaceAll("%5D", "]");
+                String[] formData = requestBody.split("&");
+                for (int i = 0; i < formData.length; ++i) {
+                    System.out.println(formData[i]);
+                }
+                // doPost
             }
         }
     }

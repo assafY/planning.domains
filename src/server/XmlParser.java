@@ -5,9 +5,9 @@ import data.XmlDomain;
 import global.Settings;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -79,6 +79,39 @@ public class XmlParser {
         }
 
         return null;
+    }
+
+    public void addXmlDomain(HashMap<String, String> attributeMap) {
+        XmlDomain newXmlDomain = new XmlDomain();
+        newXmlDomain.setDomain(new XmlDomain.Domain());
+
+        String domainId = "planning.domains:" +
+                attributeMap.get("ipc") + "/" +
+                attributeMap.get("name") + "/" +
+                attributeMap.get("formulation");
+
+        newXmlDomain.getDomain().setId(domainId);
+        newXmlDomain.getDomain().setTitle(attributeMap.get("title"));
+
+        // this is the 'metadate last modified' attribute
+        // but we also need to retrieve the files last modified date
+        // as well as the publish date (time can be T12:00:00 but date
+        // should be accurate)
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        String currentDate = sdf.format(new Date());
+
+        try {
+            newXmlDomain.getDomain().setMetadata_last_modified(sdf.parse(currentDate));
+        } catch (ParseException e) {
+            //TODO: handle exception
+        }
+
+        newXmlDomain.getDomain().setLink(attributeMap.get("link"));
+
+        // more to come, in particular setting the requirements
+        // and the problem files. Need to figure out how these will
+        // be sent from the client to the server
+
     }
 
     public static void marshal(XmlDomain domain) {
