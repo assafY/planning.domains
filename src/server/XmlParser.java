@@ -5,6 +5,7 @@ import data.XmlDomain;
 import global.Settings;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -81,7 +82,7 @@ public class XmlParser {
         return null;
     }
 
-    public void addXmlDomain(HashMap<String, String> attributeMap) {
+    public void addXmlDomain(Map<String, String> attributeMap, ArrayList<Map<String, ArrayList<String>>> fileMapList) {
         XmlDomain newXmlDomain = new XmlDomain();
         newXmlDomain.setDomain(new XmlDomain.Domain());
 

@@ -148,18 +148,57 @@ public class RequestHandler {
     }
 
     private void doPost(Socket request, String requestBody) {
-        // handle request body
-        System.out.println(requestBody);
-        /*String[] requestAttributes = requestBody.split(",");
-        HashMap<String, String> attributeMap = new HashMap<>();
 
-        for (int i = 0; i < requestAttributes.length; ++i) {
-            String[] currentAttribute = requestAttributes[i].split(":");
-            attributeMap.put(currentAttribute[0].replaceAll("\"", ""),
-                    currentAttribute[1].replaceAll("\"", ""));
+        requestBody = requestBody.replaceAll("%5B", "[");
+        requestBody = requestBody.replaceAll("%5D", "]");
+        requestBody = requestBody.replaceAll("%20", "");
+        requestBody = requestBody.replaceAll(".000Z", "");
+        String[] formData = requestBody.split("&");
+
+        Map<String, String> attributeMap = new HashMap<>();
+        ArrayList<Map<String, ArrayList<String>>> fileMapList = new ArrayList<>();
+
+        int fileIndex = 0;
+
+        for (int i = 0; i < formData.length; ++i) {
+            String[] currentField = formData[i].split("=");
+
+            if (!currentField[0].startsWith("domainFiles")) {
+                attributeMap.put(currentField[0], currentField[1]);
+            } else {
+                fileIndex = i;
+                break;
+            }
         }
 
-        server.getXmlParser().addXmlDomain(attributeMap);*/
+        int domainFileCounter = -1;
+        Map<String, ArrayList<String>> currentFileMap = new HashMap<>();
+        String currentDomainFile = "";
+        ArrayList<String> currentProblemFiles = new ArrayList<>();
+
+        for (int i = fileIndex; i < formData.length; ++i) {
+            String[] currentFile = formData[i].split("=");
+
+            int currentFileIndex = Character.getNumericValue(currentFile[0].charAt(12));
+            if (currentFileIndex != domainFileCounter) {
+                if (domainFileCounter != -1) {
+                    currentFileMap.put(currentDomainFile, currentProblemFiles);
+                    Map<String, ArrayList<String>> mapCopy = currentFileMap;
+                    fileMapList.add(mapCopy);
+                }
+                domainFileCounter = currentFileIndex;
+                currentFileMap = new HashMap<>();
+                currentProblemFiles = new ArrayList<>();
+                currentDomainFile = currentFile[1];
+            } else {
+                currentProblemFiles.add(currentFile[1]);
+            }
+        }
+        currentFileMap.put(currentDomainFile, currentProblemFiles);
+        Map<String, ArrayList<String>> mapCopy = currentFileMap;
+        fileMapList.add(mapCopy);
+
+        server.getXmlParser().addXmlDomain(attributeMap, fileMapList);
     }
 
     /**
@@ -213,13 +252,8 @@ public class RequestHandler {
                         break;
                     }
                 }
-                requestBody = requestBody.replaceAll("%5B", "[");
-                requestBody = requestBody.replaceAll("%5D", "]");
-                String[] formData = requestBody.split("&");
-                for (int i = 0; i < formData.length; ++i) {
-                    System.out.println(formData[i]);
-                }
-                // doPost
+
+                doPost(request, requestBody);
             }
         }
     }

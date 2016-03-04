@@ -3,9 +3,11 @@ angular.module('app')
 	
 	$scope.domainFiles = [];
 	$scope.problemFiles = [];
+	$scope.publishDate = new Date();
 
 	$scope.submitForm = function () {
 		console.log('this is happening')
+		$scope.form.publishDate = $scope.publishDate;
 		$scope.form.domainFiles	= []	
 
 		for (var i = 0; i < $scope.domainFiles.length; i++) {
