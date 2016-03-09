@@ -147,7 +147,7 @@ public class RequestHandler {
         sendResponse(request, builder);
     }
 
-    private void doPost(Socket request, String requestBody) {
+    private void doPost(Socket request, String requestBody) throws IOException {
 
         requestBody = requestBody.replaceAll("%5B", "[");
         requestBody = requestBody.replaceAll("%5D", "]");
@@ -157,14 +157,18 @@ public class RequestHandler {
 
         Map<String, String> attributeMap = new HashMap<>();
         ArrayList<Map<String, ArrayList<String>>> fileMapList = new ArrayList<>();
-
         int fileIndex = 0;
 
         for (int i = 0; i < formData.length; ++i) {
             String[] currentField = formData[i].split("=");
 
             if (!currentField[0].startsWith("domainFiles")) {
-                attributeMap.put(currentField[0], currentField[1]);
+                // make sure to map connection to domain name
+                if (currentField[0].startsWith("Connection")) {
+                    attributeMap.put("name", currentField[1]);
+                } else {
+                    attributeMap.put(currentField[0], currentField[1]);
+                }
             } else {
                 fileIndex = i;
                 break;
@@ -197,6 +201,21 @@ public class RequestHandler {
         currentFileMap.put(currentDomainFile, currentProblemFiles);
         Map<String, ArrayList<String>> mapCopy = currentFileMap;
         fileMapList.add(mapCopy);
+
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<String, String> m: attributeMap.entrySet()) {
+            builder.append(m.getKey() + ": " + m.getValue() + "\n");
+        }
+        builder.append("files:\n");
+        for(Map<String, ArrayList<String>> m: fileMapList) {
+            for (Map.Entry<String, ArrayList<String>> e: m.entrySet()) {
+                builder.append(e.getKey() + ":\n");
+                for (String s: e.getValue()) {
+                    builder.append(s + "\n");
+                }
+            }
+        }
+        sendResponse(request, builder);
 
         server.getXmlParser().addXmlDomain(attributeMap, fileMapList);
     }

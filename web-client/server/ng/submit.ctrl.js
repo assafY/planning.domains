@@ -1,4 +1,4 @@
-angular.module('app')
+	angular.module('app')
 .controller('SubmitController', function ($scope, $timeout, Upload, SubmitService) {
 	
 	$scope.domainFiles = [];
@@ -6,30 +6,28 @@ angular.module('app')
 	$scope.publishDate = new Date();
 
 	$scope.submitForm = function () {
-		console.log('this is happening')
-		$scope.form.publishDate = $scope.publishDate;
-		$scope.form.domainFiles	= []	
+		// check if domain and problem files were selected
+		if ($scope.domainFiles.length > 0 && $scope.problemFiles.length > 0) {
+			$scope.form.publishDate = $scope.publishDate;
+			$scope.form.domainFiles	= []	
 
-		for (var i = 0; i < $scope.domainFiles.length; i++) {
-			problemFilesNames = []
-			for (var j = 0; j < $scope.problemFiles[i].length; j++) {
-				problemFilesNames.push($scope.problemFiles[i][j].name)
+			for (var i = 0; i < $scope.domainFiles.length; i++) {
+				problemFilesNames = []
+				for (var j = 0; j < $scope.problemFiles[i].length; j++) {
+					problemFilesNames.push($scope.problemFiles[i][j].name)
+				}
+
+				$scope.form.domainFiles[i] = {
+					domainFile: $scope.domainFiles[i].name,
+					problemFiles: problemFilesNames
+				}
+
+				SubmitService.submitDomainForm($scope.form). success(function (result) {
+					console.log(result)
+					// handle form submission success
+				})
 			}
-
-			$scope.form.domainFiles[i] = {
-				domainFile: $scope.domainFiles[i].name,
-				problemFiles: problemFilesNames
-			}
-
-			SubmitService.submitDomainForm($scope.form). success(function (result) {
-				console.log("submission success!")
-				// handle form submission success
-			})
 		}
-	}
-
-	$scope.testSubmit = function() {
-		console.log("form submitted");
 	}
 
 	$scope.uploadFiles = function (files) {

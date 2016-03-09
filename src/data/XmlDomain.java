@@ -47,6 +47,7 @@ public class XmlDomain implements Serializable{
         private Date publishedDate;
         private String link;
         private Requirements requirements;
+        private Properties properties;
         private Problems problems;
 
         public String getId() {
@@ -114,6 +115,15 @@ public class XmlDomain implements Serializable{
         @XmlElement
         public void setRequirements(Requirements requirements) {
             this.requirements = requirements;
+        }
+
+        public Properties getProperties() {
+            return properties;
+        }
+
+        @XmlElement
+        public void setProperties(Properties properties) {
+            this.properties = properties;
         }
 
         public Problems getProblems() {
@@ -447,6 +457,54 @@ public class XmlDomain implements Serializable{
                 }
                 return toReturn;
             }
+        }
+
+        public static class Properties implements Serializable {
+
+            // Strings representing domain properties
+            private String dead = null; // dead_ends
+            private String solvable = null;
+            private String zero = null; // zero_cost_actions
+            private String required = null; // required_concurrency
+            private String complexity = null;
+
+            public String getDead() {
+                return dead;
+            }
+
+            @XmlElement(name = "dead_ends")
+            public void setDead(String dead) {
+                this.dead = dead;
+            }
+
+            public String getSolvable() {
+                return solvable;
+            }
+
+            @XmlElement(name = "solvable")
+            public void setSolvable(String solvable) {
+                this.solvable = solvable;
+            }
+
+            public String getRequired() {
+                return required;
+            }
+
+            @XmlElement(name = "required_concurrency")
+            public void setRequired(String required) {
+                this.required = required;
+            }
+
+            public String getZero() {
+                return zero;
+            }
+
+            @XmlElement(name = "zero_cost_actions")
+            public void setZero(String zero) {
+                this.zero = zero;
+            }
+
+            // TODO: handle complexity
         }
 
         /**

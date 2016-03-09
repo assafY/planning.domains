@@ -6,6 +6,8 @@ import global.Settings;
 
 import java.io.File;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -82,37 +84,134 @@ public class XmlParser {
         return null;
     }
 
+    /**
+     * Creates a new XML file for an uploaded domain
+     *
+     * @param attributeMap all domain attributes apart from file names
+     * @param fileMapList list of map object of domain names and corresponding file lists
+     */
     public void addXmlDomain(Map<String, String> attributeMap, ArrayList<Map<String, ArrayList<String>>> fileMapList) {
         XmlDomain newXmlDomain = new XmlDomain();
         newXmlDomain.setDomain(new XmlDomain.Domain());
 
-        String domainId = "planning.domains:" +
-                attributeMap.get("ipc") + "/" +
-                attributeMap.get("name") + "/" +
-                attributeMap.get("formulation");
+        // capitalize first letter of domain name
+        String domainName = attributeMap.remove("name").toLowerCase();
+        String formulation = attributeMap.remove("formulation").toLowerCase();
+        String ipc = attributeMap.remove("ipc"); // can be null as ipc year is optional
+        String link = attributeMap.remove("link"); // can be null as link is optional
+        String publishDate = attributeMap.remove("publishDate");
+
+        // build domain id and title from form data
+        String domainId = "planning.domains:";
+        String title = "The " + domainName + " domain from the " + formulation + " track";
+
+        // if an IPC year was submitted
+        if (ipc != null) {
+            domainId += "ipc" + ipc + "/";
+            title += " of IPC" + ipc;
+        }
+        domainId += domainName + "/" + formulation;
 
         newXmlDomain.getDomain().setId(domainId);
-        newXmlDomain.getDomain().setTitle(attributeMap.get("title"));
+        newXmlDomain.getDomain().setTitle(title);
 
-        // this is the 'metadate last modified' attribute
-        // but we also need to retrieve the files last modified date
-        // as well as the publish date (time can be T12:00:00 but date
-        // should be accurate)
+        // set the link
+        if (link != null) {
+            newXmlDomain.getDomain().setLink(link);
+        } else {
+            newXmlDomain.getDomain().setLink("");
+        }
+
+        // set the required dates for this domain
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        publishDate = publishDate.substring(0, publishDate.indexOf('T') + 1) + "12:00:00";
         String currentDate = sdf.format(new Date());
 
         try {
             newXmlDomain.getDomain().setMetadata_last_modified(sdf.parse(currentDate));
+            newXmlDomain.getDomain().setFiles_last_modified(sdf.parse(currentDate));
+            newXmlDomain.getDomain().setPublished(sdf.parse(publishDate));
         } catch (ParseException e) {
             //TODO: handle exception
         }
 
-        newXmlDomain.getDomain().setLink(attributeMap.get("link"));
+        // at this point all that should remain in the attribute
+        // map are requirements and properties
+        ArrayList<String> requirements = new ArrayList<>();
+        ArrayList<String> properties = new ArrayList<>();
+        for (Map.Entry<String, String> m : attributeMap.entrySet()) {
+            String currentKey = m.getKey();
+            if (currentKey.startsWith("req")) {
+                if (m.getValue().equals("true")) {
+                    requirements.add(currentKey.substring(currentKey.indexOf('[') + 1, currentKey.indexOf(']')));
+                }
+            } else if (currentKey.startsWith("pro")) {
+                if (m.getValue().equals("true")) {
+                    properties.add(currentKey.substring(currentKey.indexOf('[') + 1, currentKey.indexOf(']')));
+                }
+            }
+        }
+
+        // use Java reflection to set requirements
+        newXmlDomain.getDomain().setRequirements((XmlDomain.Domain.Requirements)
+                                                    xmlDomainReflection(true, requirements));
+
+        // repeat for properties is there are any
+        if (properties.size() > 0) {
+            newXmlDomain.getDomain().setProperties((XmlDomain.Domain.Properties)
+                    xmlDomainReflection(false, properties));
+        }
+
+
 
         // more to come, in particular setting the requirements
         // and the problem files. Need to figure out how these will
         // be sent from the client to the server
 
+    }
+
+    private Object xmlDomainReflection(boolean isRequirements, ArrayList<String> list) {
+        XmlDomain.Domain.Requirements domainRequirements = new XmlDomain.Domain.Requirements();
+        XmlDomain.Domain.Properties domainProperties = new XmlDomain.Domain.Properties();
+
+        for (String s: list) {
+            String methodName = "";
+            if (!s.contains("_")) {
+                methodName = "set" + s.substring(0, 1).toUpperCase() + s.substring(1);
+            } else {
+                methodName = "set" + s.substring(0, 1).toUpperCase() + s.substring(1, s.indexOf("_"));
+            }
+            Method method = null;
+            try {
+                if (isRequirements) {
+                    method = domainRequirements.getClass().getMethod(methodName, String.class);
+                } else {
+                    method = domainProperties.getClass().getMethod(methodName, String.class);
+                }
+            } catch (NoSuchMethodException e) {
+                //TODO: handle exception
+                e.printStackTrace();
+            }
+            if (method != null) {
+                try {
+                    if (isRequirements) {
+                        method.invoke(domainRequirements, s);
+                    } else {
+                        method.invoke(domainProperties, s);
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (isRequirements) {
+            return domainRequirements;
+        }
+
+        return domainProperties;
     }
 
     public static void marshal(XmlDomain domain) {

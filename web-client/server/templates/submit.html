@@ -10,13 +10,13 @@
 			<form id='domain-submit' method="post" ng-submit="submitForm();">
 				<div id="form-fields">
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" maxlength="25" type="text" ng-model="form.domainName" id="domain-name" required>
+						<input class="mdl-textfield__input" maxlength="25" type="text" ng-model="form.name" id="domain-name" required>
 						<label class="mdl-textfield__label" for="domain-name">name</label>
 					</div>
 					<br>
 					<div class="info-input">
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" ng-model="form.ipcYear" pattern="20[0-9][0-9]" id="ipc">
+							<input class="mdl-textfield__input" type="text" ng-model="form.ipc" pattern="20[0-9][0-9]" id="ipc">
 							<label class="mdl-textfield__label" for="ipc">ipc</label>
 							<span class="mdl-textfield__error">Please enter a valid year or leave empty</span>
 						</div>
