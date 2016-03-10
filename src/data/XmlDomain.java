@@ -39,6 +39,8 @@ public class XmlDomain implements Serializable{
         return domain.toString();
     }
 
+    @XmlType(propOrder = {"title", "files_last_modified", "metadata_last_modified", "published",
+            "link", "requirements", "properties", "problems"})
     public static class Domain implements Serializable {
         private String id;
         private String title;
@@ -67,7 +69,7 @@ public class XmlDomain implements Serializable{
             return title;
         }
 
-        @XmlElement
+        @XmlElement(name="title")
         public void setTitle(String title) {
             this.title = title;
         }
@@ -76,7 +78,7 @@ public class XmlDomain implements Serializable{
             return filesModifiedDate;
         }
 
-        @XmlElement
+        @XmlElement(name="files_last_modified")
         public void setFiles_last_modified(Date date) {
             filesModifiedDate = date;
         }
@@ -85,7 +87,7 @@ public class XmlDomain implements Serializable{
             return metaModifiedDate;
         }
 
-        @XmlElement
+        @XmlElement(name="metadata_last_modified")
         public void setMetadata_last_modified(Date date) {
             metaModifiedDate = date;
         }
@@ -94,7 +96,7 @@ public class XmlDomain implements Serializable{
             return publishedDate;
         }
 
-        @XmlElement
+        @XmlElement(name="published")
         public void setPublished(Date date) {
             publishedDate = date;
         }
@@ -103,7 +105,7 @@ public class XmlDomain implements Serializable{
             return link;
         }
 
-        @XmlElement
+        @XmlElement(name="link")
         public void setLink(String link) {
             this.link = link;
         }
@@ -112,7 +114,7 @@ public class XmlDomain implements Serializable{
             return requirements;
         }
 
-        @XmlElement
+        @XmlElement(name="requirements")
         public void setRequirements(Requirements requirements) {
             this.requirements = requirements;
         }
@@ -121,7 +123,7 @@ public class XmlDomain implements Serializable{
             return properties;
         }
 
-        @XmlElement
+        @XmlElement(name="properties")
         public void setProperties(Properties properties) {
             this.properties = properties;
         }
@@ -130,7 +132,7 @@ public class XmlDomain implements Serializable{
             return problems;
         }
 
-        @XmlElement
+        @XmlElement(name="problems")
         public void setProblems(Problems problems) {
             this.problems = problems;
         }

@@ -250,6 +250,7 @@ public class XmlParser {
             };
 
             marshaller.setProperty("com.sun.xml.internal.bind.namespacePrefixMapper", mapper);
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(domain, newXmlFile);
             marshaller.marshal(domain, System.out);
