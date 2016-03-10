@@ -1,5 +1,6 @@
 package server;
 
+import com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper;
 import data.Domain;
 import data.XmlDomain;
 import global.Settings;
@@ -13,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 public class XmlParser {
@@ -88,9 +90,9 @@ public class XmlParser {
      * Creates a new XML file for an uploaded domain
      *
      * @param attributeMap all domain attributes apart from file names
-     * @param fileMapList list of map object of domain names and corresponding file lists
+     * @param fileMap map object of domain names and corresponding file lists
      */
-    public void addXmlDomain(Map<String, String> attributeMap, ArrayList<Map<String, ArrayList<String>>> fileMapList) {
+    public void addXmlDomain(Map<String, String> attributeMap, Map<String, ArrayList<String>> fileMap) {
         XmlDomain newXmlDomain = new XmlDomain();
         newXmlDomain.setDomain(new XmlDomain.Domain());
 
@@ -162,11 +164,28 @@ public class XmlParser {
                     xmlDomainReflection(false, properties));
         }
 
+        // set all domain and problem files
+        ArrayList<XmlDomain.Domain.Problems.Problem> problemList = new ArrayList<>();
+        int problemCounter = 1;
 
+        for (Map.Entry<String, ArrayList<String>> currentEntry: fileMap.entrySet()) {
+            String currentDomainFile = currentEntry.getKey();
+            for (String problemFile: currentEntry.getValue()) {
+                XmlDomain.Domain.Problems.Problem currentProblem = new XmlDomain.Domain.Problems.Problem();
+                currentProblem.setDomain_file(currentDomainFile);
+                currentProblem.setProblem_file(problemFile);
+                currentProblem.setNumber(problemCounter);
 
-        // more to come, in particular setting the requirements
-        // and the problem files. Need to figure out how these will
-        // be sent from the client to the server
+                problemList.add(currentProblem);
+                ++problemCounter;
+            }
+        }
+
+        XmlDomain.Domain.Problems problems = new XmlDomain.Domain.Problems();
+        problems.setProblem(problemList);
+        newXmlDomain.getDomain().setProblems(problems);
+
+        marshal(newXmlDomain);
 
     }
 
@@ -215,6 +234,28 @@ public class XmlParser {
     }
 
     public static void marshal(XmlDomain domain) {
-        // create xml file for new domain
+
+        try {
+            File newXmlFile = new File(Settings.DOMAIN_DIR_PATH + "uploads/metadata.xml");
+            JAXBContext jaxbContext = JAXBContext.newInstance(XmlDomain.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+
+            // create mapper to change default namespace to 'planning'
+            // this internal package must be compiled using '-XDignore.symbol.file'
+            NamespacePrefixMapper mapper = new NamespacePrefixMapper() {
+                @Override
+                public String getPreferredPrefix(String s, String s1, boolean b) {
+                    return "planning";
+                }
+            };
+
+            marshaller.setProperty("com.sun.xml.internal.bind.namespacePrefixMapper", mapper);
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(domain, newXmlFile);
+            marshaller.marshal(domain, System.out);
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
     }
 }

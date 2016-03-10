@@ -156,7 +156,7 @@ public class RequestHandler {
         String[] formData = requestBody.split("&");
 
         Map<String, String> attributeMap = new HashMap<>();
-        ArrayList<Map<String, ArrayList<String>>> fileMapList = new ArrayList<>();
+        //ArrayList<Map<String, ArrayList<String>>> fileMapList = new ArrayList<>();
         int fileIndex = 0;
 
         for (int i = 0; i < formData.length; ++i) {
@@ -176,7 +176,7 @@ public class RequestHandler {
         }
 
         int domainFileCounter = -1;
-        Map<String, ArrayList<String>> currentFileMap = new HashMap<>();
+        Map<String, ArrayList<String>> fileMap = new HashMap<>();
         String currentDomainFile = "";
         ArrayList<String> currentProblemFiles = new ArrayList<>();
 
@@ -186,38 +186,39 @@ public class RequestHandler {
             int currentFileIndex = Character.getNumericValue(currentFile[0].charAt(12));
             if (currentFileIndex != domainFileCounter) {
                 if (domainFileCounter != -1) {
-                    currentFileMap.put(currentDomainFile, currentProblemFiles);
-                    Map<String, ArrayList<String>> mapCopy = currentFileMap;
-                    fileMapList.add(mapCopy);
+                    ArrayList<String> pFilesCopy = currentProblemFiles;
+                    fileMap.put(currentDomainFile, pFilesCopy);
+//                    Map<String, ArrayList<String>> mapCopy = currentFileMap;
+//                    fileMapList.add(mapCopy);
                 }
                 domainFileCounter = currentFileIndex;
-                currentFileMap = new HashMap<>();
+                fileMap = new HashMap<>();
                 currentProblemFiles = new ArrayList<>();
                 currentDomainFile = currentFile[1];
             } else {
                 currentProblemFiles.add(currentFile[1]);
             }
         }
-        currentFileMap.put(currentDomainFile, currentProblemFiles);
-        Map<String, ArrayList<String>> mapCopy = currentFileMap;
-        fileMapList.add(mapCopy);
+        fileMap.put(currentDomainFile, currentProblemFiles);
+//        Map<String, ArrayList<String>> mapCopy = currentFileMap;
+//        fileMapList.add(mapCopy);
 
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, String> m: attributeMap.entrySet()) {
             builder.append(m.getKey() + ": " + m.getValue() + "\n");
         }
         builder.append("files:\n");
-        for(Map<String, ArrayList<String>> m: fileMapList) {
-            for (Map.Entry<String, ArrayList<String>> e: m.entrySet()) {
+//        for(Map<String, ArrayList<String>> m: fileMapList) {
+            for (Map.Entry<String, ArrayList<String>> e: fileMap.entrySet()) {
                 builder.append(e.getKey() + ":\n");
                 for (String s: e.getValue()) {
                     builder.append(s + "\n");
                 }
             }
-        }
+//        }
         sendResponse(request, builder);
 
-        server.getXmlParser().addXmlDomain(attributeMap, fileMapList);
+        server.getXmlParser().addXmlDomain(attributeMap, fileMap);
     }
 
     /**
