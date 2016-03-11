@@ -235,8 +235,21 @@ public class XmlParser {
 
     public static void marshal(XmlDomain domain) {
 
+        // create a new directory to store the file
+        File newDomainDir = new File(Settings.DOMAIN_DIR_PATH + "uploads/" + domain.getDomain().getShortId());
+        int counter = 0;
+
+        // if the directory exists append a number and check again
+        while (newDomainDir.exists()) {
+            newDomainDir = new File(Settings.DOMAIN_DIR_PATH + "uploads/" +
+                    domain.getDomain().getShortId() + "(" + ++counter + ")");
+        }
+
+        newDomainDir.mkdir();
+
         try {
-            File newXmlFile = new File(Settings.DOMAIN_DIR_PATH + "uploads/metadata.xml");
+
+            File newXmlFile = new File(newDomainDir.getPath() + "/metadata.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(XmlDomain.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
 
