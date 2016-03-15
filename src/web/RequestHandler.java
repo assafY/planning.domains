@@ -70,7 +70,12 @@ public class RequestHandler {
                             "<name>" + name + "</name>\n" +
                             "<formulation>" + formulation + "</formulation>\n");
                 } else {
-                    String ipcCheck = domain[0].substring(3);
+                    String ipcCheck = "";
+                    try {
+                        ipcCheck = domain[0].substring(3);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        // this is an uploaded domain with fewer than 3 characters
+                    }
                     if (ipcCheck.equals("2002")) {
                         builder.append(
                                 "<id>" + domainId + "</id>\n" +
