@@ -506,7 +506,14 @@ public class XmlDomain implements Serializable{
                 this.zero = zero;
             }
 
-            // TODO: handle complexity
+            public String getComplexity() {
+                return complexity;
+            }
+
+            @XmlElement(name = "complexity")
+            public void setComplexity(String complexity) {
+                this.complexity = complexity;
+            }
         }
 
         /**

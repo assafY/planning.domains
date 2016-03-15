@@ -102,6 +102,7 @@ public class XmlParser {
         String ipc = attributeMap.remove("ipc"); // can be null as ipc year is optional
         String link = attributeMap.remove("link"); // can be null as link is optional
         String publishDate = attributeMap.remove("publishDate");
+        String complexityText = attributeMap.remove("properties[complexityText]"); // can be null
 
         // build domain id and title from form data
         String domainId = "planning.domains:";
@@ -154,12 +155,12 @@ public class XmlParser {
 
         // use Java reflection to set requirements
         newXmlDomain.getDomain().setRequirements((XmlDomain.Domain.Requirements)
-                                                    xmlDomainReflection(true, requirements));
+                                                    xmlDomainReflection(true, requirements, null));
 
         // repeat for properties is there are any
         if (properties.size() > 0) {
             newXmlDomain.getDomain().setProperties((XmlDomain.Domain.Properties)
-                    xmlDomainReflection(false, properties));
+                    xmlDomainReflection(false, properties, complexityText));
         }
 
         // set all domain and problem files
@@ -187,7 +188,8 @@ public class XmlParser {
 
     }
 
-    private Object xmlDomainReflection(boolean isRequirements, ArrayList<String> list) {
+    private Object xmlDomainReflection(boolean isRequirements, ArrayList<String> list,
+                                       String complexityText) {
         XmlDomain.Domain.Requirements domainRequirements = new XmlDomain.Domain.Requirements();
         XmlDomain.Domain.Properties domainProperties = new XmlDomain.Domain.Properties();
 
@@ -213,6 +215,12 @@ public class XmlParser {
                 try {
                     if (isRequirements) {
                         method.invoke(domainRequirements, s);
+                    } else if (s.equals("complexity")) {
+                        if (complexityText != null) {
+                            method.invoke(domainProperties, complexityText);
+                        } else {
+                            method.invoke(domainProperties, "");
+                        }
                     } else {
                         method.invoke(domainProperties, s);
                     }

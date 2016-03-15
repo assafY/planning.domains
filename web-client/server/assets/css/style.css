@@ -206,7 +206,15 @@ span.main-title-underline {
 	color: #fbfbfb;
 }
 
-#submit-button {
+#complexity-div {
+	position: absolute;
+}
+
+#complexity-textfield {
+	width: 200px;
+}
+
+#form-submit-button {
 	position: relative;
 	left: 5px;
 	top: 50px;
