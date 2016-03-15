@@ -120,8 +120,6 @@ public class XmlParser {
         // set the link
         if (link != null) {
             newXmlDomain.getDomain().setLink(link);
-        } else {
-            newXmlDomain.getDomain().setLink("");
         }
 
         // set the required dates for this domain

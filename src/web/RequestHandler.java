@@ -167,7 +167,9 @@ public class RequestHandler {
                 if (currentField[0].startsWith("Connection")) {
                     attributeMap.put("name", currentField[1]);
                 } else {
-                    attributeMap.put(currentField[0], currentField[1]);
+                    if (currentField.length > 1) {
+                        attributeMap.put(currentField[0], currentField[1]);
+                    }
                 }
             } else {
                 fileIndex = i;
@@ -182,40 +184,35 @@ public class RequestHandler {
 
         for (int i = fileIndex; i < formData.length; ++i) {
             String[] currentFile = formData[i].split("=");
-
-            int currentFileIndex = Character.getNumericValue(currentFile[0].charAt(12));
+            System.out.println(currentFile[0]);
+            int currentFileIndex = Integer.parseInt(currentFile[0].substring(
+                    12, currentFile[0].indexOf(']')));
             if (currentFileIndex != domainFileCounter) {
                 if (domainFileCounter != -1) {
                     ArrayList<String> pFilesCopy = currentProblemFiles;
                     fileMap.put(currentDomainFile, pFilesCopy);
-//                    Map<String, ArrayList<String>> mapCopy = currentFileMap;
-//                    fileMapList.add(mapCopy);
                 }
                 domainFileCounter = currentFileIndex;
-                fileMap = new HashMap<>();
                 currentProblemFiles = new ArrayList<>();
                 currentDomainFile = currentFile[1];
             } else {
                 currentProblemFiles.add(currentFile[1]);
             }
         }
-        fileMap.put(currentDomainFile, currentProblemFiles);
-//        Map<String, ArrayList<String>> mapCopy = currentFileMap;
-//        fileMapList.add(mapCopy);
+        ArrayList<String> pFilesCopy = currentProblemFiles;
+        fileMap.put(currentDomainFile, pFilesCopy);
 
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, String> m: attributeMap.entrySet()) {
             builder.append(m.getKey() + ": " + m.getValue() + "\n");
         }
         builder.append("files:\n");
-//        for(Map<String, ArrayList<String>> m: fileMapList) {
-            for (Map.Entry<String, ArrayList<String>> e: fileMap.entrySet()) {
-                builder.append(e.getKey() + ":\n");
-                for (String s: e.getValue()) {
-                    builder.append(s + "\n");
-                }
+        for (Map.Entry<String, ArrayList<String>> e: fileMap.entrySet()) {
+            builder.append(e.getKey() + ":\n");
+            for (String s: e.getValue()) {
+                builder.append(s + "\n");
             }
-//        }
+        }
         sendResponse(request, builder);
 
         server.getXmlParser().addXmlDomain(attributeMap, fileMap);

@@ -20,6 +20,10 @@ h1, h2, h3, h4, h5 {
 	font-family: 'Adam', serif;
 }
 
+img:focus {
+	outline: none;
+}
+
 .navbar-button {
 	color: #fbfbfb;
 }
@@ -200,6 +204,19 @@ span.main-title-underline {
 
 .domain-button {
 	color: #fbfbfb;
+}
+
+#submit-button {
+	position: relative;
+	left: 5px;
+	top: 50px;
+	margin-bottom: 100px;
+}
+
+#add-button {
+	float: left;
+	position: relative;
+	left: 10px;
 }
 
 #submission-form {

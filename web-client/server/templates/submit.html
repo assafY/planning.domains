@@ -240,17 +240,22 @@
 				<div id="file-selection">
 					<h5 class="submit-title">Files</h5><br>
 					
-					<div class="domain-selection">
-						<input id="domain-input" type="file" name="domainFile" ng-model="domainFiles[0]" class="ng-hide" ngf-select accept=".pddl" ngf-max-size="2MB">
-						<button class="mdl-button mdl-js-button domain-button" onclick="document.getElementById('domain-input').click();"> Choose Domain File </button>
-					</div>
-					<div class="problem-selection">
-						<input id="problem-input" type="file" name="problemFiles" ng-model="problemFiles[0]" class="ng-hide" ngf-select accept=".pddl" ngf-max-size="2MB" ngf-multiple="true">
-						<button class="mdl-button mdl-js-button domain-button" onclick="document.getElementById('problem-input').click();"> Choose Problem Files </button>
-					</div>
+					<fieldset ng-repeat="domainFile in allDomainFiles">
+						<div class="domain-selection">
+							<input id="{{domainFile.id}}" type="file" ng-model="domainFile.domainFile" class="ng-hide" ngf-select accept=".pddl" ngf-max-size="2MB">
+							<button type="button" class="mdl-button mdl-js-button" ng-click="getUploadButton(domainFile.id);"> Choose Domain File </button>
+							<div>{{ domainFile.domainFile.name }}</div>
+						</div>
+						<div class="problem-selection">
+							<input id="{{domainFile.id + 'a'}}" type="file" ng-model="domainFile.problemFiles" class="ng-hide" ngf-select accept=".pddl" ngf-max-size="2MB" ngf-multiple="true">
+							<button type="button" class="mdl-button mdl-js-button" ng-click="getUploadButton(domainFile.id + 'a');"> Choose Problem Files </button>
+							<div ng-repeat="problem in domainFile.problemFiles">{{ problem.name }}</div>
+						</div>
+					</fieldset>
+					<div id="add-button"> <img src="img/add.png" ng-click="addDomain()" /> </div>
 				</div>
 				<br>
-				<button type="submit" class="mdl-button mdl-js-button domain-button"> Submit </button>
+				<button id="submit-button" class="mdl-button mdl-js-button"> Submit Domain </button>
 				<br> 
 			</form>
 		</div>
