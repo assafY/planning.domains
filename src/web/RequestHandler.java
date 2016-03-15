@@ -7,9 +7,8 @@ import server.Server;
 import java.io.*;
 import java.net.Socket;
 import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Class for handling GET and POST requests from web clients.
@@ -148,8 +147,75 @@ public class RequestHandler {
         sendResponse(request, builder);
     }
 
-    private void doPost(Socket request, String requestBody) {
-        // handle request body
+    private void doPost(Socket request, String requestBody) throws IOException {
+
+        requestBody = requestBody.replaceAll("%5B", "[");
+        requestBody = requestBody.replaceAll("%5D", "]");
+        requestBody = requestBody.replaceAll("%20", "");
+        requestBody = requestBody.replaceAll(".000Z", "");
+        String[] formData = requestBody.split("&");
+
+        Map<String, String> attributeMap = new HashMap<>();
+        //ArrayList<Map<String, ArrayList<String>>> fileMapList = new ArrayList<>();
+        int fileIndex = 0;
+
+        for (int i = 0; i < formData.length; ++i) {
+            String[] currentField = formData[i].split("=");
+
+            if (!currentField[0].startsWith("domainFiles")) {
+                // make sure to map connection to domain name
+                if (currentField[0].startsWith("Connection")) {
+                    attributeMap.put("name", currentField[1]);
+                } else {
+                    if (currentField.length > 1) {
+                        attributeMap.put(currentField[0], currentField[1]);
+                    }
+                }
+            } else {
+                fileIndex = i;
+                break;
+            }
+        }
+
+        int domainFileCounter = -1;
+        Map<String, ArrayList<String>> fileMap = new HashMap<>();
+        String currentDomainFile = "";
+        ArrayList<String> currentProblemFiles = new ArrayList<>();
+
+        for (int i = fileIndex; i < formData.length; ++i) {
+            String[] currentFile = formData[i].split("=");
+            System.out.println(currentFile[0]);
+            int currentFileIndex = Integer.parseInt(currentFile[0].substring(
+                    12, currentFile[0].indexOf(']')));
+            if (currentFileIndex != domainFileCounter) {
+                if (domainFileCounter != -1) {
+                    ArrayList<String> pFilesCopy = currentProblemFiles;
+                    fileMap.put(currentDomainFile, pFilesCopy);
+                }
+                domainFileCounter = currentFileIndex;
+                currentProblemFiles = new ArrayList<>();
+                currentDomainFile = currentFile[1];
+            } else {
+                currentProblemFiles.add(currentFile[1]);
+            }
+        }
+        ArrayList<String> pFilesCopy = currentProblemFiles;
+        fileMap.put(currentDomainFile, pFilesCopy);
+
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<String, String> m: attributeMap.entrySet()) {
+            builder.append(m.getKey() + ": " + m.getValue() + "\n");
+        }
+        builder.append("files:\n");
+        for (Map.Entry<String, ArrayList<String>> e: fileMap.entrySet()) {
+            builder.append(e.getKey() + ":\n");
+            for (String s: e.getValue()) {
+                builder.append(s + "\n");
+            }
+        }
+        sendResponse(request, builder);
+
+        server.getXmlParser().addXmlDomain(attributeMap, fileMap);
     }
 
     /**
@@ -161,8 +227,11 @@ public class RequestHandler {
      */
     public void handleRequest(Socket request) throws IOException {
         BufferedReader requestReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String requestBody;
+        String requestBody = "";
         String input;
+
+        int contentLength = 0;
+        boolean isPostRequest = false;
 
         while (!(input = requestReader.readLine()).equals("")) {
             if (input.startsWith("GET")) {
@@ -178,14 +247,30 @@ public class RequestHandler {
                 break;
             }
             if (input.startsWith("POST")) {
-                requestBody = "";
-                while (!(requestReader.readLine()).startsWith("{")) {}
-                while((input = requestReader.readLine()).startsWith(" ")) {
-                    requestBody += input.replaceAll(" ", "");
+                isPostRequest = true;
+
+                while((input = requestReader.readLine()) != null) {
+                    System.out.println(input);
+                    if (input.startsWith("content-length")) {
+                        contentLength = Integer.valueOf(input.substring(input.indexOf(' ')+1));
+                        break;
+                    }
                 }
-                doPost(request, requestBody);
-                requestReader.close();
                 break;
+            }
+        }
+
+        if (isPostRequest) {
+            if (contentLength > 0) {
+                int read;
+                while ((read = requestReader.read()) != -1) {
+                    requestBody += (char) read;
+                    if (requestBody.length() == contentLength + 21) {
+                        break;
+                    }
+                }
+
+                doPost(request, requestBody);
             }
         }
     }

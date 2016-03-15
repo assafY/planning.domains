@@ -1,22 +1,25 @@
-<div class="container page-background">
+<div class="container">
 	<div class="page-title">
-		<h2 class="page-title">View Domains</h2>
+		<span class='header-underline'>
+			<h2 class="page-title">View Domains</h2>
+		</span>
 	</div>
+	
 	<br>
 	<div class="fixed-width">
 		<table class="mdl-data-table mdl-js-data-table mdl-shadow--8dp view-table">
 			<thead>
-				<tr>
-					<th class="mdl-data-table__cell--non-numeric">Domain</th>
-					<th class="mdl-data-table__cell--non-numeric">Formulation</th>
-					<th>IPC</th>
+				<tr class='table-header-row'>
+					<th class="table-text mdl-data-table__cell--non-numeric"><font size="5">Domain</font></th>
+					<th class="table-text mdl-data-table__cell--non-numeric"><font size="5">Formulation</font></th>
+					<th class="table-text"><font size="5">IPC</font></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat='domain in domains' ng-click='getDomain(domain.id);'>
-					<td class="mdl-data-table__cell--non-numeric">{{ domain.name }}</td>
-					<td class="mdl-data-table__cell--non-numeric">{{ domain.formulation }}</td>
-					<td>{{ domain.ipc }}</td>
+				<tr class='table-row' ng-repeat='domain in domains' ng-click='getDomain(domain.id);'>
+					<td class="table-text mdl-data-table__cell--non-numeric">{{ domain.name }}</td>
+					<td class="table-text mdl-data-table__cell--non-numeric">{{ domain.formulation }}</td>
+					<td class="table-text">{{ domain.ipc }}</td>
 				</tr>
 			</tbody>
 		</table>

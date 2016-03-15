@@ -39,6 +39,8 @@ public class XmlDomain implements Serializable{
         return domain.toString();
     }
 
+    @XmlType(propOrder = {"title", "files_last_modified", "metadata_last_modified", "published",
+            "link", "requirements", "properties", "problems"})
     public static class Domain implements Serializable {
         private String id;
         private String title;
@@ -47,6 +49,7 @@ public class XmlDomain implements Serializable{
         private Date publishedDate;
         private String link;
         private Requirements requirements;
+        private Properties properties;
         private Problems problems;
 
         public String getId() {
@@ -66,7 +69,7 @@ public class XmlDomain implements Serializable{
             return title;
         }
 
-        @XmlElement
+        @XmlElement(name="title")
         public void setTitle(String title) {
             this.title = title;
         }
@@ -75,7 +78,7 @@ public class XmlDomain implements Serializable{
             return filesModifiedDate;
         }
 
-        @XmlElement
+        @XmlElement(name="files_last_modified")
         public void setFiles_last_modified(Date date) {
             filesModifiedDate = date;
         }
@@ -84,7 +87,7 @@ public class XmlDomain implements Serializable{
             return metaModifiedDate;
         }
 
-        @XmlElement
+        @XmlElement(name="metadata_last_modified")
         public void setMetadata_last_modified(Date date) {
             metaModifiedDate = date;
         }
@@ -93,7 +96,7 @@ public class XmlDomain implements Serializable{
             return publishedDate;
         }
 
-        @XmlElement
+        @XmlElement(name="published")
         public void setPublished(Date date) {
             publishedDate = date;
         }
@@ -102,7 +105,7 @@ public class XmlDomain implements Serializable{
             return link;
         }
 
-        @XmlElement
+        @XmlElement(name="link")
         public void setLink(String link) {
             this.link = link;
         }
@@ -111,16 +114,25 @@ public class XmlDomain implements Serializable{
             return requirements;
         }
 
-        @XmlElement
+        @XmlElement(name="requirements")
         public void setRequirements(Requirements requirements) {
             this.requirements = requirements;
+        }
+
+        public Properties getProperties() {
+            return properties;
+        }
+
+        @XmlElement(name="properties")
+        public void setProperties(Properties properties) {
+            this.properties = properties;
         }
 
         public Problems getProblems() {
             return problems;
         }
 
-        @XmlElement
+        @XmlElement(name="problems")
         public void setProblems(Problems problems) {
             this.problems = problems;
         }
@@ -446,6 +458,61 @@ public class XmlDomain implements Serializable{
                     toReturn += "universal_preconditions\n";
                 }
                 return toReturn;
+            }
+        }
+
+        public static class Properties implements Serializable {
+
+            // Strings representing domain properties
+            private String dead = null; // dead_ends
+            private String solvable = null;
+            private String zero = null; // zero_cost_actions
+            private String required = null; // required_concurrency
+            private String complexity = null;
+
+            public String getDead() {
+                return dead;
+            }
+
+            @XmlElement(name = "dead_ends")
+            public void setDead(String dead) {
+                this.dead = dead;
+            }
+
+            public String getSolvable() {
+                return solvable;
+            }
+
+            @XmlElement(name = "solvable")
+            public void setSolvable(String solvable) {
+                this.solvable = solvable;
+            }
+
+            public String getRequired() {
+                return required;
+            }
+
+            @XmlElement(name = "required_concurrency")
+            public void setRequired(String required) {
+                this.required = required;
+            }
+
+            public String getZero() {
+                return zero;
+            }
+
+            @XmlElement(name = "zero_cost_actions")
+            public void setZero(String zero) {
+                this.zero = zero;
+            }
+
+            public String getComplexity() {
+                return complexity;
+            }
+
+            @XmlElement(name = "complexity")
+            public void setComplexity(String complexity) {
+                this.complexity = complexity;
             }
         }
 

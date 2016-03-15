@@ -245,6 +245,10 @@ public class Server {
         return domainList;
     }
 
+    public XmlParser getXmlParser() {
+        return xmlParser;
+    }
+
     /**
      * Create one new job and add it to the job queue.
      *
