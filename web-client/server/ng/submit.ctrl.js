@@ -5,6 +5,7 @@
 	//$scope.domainFiles = [];
 	//$scope.problemFiles = [];
 	$scope.publishDate = new Date();
+	
 
 	$scope.addDomain = function() {
 		if ($scope.allDomainFiles[$scope.allDomainFiles.length - 1].domainFile &&
@@ -27,8 +28,10 @@
 
 			for (var i = 0; i < $scope.allDomainFiles.length; i++) {
 				problemFilesNames = []
+				
 				for (var j = 0; j < $scope.allDomainFiles[i].problemFiles.length; j++) {
 					problemFilesNames.push($scope.allDomainFiles[i].problemFiles[j].name)
+					
 				}
 
 				$scope.form.domainFiles[i] = {
@@ -36,16 +39,30 @@
 					problemFiles: problemFilesNames
 				}
 
-				SubmitService.submitDomainForm($scope.form). success(function (result) {
-					console.log(result)
+				SubmitService.submitDomainForm($scope.form). success(function (dirname) {
+					$scope.uploadFiles(dirname)
 					// handle form submission success
 				})
 			}
 		}
 	}
 
-	$scope.uploadFiles = function (files) {
-		
+	$scope.uploadFiles = function (dirname) {
+		for (var i = 0; i < $scope.allDomainFiles.length; ++i) {
+			var file = $scope.allDomainFiles[i].domainFile;
+			Upload.upload({
+				url: '/api/upload',
+				data: {file: file, dirname: dirname}
+			})
 
+			for (var j = 0; j < $scope.allDomainFiles[i].problemFiles.length; ++j) {
+				file = $scope.allDomainFiles[i].problemFiles[j];
+
+				Upload.upload({
+					url: '/api/upload',
+					data: {file: file, dirname: dirname}
+				})
+			}
+		}
 	}
 })

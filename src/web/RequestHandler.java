@@ -189,7 +189,6 @@ public class RequestHandler {
 
         for (int i = fileIndex; i < formData.length; ++i) {
             String[] currentFile = formData[i].split("=");
-            System.out.println(currentFile[0]);
             int currentFileIndex = Integer.parseInt(currentFile[0].substring(
                     12, currentFile[0].indexOf(']')));
             if (currentFileIndex != domainFileCounter) {
@@ -208,7 +207,7 @@ public class RequestHandler {
         fileMap.put(currentDomainFile, pFilesCopy);
 
         StringBuilder builder = new StringBuilder();
-        for (Map.Entry<String, String> m: attributeMap.entrySet()) {
+        /*for (Map.Entry<String, String> m: attributeMap.entrySet()) {
             builder.append(m.getKey() + ": " + m.getValue() + "\n");
         }
         builder.append("files:\n");
@@ -218,9 +217,10 @@ public class RequestHandler {
                 builder.append(s + "\n");
             }
         }
+        sendResponse(request, builder);*/
+        
+        builder.append(server.getXmlParser().addXmlDomain(attributeMap, fileMap));
         sendResponse(request, builder);
-
-        server.getXmlParser().addXmlDomain(attributeMap, fileMap);
     }
 
     /**
@@ -255,7 +255,6 @@ public class RequestHandler {
                 isPostRequest = true;
 
                 while((input = requestReader.readLine()) != null) {
-                    System.out.println(input);
                     if (input.startsWith("content-length")) {
                         contentLength = Integer.valueOf(input.substring(input.indexOf(' ')+1));
                         break;
