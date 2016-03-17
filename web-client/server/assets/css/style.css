@@ -253,6 +253,10 @@ span.main-title-underline {
 	float: right;
 }
 
+#success-title {
+	margin-top: 450px;
+}
+
 .info-input {
 	padding-left: 20px;
 	display: inline-block;

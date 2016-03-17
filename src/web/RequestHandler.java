@@ -218,7 +218,7 @@ public class RequestHandler {
             }
         }
         sendResponse(request, builder);*/
-        
+
         builder.append(server.getXmlParser().addXmlDomain(attributeMap, fileMap));
         sendResponse(request, builder);
     }

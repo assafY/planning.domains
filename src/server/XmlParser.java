@@ -247,7 +247,7 @@ public class XmlParser {
         // if the directory exists append a number and check again
         while (newDomainDir.exists()) {
             newDomainDir = new File(Settings.DOMAIN_DIR_PATH + "uploads/" +
-                    domain.getDomain().getShortId() + "(" + ++counter + ")");
+                    domain.getDomain().getShortId() +  ++counter);
         }
 
         newDomainDir.mkdir();

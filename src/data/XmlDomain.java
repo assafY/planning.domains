@@ -231,12 +231,12 @@ public class XmlDomain implements Serializable{
                 this.equality = equality;
             }
 
-            public String getInequalities() {
+            public String getDuration() {
                 return inequalities;
             }
 
             @XmlElement(name = "duration_inequalities")
-            public void setInequalities(String inequalities) {
+            public void setDuration(String inequalities) {
                 this.inequalities = inequalities;
             }
 
