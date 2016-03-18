@@ -6,7 +6,6 @@ import data.XmlDomain;
 import global.Settings;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -92,7 +91,7 @@ public class XmlParser {
      * @param attributeMap all domain attributes apart from file names
      * @param fileMap map object of domain names and corresponding file lists
      */
-    public void addXmlDomain(Map<String, String> attributeMap, Map<String, ArrayList<String>> fileMap) {
+    public String addXmlDomain(Map<String, String> attributeMap, Map<String, ArrayList<String>> fileMap) {
         XmlDomain newXmlDomain = new XmlDomain();
         newXmlDomain.setDomain(new XmlDomain.Domain());
 
@@ -184,8 +183,7 @@ public class XmlParser {
         problems.setProblem(problemList);
         newXmlDomain.getDomain().setProblems(problems);
 
-        marshal(newXmlDomain);
-
+        return marshal(newXmlDomain);
     }
 
     private Object xmlDomainReflection(boolean isRequirements, ArrayList<String> list,
@@ -239,7 +237,7 @@ public class XmlParser {
         return domainProperties;
     }
 
-    public static void marshal(XmlDomain domain) {
+    public static String marshal(XmlDomain domain) {
 
         // create a new directory to store the file
         File newDomainDir = new File(Settings.DOMAIN_DIR_PATH + "uploads/" + domain.getDomain().getShortId());
@@ -248,7 +246,7 @@ public class XmlParser {
         // if the directory exists append a number and check again
         while (newDomainDir.exists()) {
             newDomainDir = new File(Settings.DOMAIN_DIR_PATH + "uploads/" +
-                    domain.getDomain().getShortId() + "(" + ++counter + ")");
+                    domain.getDomain().getShortId() +  ++counter);
         }
 
         newDomainDir.mkdir();
@@ -272,10 +270,11 @@ public class XmlParser {
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(domain, newXmlFile);
-            marshaller.marshal(domain, System.out);
 
         } catch (JAXBException e) {
             e.printStackTrace();
         }
+
+        return newDomainDir.getName();
     }
 }

@@ -7,7 +7,6 @@ import server.Server;
 import java.io.*;
 import java.net.Socket;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -35,8 +34,8 @@ public class RequestHandler {
 
         if (domainRequested.equals("all")) {
             builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<domains>\n");
-            for (Domain d: server.getDomainList()) {
+                    "<domains>\n");
+            for (Domain d : server.getDomainList()) {
 
                 String domainId = d.getXmlDomain().getDomain().getShortId();
                 String[] domain = domainId.split("--");
@@ -55,8 +54,7 @@ public class RequestHandler {
                         name = domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + " - " +
                                 domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1);
                         formulation = domain[3].substring(0, 1).toUpperCase() + domain[3].substring(1);
-                    }
-                    else if (ipc.equals("2008") || ipc.equals("2011")) {
+                    } else if (ipc.equals("2008") || ipc.equals("2011")) {
                         name = domain[2].substring(0, 1).toUpperCase() + domain[2].substring(1);
                         formulation = domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1);
                     } else {
@@ -66,9 +64,9 @@ public class RequestHandler {
 
                     builder.append(
                             "<id>" + domainId + "</id>\n" +
-                            "<ipc>" + ipc + "</ipc>\n" +
-                            "<name>" + name + "</name>\n" +
-                            "<formulation>" + formulation + "</formulation>\n");
+                                    "<ipc>" + ipc + "</ipc>\n" +
+                                    "<name>" + name + "</name>\n" +
+                                    "<formulation>" + formulation + "</formulation>\n");
                 } else {
                     String ipcCheck = "";
                     try {
@@ -79,14 +77,14 @@ public class RequestHandler {
                     if (ipcCheck.equals("2002")) {
                         builder.append(
                                 "<id>" + domainId + "</id>\n" +
-                                "<ipc>" + ipcCheck + "</ipc>\n" +
-                                "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</name>\n");
+                                        "<ipc>" + ipcCheck + "</ipc>\n" +
+                                        "<name>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</name>\n");
                     } else {
                         // if the domain was not part of an IPC
                         builder.append(
                                 "<id>" + domainId + "</id>\n" +
-                                "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
-                                "<formulation>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
+                                        "<name>" + domain[0].substring(0, 1).toUpperCase() + domain[0].substring(1) + "</name>\n" +
+                                        "<formulation>" + domain[1].substring(0, 1).toUpperCase() + domain[1].substring(1) + "</formulation>\n");
                     }
                 }
                 builder.append("</domain>\n");
@@ -98,7 +96,7 @@ public class RequestHandler {
             LinkedHashMap<Planner, Double> leaderboard = server.getLeaderboard().getSortedLeaderboard();
 
             int rank = 1;
-            for (Map.Entry<Planner, Double> currentPlanner: leaderboard.entrySet()) {
+            for (Map.Entry<Planner, Double> currentPlanner : leaderboard.entrySet()) {
 
                 // format result to two decimal place
                 DecimalFormat df = new DecimalFormat("#.00");
@@ -113,6 +111,15 @@ public class RequestHandler {
             }
 
             builder.append("</leaderboard>");
+        } else if (domainRequested.contains("upload")) {
+            String dir = domainRequested.substring(domainRequested.indexOf('/'));
+
+            if (domainRequested.startsWith("planner")) {
+                server.copyFilesToNodes(true, dir);
+            } else if (domainRequested.startsWith("domain")) {
+                server.copyFilesToNodes(false, dir);
+            }
+
         } else {
             File file = null;
 
@@ -189,7 +196,6 @@ public class RequestHandler {
 
         for (int i = fileIndex; i < formData.length; ++i) {
             String[] currentFile = formData[i].split("=");
-            System.out.println(currentFile[0]);
             int currentFileIndex = Integer.parseInt(currentFile[0].substring(
                     12, currentFile[0].indexOf(']')));
             if (currentFileIndex != domainFileCounter) {
@@ -208,7 +214,7 @@ public class RequestHandler {
         fileMap.put(currentDomainFile, pFilesCopy);
 
         StringBuilder builder = new StringBuilder();
-        for (Map.Entry<String, String> m: attributeMap.entrySet()) {
+        /*for (Map.Entry<String, String> m: attributeMap.entrySet()) {
             builder.append(m.getKey() + ": " + m.getValue() + "\n");
         }
         builder.append("files:\n");
@@ -218,9 +224,11 @@ public class RequestHandler {
                 builder.append(s + "\n");
             }
         }
-        sendResponse(request, builder);
+        sendResponse(request, builder);*/
 
-        server.getXmlParser().addXmlDomain(attributeMap, fileMap);
+        // create xml file for this domain and get directory name
+        builder.append(server.getXmlParser().addXmlDomain(attributeMap, fileMap));
+        sendResponse(request, builder);
     }
 
     /**
@@ -255,7 +263,6 @@ public class RequestHandler {
                 isPostRequest = true;
 
                 while((input = requestReader.readLine()) != null) {
-                    System.out.println(input);
                     if (input.startsWith("content-length")) {
                         contentLength = Integer.valueOf(input.substring(input.indexOf(' ')+1));
                         break;
