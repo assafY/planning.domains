@@ -6,7 +6,6 @@ import data.XmlDomain;
 import global.Settings;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;

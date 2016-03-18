@@ -1,4 +1,4 @@
-<div class="container page-background">
+<div class="container">
 	<div class="page-title">
 		<div class="fixed-width">
 			<h2>Submit A Domain</h2>
@@ -6,7 +6,7 @@
 	</div>
 	<br>
 	<div class="fixed-width">
-		<div id="submission-form">
+		<div id="domain-submission-form">
 			<form id='domain-submit' method="post" ng-submit="submitForm();">
 				<div id="form-fields">
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -39,7 +39,7 @@
 					</div>
 					<br>
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-						<input class="mdl-textfield__input" type="text" ng-model="form.link" pattern="(https?://)?([a-zA-Z0-9]+\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,6}(\.[a-zA-Z]{2,6})?(/[a-zA-Z0-9\?\.]*)*" id="link">
+						<input class="mdl-textfield__input" type="text" ng-model="form.link" pattern="(https?://)?([a-zA-Z0-9]+\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,12}(\.[a-zA-Z]{2,12})?(/[a-zA-Z0-9\?\.]*)*" id="link">
 						<label class="mdl-textfield__label" for="domain-name">link</label>
 						<span class="mdl-textfield__error">Not a valid link</span>
 					</div>
@@ -266,7 +266,7 @@
 					<div id="add-button"> <img src="img/add.png" ng-click="addDomain()" /> </div>
 				</div>
 				<br>
-				<button id="form-submit-button" class="mdl-button mdl-js-button"> Submit Domain </button>
+				<button class="form-submit-button mdl-button mdl-js-button"> Submit Domain </button>
 				<br> 
 			</form>
 		</div>

@@ -25,7 +25,7 @@ angular.module('app')
 
 	$scope.submitForm = function () {
 		// check if the first domain and problem files pair was selected
-		$scope.submitted = true;
+		$scope.submitted = true; // necessary?
 		if ($scope.allDomainFiles[0].domainFile && $scope.allDomainFiles[0].problemFiles) {
 			$scope.form.publishDate = $scope.publishDate;
 			$scope.form.domainFiles	= []	
@@ -52,11 +52,27 @@ angular.module('app')
 					$rootScope.formSubmitted = true;
 
 					$scope.uploadFiles(dirname).success (function () {
-						SubmitService.formSuccess();
+						SubmitService.domainNotifyServer(dirname).success(function () {
+							SubmitService.formSuccess();
+						})
 					}).error (function () {
 						SubmitService.formError();
 					})
 				});
+		}
+	}
+
+	$scope.submitPlanner = function () {
+		if ($scope.plannerForm.plannerFile) {
+			$rootScope.formSubmitted = true;
+
+			$scope.uploadPlanner().success (function (dirName) {
+				SubmitService.plannerNotifyServer(dirName).success (function () {
+					SubmitService.formSuccess();
+				})
+			}).error (function () {
+				SubmitService.formError();
+			})
 		}
 	}
 
@@ -82,5 +98,16 @@ angular.module('app')
 				arrayKey: '',
 				data: {files: files, dirname: dirname}
 			})
+	}
+
+	$scope.uploadPlanner = function () {
+		return Upload.upload({
+			url: '/api/upload/planner',
+			data: {
+				file: $scope.plannerForm.plannerFile,
+				email: $scope.plannerForm.email,
+				org: $scope.plannerForm.org
+			}
+		})
 	}
 })

@@ -245,6 +245,48 @@ public class Server {
         return domainList;
     }
 
+    /**
+     * Copy files uploaded to the server from the web,
+     * either domain or planner, to a live node
+     *
+     * @param plannerFiles true if this is a planner upload
+     * @param dirname the name of the local directory containing the files
+     */
+    public void copyFilesToNodes(boolean plannerFiles, String dirname) {
+        String baseDir = "";
+
+        if (plannerFiles) {
+            baseDir = Settings.PLANNER_DIR_PATH;
+        } else {
+            baseDir = Settings.DOMAIN_DIR_PATH;
+        }
+
+        baseDir = baseDir + "uploads/";
+
+        // find a live node to send to
+        Node selecteNode = null;
+        for (Node n: nodeList) {
+
+            if (n.isConnected()) {
+                selecteNode = n;
+                break;
+            }
+        }
+
+        // build file copy process
+        pBuilder = new ProcessBuilder("scp", "-r", baseDir + dirname,
+                Settings.USER_NAME + "@" + "nmscde000821.nms.kcl.ac.uk" + // should be: selecteNode.getName() +
+            ":~/planning.domains/" + baseDir + dirname);
+
+        try {
+            Process process = pBuilder.start();
+        } catch (IOException e) {
+            System.err.println("Error copying uploaded files");
+        }
+
+
+    }
+
     public XmlParser getXmlParser() {
         return xmlParser;
     }

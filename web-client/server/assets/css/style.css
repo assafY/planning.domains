@@ -87,16 +87,26 @@ img:focus {
 	background-size: 175%;
 }
 
-ul {
+#main-buttons {
 	padding-top: 420px;
 	list-style-type: none;
 	display: block;
 	text-align: center;
 }
 
-li {
+#main-buttons li {
 	display: inline-block;
 	padding-right: 70px;
+}
+
+#planner-requirements {
+	margin-top: 150px;
+	list-style-type: circle;
+	font-size: 20px;
+}
+
+#planner-requirements li {
+	padding: 7px;
 }
 
 a {
@@ -151,7 +161,7 @@ a:hover {
 }
 
 .page-title {
-	
+	padding-top: 70px;
 	font-size: 1.9em;
 	color: #CF6768;
 	text-align: center;
@@ -214,7 +224,7 @@ span.main-title-underline {
 	width: 200px;
 }
 
-#form-submit-button {
+.form-submit-button {
 	position: relative;
 	left: 5px;
 	top: 50px;
@@ -227,11 +237,25 @@ span.main-title-underline {
 	left: 10px;
 }
 
-#submission-form {
+#domain-submission-form {
 	display: inline-block;
 	text-align: center;
 	padding-left: 260px;
 	padding-top: 100px;
+}
+
+#planner-submission-form {
+	display: inline-block;
+	text-align: center;
+	padding-left: 450px;
+	padding-top: 150px;
+	margin-bottom: 50px;
+}
+
+#planner-selection {
+	margin-top: 20px;
+	margin-bottom: 100px;
+		
 }
 
 #form-fields {
