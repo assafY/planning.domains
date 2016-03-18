@@ -1,28 +1,38 @@
 <div class='container'>
 	<div class='fixed-width'>
 		<div class='page-title'>
-			<h3 class="page-title"> {{ domain.title._ }} </h3>
-				<div class="domain-button-view"><a href= '{{ domain.link }}'><button class="mdl-button mdl-js-button domain-button">Visit Website</button></a></div>
+			<h5 class="page-title" ng-show="domain.title._"> {{ domain.title._ }} </h5>
+			<h5 class="page-title" ng-hide="domain.title._"> {{ domain.title }} </h5>
+				<br><div class="domain-button-view" ng-show="domain.link"><a href='{{ domain.link }}' target='_blank'><button class="mdl-button mdl-js-button domain-button">Visit Website</button></a></div>
 		</div>
 	</div>
 	<div class='fixed-width'>
 		<div id='domain-view'>
 			<div id='domain-details'>
-				<br><strong>Requirements:</strong><br>
+				<br><strong>Requirements:</strong><br><br>
 				<div ng-repeat="(key, data) in domain.requirements">
 					{{ key }}
-				</div><br>
+				</div>
+				<br>
+				<div ng-show='domain.properties'>
+					<br><strong>Properties:</strong><br><br>
+					<div ng-repeat="(key, data) in domain.properties">
+						{{ key }} <span ng-show="key === 'complexity'"> ({{ data }})</span>
+					</div>
+					<br>
+				</div>
 			</div>
+			<br>
 			<div id='domain-table'>
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--8dp view-table">
 					<thead>
-						<tr>
+						<tr class="table-header-row">
 							<th class="mdl-data-table__cell--non-numeric">Problem</th>
 							<th class="mdl-data-table__cell--non-numeric">Domain</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat='problem in domain.problems.problem'>
+						<tr class="table-row" ng-repeat='problem in domain.problems.problem'>
 							<td class="mdl-data-table__cell--non-numeric" ng-click='getPddlFile(problem.$.problem_file)'>{{ problem.$.problem_file }}</td>
 							<td class="mdl-data-table__cell--non-numeric" ng-click='getPddlFile(problem.$.domain_file)'>{{ problem.$.domain_file }}</td>
 						</tr>

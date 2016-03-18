@@ -6,14 +6,14 @@
 	<div class="fixed-width">
 		<table class="mdl-data-table mdl-js-data-table mdl-shadow--8dp view-table">
 			<thead>
-				<tr>
+				<tr class="table-header-row">
 					<th>Rank</th>
 					<th class="mdl-data-table__cell--non-numeric">Planner</th>
 					<th>Score</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat='entry in leaderboard' ng-click='getPlannerStats(entry.planner);'>
+				<tr class="table-row" ng-repeat='entry in leaderboard' ng-click='getPlannerStats(entry.planner);'>
 					<td>{{ entry.rank }}</td>
 					<td class="mdl-data-table__cell--non-numeric">{{ entry.planner }}</td>
 					<td >{{ entry.score }}</td>

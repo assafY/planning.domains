@@ -110,7 +110,7 @@ public class XmlParser {
         // if an IPC year was submitted
         if (ipc != null) {
             domainId += "ipc" + ipc + "/";
-            title += " of IPC" + ipc;
+            title += " IPC" + ipc;
         }
         domainId += domainName + "/" + formulation;
 
@@ -119,6 +119,9 @@ public class XmlParser {
 
         // set the link
         if (link != null) {
+            if (!link.contains("http")) {
+                link = "http://" + link;
+            }
             newXmlDomain.getDomain().setLink(link);
         }
 
