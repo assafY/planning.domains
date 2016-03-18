@@ -1,0 +1,55 @@
+<div class="container">
+	<div class="page-title">
+		<div class="fixed-width">
+			<h2>Submit A Planner</h2>
+		</div>
+	</div>
+	<br>
+	<div class="fixed-width">
+		
+			<ul id='planner-requirements'>
+				<li>
+					Please upload a single zip file containing the planner code
+				</li>
+				<li>
+					Include a shell script called 'plan' in the root directory that runs the planner on a problem file with the following arguments:<br><pre>plan domain.pddl problem.pddl resultfile</pre>
+				</li>
+				<li>
+					Optionally include a readme file in the root directory with any information you find relevant
+				</li>
+				<li>
+					The maximum file size is 20MB
+				</li>
+				<li>
+					Once pressing the submit button, please wait until you are redirected
+				</li>
+				<li>
+					Once the planner is uploaded, it will be reviewed by an admin. You will receive an email when the planner is validated and goes live
+				</li>
+			</ul>
+			<div id="planner-submission-form">
+				<form id="planner-submit" method="post" ng-submit="submitPlanner();">
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" maxlength="60" type="text" ng-model="plannerForm.email" pattern="[A-Za-z0-9_\-]+[a-zA-Z\.\-_]*@[a-zA-Z0-9\-_]+\.[a-zA-Z]{2,12}(\.[a-zA-Z]{2,12})?" id="email" required>
+						<label class="mdl-textfield__label" for="email">email address</label>
+					</div>
+					<br>
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<input class="mdl-textfield__input" maxlength="50" type="text" ng-model="plannerForm.org" id="org">
+						<label class="mdl-textfield__label" for="org">organization</label>
+					</div>
+					<br>
+					<div id="planner-selection">
+						<input id="planner-button" type="file" ng-model="plannerForm.plannerFile" class="ng-hide" ngf-select accept=".zip" ngf-max-size="20MB">
+						<button type="button" class="mdl-button mdl-js-button" onClick="document.getElementById('planner-button').click();"> Choose Planner File </button>
+						<div class="selected-files">
+							{{ plannerForm.plannerFile.name }}
+						</div>
+					</div>
+					<br>
+					<button class="form-submit-button mdl-button mdl-js-button"> Submit Planner </button>
+					<br> 
+				</form>
+			</div>
+	</div>
+</div>
