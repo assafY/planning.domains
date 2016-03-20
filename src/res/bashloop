@@ -1,0 +1,10 @@
+#!/bin/bash
+# This script is used along with the copy rsa script
+# in order to log in to nodes once a day. Run this way:
+# 'nohup ./bashloop >& /dev/null &'
+# the script needs to rerun when the server reboots
+
+while true; do 
+echo "./copy_rsa.sh node_list.txt"
+sleep 3600
+done
