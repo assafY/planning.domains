@@ -29,6 +29,18 @@ public class RequestHandler {
         this.server = server;
     }
 
+    /**
+     * Handles GET requests. Five request types are possible:
+     * all: the client requests an XML response with all domain names, ipc years and formulations
+     * leaderboard: the client requests the current leaderboard for all planners
+     * upload: a new domain or planner were uploaded, copy all new server files to one of the nodes
+     * pddl: the client requests the pddl source of a domain file
+     * domain: the client requests the XML file of a certain domain
+     *
+     * @param request the client socket
+     * @param domainRequested the request data
+     * @throws IOException
+     */
     private void doGet(Socket request, String domainRequested) throws IOException {
         StringBuilder builder = new StringBuilder();
 
@@ -159,6 +171,16 @@ public class RequestHandler {
         sendResponse(request, builder);
     }
 
+    /** Handles POST requests. POST requests are only sent when a new
+     * a new domain is uploaded. The method parses the request and
+     * build an attribute and file maps which are later used to
+     * create a new XmlDomain object and marshal an XML file. The response
+     * to the client is the directory where the domain files should be uploaded.
+     *
+     * @param request the client socket
+     * @param requestBody the request data
+     * @throws IOException
+     */
     private void doPost(Socket request, String requestBody) throws IOException {
 
         requestBody = requestBody.replaceAll("%5B", "[");

@@ -193,6 +193,7 @@ public class XmlParser {
         problems.setProblem(problemList);
         newXmlDomain.getDomain().setProblems(problems);
 
+        // marshal the object and return directory name
         return marshal(newXmlDomain);
     }
 
