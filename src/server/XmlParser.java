@@ -16,6 +16,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+/**
+ * Handles the unmarhalling of domain XML files and
+ * the marshaling of XML files from uploaded domains
+ */
 public class XmlParser {
 
     private ArrayList<Domain> domainList;
@@ -86,10 +90,13 @@ public class XmlParser {
     }
 
     /**
-     * Creates a new XML file for an uploaded domain
+     * Reads an attribute map and file map and create
+     * a new domain object, setting its fields from
+     * the values in the maps.
      *
      * @param attributeMap all domain attributes apart from file names
      * @param fileMap map object of domain names and corresponding file lists
+     * @return directory name for the client to upload the files to
      */
     public String addXmlDomain(Map<String, String> attributeMap, Map<String, ArrayList<String>> fileMap) {
         XmlDomain newXmlDomain = new XmlDomain();
@@ -189,6 +196,15 @@ public class XmlParser {
         return marshal(newXmlDomain);
     }
 
+    /**
+     * uses Java reflection to set the requirements and
+     * properties of this domain in its object.
+     *
+     * @param isRequirements true if thelist contains requirements, false if properties
+     * @param list this list of requirements or properties
+     * @param complexityText if complexity is a property, contains the complexity class
+     * @return an Object referencing XmlDomain.Domain.Requirements or XmlDomain.Domain.Properties
+     */
     private Object xmlDomainReflection(boolean isRequirements, ArrayList<String> list,
                                        String complexityText) {
         XmlDomain.Domain.Requirements domainRequirements = new XmlDomain.Domain.Requirements();
@@ -240,6 +256,11 @@ public class XmlParser {
         return domainProperties;
     }
 
+    /**
+     * marshals a new XML file for a given domain
+     * @param domain the XmlDomain object to marshal
+     * @return the name of the directory the xml was saved in
+     */
     public static String marshal(XmlDomain domain) {
 
         // create a new directory to store the file
