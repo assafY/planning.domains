@@ -32,7 +32,7 @@ public class Leaderboard implements Serializable {
         for (Domain currentDomain: domainList) {
             for (XmlDomain.Domain.Problems.Problem currentProblem:
                     currentDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
-                addProblemResults(Global.getProblemLeaderboard(currentProblem.getResultMap()));
+                addProblemResults(null, Global.getProblemLeaderboard(currentProblem.getResultMap()));
             }
         }
 
@@ -43,13 +43,20 @@ public class Leaderboard implements Serializable {
         return sortedLeaderboard;
     }
 
-    public void addProblemResults(HashMap<String, Double> problemResultsMap) {
+    public void addProblemResults(Planner planner, HashMap<String, Double> problemResultsMap) {
         if (problemResultsMap != null && problemResultsMap.size() > 0) {
             Iterator iter = problemResultsMap.entrySet().iterator();
             Map.Entry currentResult = null;
             while (iter.hasNext()) {
                 currentResult = (Map.Entry) iter.next();
-                increaseResultBy((String) currentResult.getKey(), (Double) currentResult.getValue());
+                if (planner != null) {
+                    if (currentResult.getKey().equals(planner.getName())) {
+                        increaseResultBy((String) currentResult.getKey(), (Double) currentResult.getValue());
+                        break;
+                    }
+                } else {
+                    increaseResultBy((String) currentResult.getKey(), (Double) currentResult.getValue());
+                }
             }
         }
     }

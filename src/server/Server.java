@@ -62,16 +62,6 @@ public class Server {
         if (domainList == null) {
             domainList = xmlParser.getDomainList();
             serializer.serializeDomainList(domainList);
-        } else {
-            for (Domain d: domainList) {
-                for (XmlDomain.Domain.Problems.Problem p: d.getXmlDomain().getDomain().getProblems().getProblem()) {
-                    if (p.getResultMap().size() > 0) {
-                        for (Map.Entry<String, Integer> m: p.getResultMap().entrySet()) {
-                            System.out.println("Problem: " + p + " Planner: " + m.getKey() + " result: " + m.getValue());
-                        }
-                    }
-                }
-            }
         }
 
         // import all new planners in planner text file
@@ -411,7 +401,7 @@ public class Server {
      *
      * @param job the job which was completed
      */
-    public void processResults(Job job, ClientThread thread) {
+    public void processResults(Job job) {
         pBuilder = new ProcessBuilder(Settings.RUN_VALIDATION_SCRIPT, Settings.VAL_FILES_DIR, job.getDomainPath() + job.getProblem().getDomain_file(),
                 job.getDomainPath() + job.getProblem().getProblem_file(), Settings.LOCAL_RESULT_DIR + job.getPlanner().getName() + "/" + job.getPlanner().getName() + "-" + job.getDomainId() + "-" + job.getProblem());
         try {
@@ -436,16 +426,13 @@ public class Server {
                         }
                     }
                     job.getProblem().addResult(job.getPlanner(), bestResult);
-                    leaderboard.addProblemResults(Global.getProblemLeaderboard(job.getProblem().getResultMap()));
+                    leaderboard.addProblemResults(job.getPlanner(), Global.getProblemLeaderboard(job.getProblem().getResultMap()));
                     leaderboard.sortLeaderboard();
                     serializer.serializeDomainList(domainList);
                     serializer.serializeLeaderboard(leaderboard);
                 }
             } else {
-                System.err.print(Settings.ANSI_RED + "Something went wrong: (result processing failed) " + Settings.ANSI_RESET);
-                if (job != null) {
-                    System.err.println(Settings.ANSI_RED + "in " + job + Settings.ANSI_RESET);
-                }
+                System.err.print(Settings.ANSI_RED + job + ": invalid plan" + Settings.ANSI_RESET);
             }
         } catch (IOException e) {
             //TODO: handle excpetion
@@ -454,9 +441,7 @@ public class Server {
             //TODO: handle exception
             e1.printStackTrace();
         } finally {
-            // signal server that result processing is complete
-//            thread.getJobThread().setProcessing(false);
-            thread.resultsProcessing = false;
+
         }
     }
 
@@ -494,7 +479,6 @@ public class Server {
                         plannerList = new ArrayList<>();
                     }
                     while ((currentLine = br.readLine()) != null) {
-                        System.out.println(currentLine);
                         boolean exists = false;
                         String plannerName = currentLine.replaceAll("\\s", "");
 
@@ -510,7 +494,6 @@ public class Server {
                             // create results folder if it does not exist
                             (new ProcessBuilder("mkdir", "-p", Settings.LOCAL_RESULT_DIR + plannerName)).start();
                         }
-                        System.out.println("Planner list size: " + plannerList.size());
                     }
 
                     serializer.serializePlannerList(plannerList);
@@ -550,11 +533,6 @@ public class Server {
 
         // current job being executed
         private Job currentJob;
-        private JobThread jobThread;
-
-        public boolean jobRunning;
-        public boolean filesTransferring;
-        public boolean resultsProcessing;
 
         // server streams
         private Socket clientSocket;
@@ -609,15 +587,15 @@ public class Server {
                 currentJob = jobQueue.take();
 
                 if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain())) {
-                    jobThread = new JobThread(this, node, currentJob);
                     System.out.println(Settings.ANSI_YELLOW + node.getName() + ": Running job (" + currentJob +
                             ")" + Settings.ANSI_RESET);
-                    jobThread.start();
+                    sendMessage(new Message(currentJob, Message.RUN_JOB));
                 } else {
                     takeJob();
                 }
             } catch (InterruptedException e) {
-
+                System.err.println(Settings.ANSI_RED + "Error taking a job from the queue. Retrying.");
+                takeJob();
             }
 
         }
@@ -648,18 +626,12 @@ public class Server {
                     break;
 
                 case Message.JOB_INTERRUPTED:
-
-                    /*System.out.println(Settings.ANSI_RED + node.getName() + ": " + currentJob + " failed." +
-                            "\nadding job back to queue with higher priority" + Settings.ANSI_RESET);*/
+                    System.out.println(Settings.ANSI_RED + node.getName() + ": " + currentJob + " failed." +
+                            "\nadding job back to queue with higher priority" + Settings.ANSI_RESET);
                     Planner p = currentJob.getPlanner();
                     XmlDomain.Domain.Problems.Problem prob = currentJob.getProblem();
                     Domain d = currentJob.getDomain();
                     jobQueue.put(new Job(new Job(p, prob, d), 2));
-                    System.out.println("=================");
-                    System.out.println(node.getName());
-                    System.out.println(msg.getMessage());
-                    System.out.println("=================");
-                    System.out.println(p.getName() + ", " + prob +", " + d + " added back to queue");
                     // if an exception was sent, print it.
                     if (msg.getException() != null) {
                         System.err.println(Settings.ANSI_RED + "The client produced the following exception:\n" + Settings.ANSI_RESET);
@@ -682,25 +654,21 @@ public class Server {
                     break;
 
                 case Message.RUN_FINISHED:
-                    filesTransferring = true;
-                    jobRunning = false;
 
                     break;
 
                 case Message.FILES_COPIED:
-                    resultsProcessing = true;
-                    filesTransferring = false;
+
                     break;
 
                 case Message.PROCESS_RESULTS:
                     try {
                         if (msg.getMessage().equals("success")) {
-                            processResults(currentJob, this);
+                            processResults(currentJob);
                             System.err.println(Settings.ANSI_GREEN + node.getName() + ": " + currentJob + " success" + Settings.ANSI_RESET);
                         } else {
                             System.err.println(Settings.ANSI_RED + node.getName() + ": " + currentJob + " failure" + Settings.ANSI_RESET);
                             createErrorLog(msg.getInput(), currentJob);
-                            resultsProcessing = false;
                         }
                     } finally {
                         takeJob();
@@ -752,43 +720,6 @@ public class Server {
                 System.out.println(Settings.ANSI_YELLOW + node.getName() + ": Client disconnected" + Settings.ANSI_RESET);
                 node = null;
             }
-        }
-    }
-
-    public class JobThread extends Thread {
-
-
-        private Job currentJob;
-        private Node node;
-        private ClientThread thread;
-
-        public JobThread(ClientThread thread, Node node, Job currentJob) {
-            this.node = node;
-            this.currentJob = currentJob;
-            this.thread = thread;
-        }
-
-        @Override
-        public void run() {
-            thread.jobRunning = true;
-            node.getClientThread().sendMessage(new Message(currentJob, Message.RUN_JOB));
-
-            while (thread.jobRunning) {
-                // wait for client to signal that job is finished
-            }
-//                System.out.println(Settings.ANSI_GREEN + node.getName() + ": " + currentJob + " finished. Copying files" + Settings.ANSI_RESET);
-
-            while (thread.filesTransferring) {
-                // wait for files to be sent to server
-            }
-//                System.out.println(Settings.ANSI_GREEN + node.getName() + ": " + currentJob + " files Copied. Processing results" + Settings.ANSI_RESET);
-
-            while (thread.resultsProcessing) {
-                // wait for results to process
-            }
-//                System.out.println(Settings.ANSI_GREEN + node.getName() + ": " + currentJob + " results processed. Job finished" + Settings.ANSI_RESET);
-            thread.takeJob();
-
         }
     }
 

@@ -107,8 +107,8 @@ public class Client {
                 // lama2011 specific error
                 if (runInput.contains("match magic word")) {
                     sendMessage(new Message(processInput.toString(), Message.JOB_INTERRUPTED));
-                    // lprpg specific error
-                } else if (runInput.contains("Undeclared requirement")) {
+                    // lprpg and CRIKEY specific incompatibility error
+                } else if (runInput.contains("Undeclared requirement") || runInput.contains("Was expecting")) {
                     sendMessage(new Message(processInput.toString(), Message.INCOMPATIBLE_DOMAIN));
                 } else {
                     // start process for sending results
