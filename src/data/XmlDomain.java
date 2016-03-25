@@ -543,7 +543,7 @@ public class XmlDomain implements Serializable{
                 private String problemFile;
 
                 // a map for results of running different planners on this problem
-                private HashMap<Planner, Integer> resultMap = new HashMap<>();
+                private HashMap<String, Integer> resultMap = new HashMap<>();
 
                 public String getDomain_file() {
                     return domainFile;
@@ -575,18 +575,27 @@ public class XmlDomain implements Serializable{
                 /**
                  * Adds the value of the best plan a planner produced for this
                  * problem to a map of all results. Then calls a method creating
-                 * a new leader board and assigns it to the local leader board.
+                 * a new leader board and assigns it to the local leader board
                  *
                  * @param planner the planner that produced the result
                  * @param result the result produced by running the planner on this problem
                  */
                 public void addResult(Planner planner, int result) {
-                    resultMap.put(planner, result);
+                    resultMap.put(planner.getName(), result);
                 }
 
-                public HashMap<Planner, Integer> getResultMap() {
-                    System.out.println("getting result map of size " + resultMap.size());
+                public HashMap<String, Integer> getResultMap() {
                     return resultMap;
+                }
+
+                /**
+                 * Checks whether this problem has a result with a given planner
+                 *
+                 * @param planner the planner to check for
+                 * @return true if the problem already has a recorded result
+                 */
+                public boolean hasResult(Planner planner) {
+                    return resultMap.get(planner.getName()) != null;
                 }
 
                 /**

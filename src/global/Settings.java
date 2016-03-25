@@ -19,12 +19,19 @@ public class Settings {
     public static final String REMOTE_RESULT_DIR = "~/planning_domains/res/results/";
     public static final String VAL_FILES_DIR = "res/validation/";
 
+    // serialization
+    public static final String SERIALIZATION_DIR = "res/saved_files/";
+    public static final String DOMAINLIST_FILE = "domainList.ser";
+    public static final String PLANNERLIST_FILE = "plannerList.ser";
+    public static final String LEADERBOARD_FILE = "leaderboard.ser";
+
     // scripts
-    public static final String NODE_START_SCRIPT = "res/start_all_nodes.sh";
-    public static final String RESULT_COPY_SCRIPT = "res/copy_result_files.sh";
-    public static final String RESULT_DEL_SCRIPT = "res/del_result_files.sh";
-    public static final String RUN_PLANNER_SCRIPT = "res/run_planner.sh";
-    public static final String RUN_VALIDATION_SCRIPT = "res/validate_plan.sh";
+    public static final String NODE_START_SCRIPT = "res/scripts/start_all_nodes.sh";
+    public static final String SINGLE_NODE_START_SCRIPT = "res/scripts/start_node.sh";
+    public static final String RESULT_COPY_SCRIPT = "res/scripts/copy_result_files.sh";
+    public static final String RESULT_DEL_SCRIPT = "res/scripts/del_result_files.sh";
+    public static final String RUN_PLANNER_SCRIPT = "res/scripts/run_planner.sh";
+    public static final String RUN_VALIDATION_SCRIPT = "res/scripts/validate_plan.sh";
 
     // ansi colour codes
     public static final String ANSI_RESET = "\u001B[0m";

@@ -23,6 +23,11 @@ import javax.xml.bind.Unmarshaller;
 public class XmlParser {
 
     private ArrayList<Domain> domainList;
+    private Server server;
+
+    public XmlParser(Server server) {
+        this.server = server;
+    }
 
     /**
      * Instantiates local domain list, and calls method that iterates
@@ -262,7 +267,7 @@ public class XmlParser {
      * @param domain the XmlDomain object to marshal
      * @return the name of the directory the xml was saved in
      */
-    public static String marshal(XmlDomain domain) {
+    public String marshal(XmlDomain domain) {
 
         // create a new directory to store the file
         File newDomainDir = new File(Settings.DOMAIN_DIR_PATH + "uploads/" + domain.getDomain().getShortId());
@@ -300,6 +305,8 @@ public class XmlParser {
             e.printStackTrace();
         }
 
+        // create a new Domain object and add to server list
+        server.addNewDomain(new Domain(newDomainDir, domain));
         return newDomainDir.getName();
     }
 }

@@ -7,6 +7,6 @@
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	ping_test=$(timeout 1 ping $line | grep ttl=)
 	if grep -q ttl= <<<$ping_test; then
-		ssh -f -t -t k1333702@$line "cd planning.domains; java client/Client"
+		ssh -f -t -t k1333702@$line "cd planning.domains; nohup java client/Client"
 	fi
 done < "$1"

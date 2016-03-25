@@ -105,17 +105,17 @@ public class RequestHandler {
         } else if (domainRequested.startsWith("leaderboard")) {
             builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                     "<leaderboard>\n");
-            LinkedHashMap<Planner, Double> leaderboard = server.getLeaderboard().getSortedLeaderboard();
+            LinkedHashMap<String, Double> leaderboard = server.getLeaderboard().getSortedLeaderboard();
 
             int rank = 1;
-            for (Map.Entry<Planner, Double> currentPlanner : leaderboard.entrySet()) {
+            for (Map.Entry<String, Double> currentPlanner : leaderboard.entrySet()) {
 
                 // format result to two decimal place
                 DecimalFormat df = new DecimalFormat("#.00");
                 double score = Double.parseDouble(df.format(currentPlanner.getValue()));
 
                 builder.append("<entry>\n");
-                builder.append("<planner>" + currentPlanner.getKey().getName() + "</planner>\n");
+                builder.append("<planner>" + currentPlanner.getKey() + "</planner>\n");
                 builder.append("<rank>" + rank + "</rank>\n");
                 builder.append("<score>" + score + "</score>\n");
                 builder.append("</entry>\n");
@@ -130,6 +130,7 @@ public class RequestHandler {
                 server.copyFilesToNodes(true, dir);
             } else if (domainRequested.startsWith("domain")) {
                 server.copyFilesToNodes(false, dir);
+                server.setDomainAdditionSafety(true);
             }
 
         } else {
@@ -171,7 +172,8 @@ public class RequestHandler {
         sendResponse(request, builder);
     }
 
-    /** Handles POST requests. POST requests are only sent when a new
+    /**
+     * Handles POST requests. POST requests are only sent when a new
      * a new domain is uploaded. The method parses the request and
      * build an attribute and file maps which are later used to
      * create a new XmlDomain object and marshal an XML file. The response
@@ -182,6 +184,8 @@ public class RequestHandler {
      * @throws IOException
      */
     private void doPost(Socket request, String requestBody) throws IOException {
+
+        server.setDomainAdditionSafety(false);
 
         requestBody = requestBody.replaceAll("%5B", "[");
         requestBody = requestBody.replaceAll("%5D", "]");
@@ -248,7 +252,7 @@ public class RequestHandler {
         }
         sendResponse(request, builder);*/
 
-        // create xml file for this domain and get directory name
+        // create xml file for this domain and send directory name to client
         builder.append(server.getXmlParser().addXmlDomain(attributeMap, fileMap));
         sendResponse(request, builder);
     }
