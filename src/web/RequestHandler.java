@@ -105,7 +105,7 @@ public class RequestHandler {
         } else if (domainRequested.startsWith("leaderboard")) {
             builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                     "<leaderboard>\n");
-            LinkedHashMap<String, Double> leaderboard = server.getLeaderboard().getSortedLeaderboard();
+            LinkedHashMap<String, Double> leaderboard = server.getLeaderboard();
 
             int rank = 1;
             for (Map.Entry<String, Double> currentPlanner : leaderboard.entrySet()) {
@@ -272,43 +272,45 @@ public class RequestHandler {
         int contentLength = 0;
         boolean isPostRequest = false;
 
-        while (!(input = requestReader.readLine()).equals("")) {
-            if (input.startsWith("GET")) {
-                input = input.substring(input.indexOf('/') + 1);
+        if (requestReader != null) {
+            while ((input = requestReader.readLine()) != null && !input.equals("")) {
+                if (input.startsWith("GET")) {
+                    input = input.substring(input.indexOf('/') + 1);
 
-                if (input.startsWith(" ")) {
-                    requestBody = "all";
-                } else {
-                    requestBody = input.substring(0, input.indexOf(" "));
-                }
-
-                doGet(request, requestBody);
-                break;
-            }
-            if (input.startsWith("POST")) {
-                isPostRequest = true;
-
-                while((input = requestReader.readLine()) != null) {
-                    if (input.startsWith("content-length")) {
-                        contentLength = Integer.valueOf(input.substring(input.indexOf(' ')+1));
-                        break;
+                    if (input.startsWith(" ")) {
+                        requestBody = "all";
+                    } else {
+                        requestBody = input.substring(0, input.indexOf(" "));
                     }
-                }
-                break;
-            }
-        }
 
-        if (isPostRequest) {
-            if (contentLength > 0) {
-                int read;
-                while ((read = requestReader.read()) != -1) {
-                    requestBody += (char) read;
-                    if (requestBody.length() == contentLength + 21) {
-                        break;
+                    doGet(request, requestBody);
+                    break;
+                }
+                if (input.startsWith("POST")) {
+                    isPostRequest = true;
+
+                    while ((input = requestReader.readLine()) != null) {
+                        if (input.startsWith("content-length")) {
+                            contentLength = Integer.valueOf(input.substring(input.indexOf(' ') + 1));
+                            break;
+                        }
                     }
+                    break;
                 }
+            }
 
-                doPost(request, requestBody);
+            if (isPostRequest) {
+                if (contentLength > 0) {
+                    int read;
+                    while ((read = requestReader.read()) != -1) {
+                        requestBody += (char) read;
+                        if (requestBody.length() == contentLength + 21) {
+                            break;
+                        }
+                    }
+
+                    doPost(request, requestBody);
+                }
             }
         }
     }

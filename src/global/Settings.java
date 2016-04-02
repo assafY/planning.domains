@@ -28,6 +28,7 @@ public class Settings {
     // scripts
     public static final String NODE_START_SCRIPT = "res/scripts/start_all_nodes.sh";
     public static final String SINGLE_NODE_START_SCRIPT = "res/scripts/start_node.sh";
+    public static final String RSA_COPY_SCIPRT = "res/scripts/copy_rsa.sh";
     public static final String RESULT_COPY_SCRIPT = "res/scripts/copy_result_files.sh";
     public static final String RESULT_DEL_SCRIPT = "res/scripts/del_result_files.sh";
     public static final String RUN_PLANNER_SCRIPT = "res/scripts/run_planner.sh";

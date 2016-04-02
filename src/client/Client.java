@@ -108,7 +108,8 @@ public class Client {
                 if (runInput.contains("match magic word")) {
                     sendMessage(new Message(processInput.toString(), Message.JOB_INTERRUPTED));
                     // lprpg and CRIKEY specific incompatibility error
-                } else if (runInput.contains("Undeclared requirement") || runInput.contains("Was expecting")) {
+                } else if (runInput.contains("Undeclared requirement") || runInput.contains("Was expecting") ||
+                        runInput.contains("Parsing error")) {
                     sendMessage(new Message(processInput.toString(), Message.INCOMPATIBLE_DOMAIN));
                 } else {
                     // start process for sending results
@@ -147,7 +148,8 @@ public class Client {
 
             // if the run did not finish successfully
             else {
-                if (runError.contains("AssertionError") || runError.contains("definition expected")) {
+                if (runError.contains("AssertionError") || runError.contains("definition expected") ||
+                        runError.contains("Failed to open domain file") || runError.contains("can't find operator file")) {
                     sendMessage(new Message(processInput.toString(), Message.INCOMPATIBLE_DOMAIN));
                 } else {
                     sendMessage(new Message(processInput.toString(), Message.JOB_INTERRUPTED));

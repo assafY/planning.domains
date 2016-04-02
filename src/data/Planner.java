@@ -13,7 +13,7 @@ public class Planner implements Serializable {
 
     private String name;
     private File plannerDir;
-    private ArrayList<Domain> incompatibleDomains;
+    private ArrayList<String> incompatibleDomains;
 
     public Planner(String name) {
         this.name = name;
@@ -21,11 +21,11 @@ public class Planner implements Serializable {
         incompatibleDomains = new ArrayList<>();
     }
 
-    public void addIncompatibleDomain(Domain domain) {
-        incompatibleDomains.add(domain);
+    public void addIncompatibleDomain(String domainId) {
+        incompatibleDomains.add(domainId);
     }
 
-    public ArrayList<Domain> getIncompatibleDomains() {
+    public ArrayList<String> getIncompatibleDomains() {
         return incompatibleDomains;
     }
 

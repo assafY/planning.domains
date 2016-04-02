@@ -13,9 +13,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.PriorityBlockingQueue;
 
 public class Server {
@@ -74,11 +72,11 @@ public class Server {
         jobQueue = new PriorityBlockingQueue();
 
         // initialise and set the leaderboard
-        leaderboard = serializer.deserializeLeaderboard();
-        if (leaderboard == null) {
+        leaderboard = new Leaderboard();//serializer.deserializeLeaderboard();
+        /*if (leaderboard == null) {
             leaderboard = new Leaderboard();
             leaderboard.setLeaderboard(domainList);
-        }
+        }*/
 
         // initialise request handler
         requestHandler = new RequestHandler(this);
@@ -139,6 +137,18 @@ public class Server {
      * and running the client Java files on them.
      */
     private void startNodes() {
+        // first copy RSA to all clients that don't have it
+        pBuilder = new ProcessBuilder(Settings.RSA_COPY_SCIPRT, Settings.NODE_LIST_PATH);
+        System.out.println("Verifying key existence on clients. This will take a few minutes");
+        try {
+            pBuilder.start().waitFor();
+        } catch (IOException e) {
+
+        } catch (InterruptedException e) {
+
+        }
+
+        // then ssh to all clients and start them
         pBuilder = new ProcessBuilder(Settings.NODE_START_SCRIPT, Settings.NODE_LIST_PATH);
         System.out.println(Settings.ANSI_YELLOW + "Starting up nodes..." + Settings.ANSI_GREEN);
         try {
@@ -275,12 +285,12 @@ public class Server {
     }
 
     /**
-     * Get the server's existing leaderboard
+     * Calculate and return the planner leaderboard
      *
      * @return Leaderboard object
      */
-    public Leaderboard getLeaderboard() {
-        return leaderboard;
+    public LinkedHashMap<String, Double> getLeaderboard() {
+        return leaderboard.getLeaderboard(domainList);
     }
 
     /**
@@ -426,13 +436,11 @@ public class Server {
                         }
                     }
                     job.getProblem().addResult(job.getPlanner(), bestResult);
-                    leaderboard.addProblemResults(job.getPlanner(), Global.getProblemLeaderboard(job.getProblem().getResultMap()));
-                    leaderboard.sortLeaderboard();
                     serializer.serializeDomainList(domainList);
-                    serializer.serializeLeaderboard(leaderboard);
                 }
             } else {
                 System.err.print(Settings.ANSI_RED + job + ": invalid plan" + Settings.ANSI_RESET);
+                createErrorLog("Invalid Plan", job);
             }
         } catch (IOException e) {
             //TODO: handle excpetion
@@ -516,6 +524,9 @@ public class Server {
         try {
             PrintWriter writer = new PrintWriter(Settings.LOCAL_RESULT_DIR + job.getPlanner().getName() + "/errors/"
                     + job.getPlanner().getName() + "-" + job.getDomainId() + "-" + job.getProblem() + "_errorlog");
+            if (job.getPlanner().getIncompatibleDomains().contains(job.getDomain().getXmlDomain().getDomain().getId())) {
+                writer.println("INCOMPATIBALE DOMAIN");
+            }
             writer.println(error);
             writer.close();
         } catch (FileNotFoundException e) {
@@ -644,8 +655,9 @@ public class Server {
                     break;
 
                 case Message.INCOMPATIBLE_DOMAIN:
-                    if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain())) {
-                        currentJob.getPlanner().addIncompatibleDomain(currentJob.getDomain());
+                    if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain().getXmlDomain().getDomain().getId())) {
+                        currentJob.getPlanner().addIncompatibleDomain(currentJob.getDomain().getXmlDomain().getDomain().getId());
+                        serializer.serializePlannerList(plannerList);
                     }
                     break;
 
