@@ -31,8 +31,11 @@ public class Settings {
     public static final String RSA_COPY_SCIPRT = "res/scripts/copy_rsa.sh";
     public static final String RESULT_COPY_SCRIPT = "res/scripts/copy_result_files.sh";
     public static final String RESULT_DEL_SCRIPT = "res/scripts/del_result_files.sh";
+    public static final String LAMA_DEL_SCRIPT = "res/scripts/del_lama_files.sh";
     public static final String RUN_PLANNER_SCRIPT = "res/scripts/run_planner.sh";
     public static final String RUN_VALIDATION_SCRIPT = "res/scripts/validate_plan.sh";
+    public static final String RUN_LAMA_TRANSLATE = "res/planners/seq-sat-lama-2011/translate";
+    public static final String RUN_LAMA_PREPROCESS = "res/planners/seq-sat-lama-2011/preprocess";
 
     // ansi colour codes
     public static final String ANSI_RESET = "\u001B[0m";

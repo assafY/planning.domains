@@ -1,7 +1,5 @@
 package data;
 
-import global.Global;
-
 import javax.xml.bind.annotation.*;
 import java.io.File;
 import java.io.Serializable;
@@ -544,6 +542,7 @@ public class XmlDomain implements Serializable{
 
                 // a map for results of running different planners on this problem
                 private HashMap<String, Integer> resultMap = new HashMap<>();
+                private HashMap<String, Integer> runCounter = new HashMap<>();
 
                 public String getDomain_file() {
                     return domainFile;
@@ -570,6 +569,33 @@ public class XmlDomain implements Serializable{
                 @XmlAttribute(name = "problem_file")
                 public void setProblem_file(String problemFile) {
                     this.problemFile = problemFile;
+                }
+
+                /**
+                 * Gets the number of times a planner failed to find a plan for this problem
+                 *
+                 * @param planner the planner requesting its run count
+                 * @return the number of times the planner ran on this problem
+                 */
+                public int getRunCount(Planner planner) {
+                    if (runCounter.get(planner.getName()) == null) {
+                        return 0;
+                    } else {
+                        return runCounter.get(planner.getName());
+                    }
+                }
+
+                /**
+                 * Increases the failed run counter for a planner by 1
+                 *
+                 * @param planner the planner increasing its run count
+                 */
+                public void increaseRunCount(Planner planner) {
+                    if (runCounter.get(planner.getName()) == null) {
+                        runCounter.put(planner.getName(), 1);
+                    } else {
+                        runCounter.put(planner.getName(), runCounter.get(planner.getName()) + 1);
+                    }
                 }
 
                 /**
@@ -606,6 +632,9 @@ public class XmlDomain implements Serializable{
                  */
                 public Result getBestResult() {
 
+                    if (resultMap.size() == 0) {
+                        return null;
+                    }
                     Iterator iter = resultMap.entrySet().iterator();
                     Map.Entry bestResult = (Map.Entry) iter.next();
                     while (iter.hasNext()) {
@@ -615,7 +644,7 @@ public class XmlDomain implements Serializable{
                         }
                     }
 
-                    return new Result((Planner) bestResult.getKey(), (Integer) bestResult.getValue());
+                    return new Result((String) bestResult.getKey(), (Integer) bestResult.getValue());
                 }
 
                 @Override

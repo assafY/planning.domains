@@ -8,17 +8,12 @@ public class Message implements Serializable {
 
     // message types
     public static final int CLIENT_CONNECTED = 1,
-            //CLIENT_DISCONNECTED = 2,
-            DUPLICATE_THREAD = 2,
-            RUN_JOB = 3,
-            JOB_INTERRUPTED = 4,
-            JOB_REQUEST = 5,
-            INCOMPATIBLE_DOMAIN = 6,
-            PLAN_NOT_FOUND = 7,
-            PLAN_FOUND = 8,
-            RUN_FINISHED = 9,
-            FILES_COPIED = 10,
-            PROCESS_RESULTS = 11;
+                            DUPLICATE_THREAD = 2,
+                            RUN_JOB = 3,
+                            JOB_INTERRUPTED = 4,
+                            JOB_REQUEST = 5,
+                            INCOMPATIBLE_DOMAIN = 6,
+                            PROCESS_RESULTS = 7;
 
     private int type;
     private String message;

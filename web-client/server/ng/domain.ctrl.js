@@ -10,6 +10,9 @@ angular.module('app')
 	}
 	$scope.getDomain = function(domainId) {
 		DomainService.fetchDomain(domainId).success (function (domain) {
+			for (var problem in domain.results.problem) {
+				domain.domain.problems.problem[problem].$.results = domain.results.problem[problem];
+			};
 			$rootScope.currentDomain = domain;
 			DomainService.singleDomainView();
 		});

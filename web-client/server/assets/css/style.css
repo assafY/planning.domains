@@ -270,6 +270,11 @@ span.main-title-underline {
 	top: -32px;
 }
 
+#problem-grade img {
+	position: relative;
+	top: -2px;
+}
+
 .domain-selection {
 	float: left;
 }

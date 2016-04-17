@@ -13,6 +13,8 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -22,6 +24,9 @@ public class Server {
     private ArrayList<Node> nodeList;
     private ArrayList<Domain> domainList;
     private ArrayList<Planner> plannerList;
+
+    // date format object to use for displaying time of server output
+    DateFormat dateFormat;
 
     // leaderboard of all existing planners
     private Leaderboard leaderboard;
@@ -52,6 +57,9 @@ public class Server {
         plannerList = serializer.deserializePlannerList();
         domainList = serializer.deserializeDomainList();
 
+        // set the date format to show time only for server outputs
+        dateFormat = new SimpleDateFormat("HH:mm:ss");
+
         // initialise XML parser
         xmlParser = new XmlParser(this);
 
@@ -60,6 +68,8 @@ public class Server {
         if (domainList == null) {
             domainList = xmlParser.getDomainList();
             serializer.serializeDomainList(domainList);
+        } else {
+            domainList = xmlParser.updateDomainList(domainList);
         }
 
         // import all new planners in planner text file
@@ -72,11 +82,7 @@ public class Server {
         jobQueue = new PriorityBlockingQueue();
 
         // initialise and set the leaderboard
-        leaderboard = new Leaderboard();//serializer.deserializeLeaderboard();
-        /*if (leaderboard == null) {
-            leaderboard = new Leaderboard();
-            leaderboard.setLeaderboard(domainList);
-        }*/
+        leaderboard = new Leaderboard();
 
         // initialise request handler
         requestHandler = new RequestHandler(this);
@@ -118,7 +124,8 @@ public class Server {
                             // TODO: handle exception
                         } catch (IOException e) {
                             // TODO: handle exception
-                            System.out.println("Server failed to open client socket");
+                            System.out.println("Server failed to open client socket\n" +
+                                    "Check whether an instance of the server is already running");
                             e.printStackTrace();
                         }
                     }
@@ -129,6 +136,7 @@ public class Server {
         } catch (IOException e) {
             //TODO: handle exception
             System.err.println("Error starting server");
+            e.printStackTrace();
         }
     }
 
@@ -200,17 +208,20 @@ public class Server {
 
             if (resultCode == 0) {
                 if (n.isConnected()) {
-                    System.out.println(Settings.ANSI_GREEN + n.getName() + " connected succesfully" + Settings.ANSI_RESET);
+                    System.out.print(Settings.ANSI_GREEN + n.getName() + " connected succesfully" + Settings.ANSI_RESET);
                 } else {
-                    System.err.println(Settings.ANSI_RED + n.getName() + " is still down" + Settings.ANSI_RESET);
+                    System.err.print(Settings.ANSI_RED + n.getName() + " is still down" + Settings.ANSI_RESET);
                 }
             } else {
-                System.err.println(Settings.ANSI_RED + "An error occured while attempting to start " + n.getName() + Settings.ANSI_RESET);
+                System.err.print(Settings.ANSI_RED + "An error occured while attempting to start " + n.getName() + Settings.ANSI_RESET);
             }
         } catch (IOException e) {
-            System.err.println("Error starting node " + n.getName());
+            System.err.print("Error starting node " + n.getName());
         } catch (InterruptedException e) {
-            System.err.println("Error starting node " + n.getName());
+            System.err.print("Error starting node " + n.getName());
+        } finally {
+            Date date = new Date();
+            System.out.println(" " + dateFormat.format(date));
         }
     }
 
@@ -232,7 +243,7 @@ public class Server {
                             }
                         }
                     } catch (InterruptedException e) {
-                        System.err.println(Settings.ANSI_RED + "Node status check interrupted. Restarting" + Settings.ANSI_RESET);
+                        System.err.println(Settings.ANSI_RED + "Node status check interrupted. Restarting " + dateFormat.format(new Date()) + Settings.ANSI_RESET);
                         checkNodeStatus();
                     }
                 }
@@ -279,6 +290,7 @@ public class Server {
     private void addAllToQueue() {
         for (Domain currentDomain: domainList) {
             for (Planner currentPlanner: plannerList) {
+
                 createJob(currentPlanner, currentDomain.getXmlDomain().getDomain().getProblems().getProblem(), currentDomain);
             }
         }
@@ -355,8 +367,6 @@ public class Server {
         } catch (IOException e) {
             System.err.println(Settings.ANSI_RED + "Error copying uploaded files" + Settings.ANSI_RESET);
         }
-
-
     }
 
     /**
@@ -398,7 +408,11 @@ public class Server {
      */
     public void createJob(Planner planner, ArrayList<XmlDomain.Domain.Problems.Problem> problems, Domain domain) {
         for (XmlDomain.Domain.Problems.Problem p: problems) {
-            if (!p.hasResult(planner)) {
+                // if the planner in the job is not incompatible with the domain in the job
+                // and it didn't fail to find a plan for the problem in the job 3 times
+                // and it didn't already find a valid plan for the problem in the job
+            if (!planner.getIncompatibleDomains().contains(domain.getXmlDomain().getDomain().getId()) &&
+                    p.getRunCount(planner) < 3 && !p.hasResult(planner)) {
                 jobQueue.put(new Job(planner, p, domain));
             }
         }
@@ -421,6 +435,7 @@ public class Server {
             String results = Global.getProcessOutput(process.getInputStream());
             if (processResult == 0) {
                 if (results.contains("Value")) {
+                    System.out.println(Settings.ANSI_GREEN + job + " success " + dateFormat.format(new Date()) + Settings.ANSI_RESET);
                     ArrayList<String> resultList = new ArrayList<>(Arrays.asList(results.split(System.getProperty("line.separator"))));
                     int bestResult = -1;
                     for (String s : resultList) {
@@ -439,7 +454,7 @@ public class Server {
                     serializer.serializeDomainList(domainList);
                 }
             } else {
-                System.err.print(Settings.ANSI_RED + job + ": invalid plan" + Settings.ANSI_RESET);
+                System.err.println(Settings.ANSI_RED + job + ": invalid plan" + Settings.ANSI_RESET);
                 createErrorLog("Invalid Plan", job);
             }
         } catch (IOException e) {
@@ -482,7 +497,7 @@ public class Server {
                 // if importing the planner list
                 case Settings.PLANNER_LIST_PATH:
                     // if a previous planner list did not exist
-                    // create a branf new one from text file
+                    // create a new one from text file
                     if (plannerList == null) {
                         plannerList = new ArrayList<>();
                     }
@@ -498,11 +513,33 @@ public class Server {
                         }
 
                         if (!exists) {
+                            System.out.println("Added planner " + plannerName);
                             plannerList.add(new Planner(plannerName));
                             // create results folder if it does not exist
                             (new ProcessBuilder("mkdir", "-p", Settings.LOCAL_RESULT_DIR + plannerName)).start();
                         }
                     }
+                    // remove planners not in the planner file
+                    ArrayList<Planner> toRemove = new ArrayList<>();
+                    for (Planner planner: plannerList) {
+                        boolean exists = false;
+                        br = new BufferedReader(new FileReader(filePath));
+                        while ((currentLine = br.readLine()) != null) {
+                            String plannerName = currentLine.replaceAll("\\s", "");
+                            if (plannerName.equals(planner.getName())) {
+                                exists = true;
+                            }
+                        }
+                        if (!exists) {
+                            toRemove.add(planner);
+                        }
+;                   }
+
+                    for (Planner planner: toRemove) {
+                        System.out.println("Removed planner " + planner.getName() + ": Not on planner list");
+                        plannerList.remove(planner);
+                    }
+
 
                     serializer.serializePlannerList(plannerList);
                     break;
@@ -525,7 +562,7 @@ public class Server {
             PrintWriter writer = new PrintWriter(Settings.LOCAL_RESULT_DIR + job.getPlanner().getName() + "/errors/"
                     + job.getPlanner().getName() + "-" + job.getDomainId() + "-" + job.getProblem() + "_errorlog");
             if (job.getPlanner().getIncompatibleDomains().contains(job.getDomain().getXmlDomain().getDomain().getId())) {
-                writer.println("INCOMPATIBALE DOMAIN");
+                writer.println("\nINCOMPATIBALE DOMAIN\n");
             }
             writer.println(error);
             writer.close();
@@ -595,12 +632,19 @@ public class Server {
         public void takeJob() {
 
             try {
+                // remove a job from the queue or wait for a job to be added
                 currentJob = jobQueue.take();
 
-                if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain())) {
-                    System.out.println(Settings.ANSI_YELLOW + node.getName() + ": Running job (" + currentJob +
-                            ")" + Settings.ANSI_RESET);
+                // if the planner in the job is not incompatible with the domain in the job
+                // and it didn't fail to find a plan for the problem in the job 3 times
+                // and it didn't already find a valid plan for the problem in the job
+                if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain().getXmlDomain().getDomain().getId()) &&
+                        currentJob.getProblem().getRunCount(currentJob.getPlanner()) < 3 &&
+                        !currentJob.getProblem().hasResult(currentJob.getPlanner())) {
+
+                    System.out.println(Settings.ANSI_YELLOW + node.getName() + ": Running job (" + currentJob + ") " + dateFormat.format(new Date()) + Settings.ANSI_RESET);
                     sendMessage(new Message(currentJob, Message.RUN_JOB));
+
                 } else {
                     takeJob();
                 }
@@ -637,17 +681,17 @@ public class Server {
                     break;
 
                 case Message.JOB_INTERRUPTED:
-                    System.out.println(Settings.ANSI_RED + node.getName() + ": " + currentJob + " failed." +
-                            "\nadding job back to queue with higher priority" + Settings.ANSI_RESET);
+                    if (msg.getMessage() != null) {
+                        if(msg.getMessage().contains("Undeclared requirement")) {
+                            onReceiveMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
+                            break;
+                        }
+                    }
+
                     Planner p = currentJob.getPlanner();
                     XmlDomain.Domain.Problems.Problem prob = currentJob.getProblem();
                     Domain d = currentJob.getDomain();
-                    jobQueue.put(new Job(new Job(p, prob, d), 2));
-                    // if an exception was sent, print it.
-                    if (msg.getException() != null) {
-                        System.err.println(Settings.ANSI_RED + "The client produced the following exception:\n" + Settings.ANSI_RESET);
-                        msg.getException().printStackTrace();
-                    }
+                    createJob(p, prob, d);
                     break;
 
                 case Message.JOB_REQUEST:
@@ -657,32 +701,32 @@ public class Server {
                 case Message.INCOMPATIBLE_DOMAIN:
                     if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain().getXmlDomain().getDomain().getId())) {
                         currentJob.getPlanner().addIncompatibleDomain(currentJob.getDomain().getXmlDomain().getDomain().getId());
-                        serializer.serializePlannerList(plannerList);
                     }
-                    break;
-
-                case Message.PLAN_NOT_FOUND:
-                    System.err.println(Settings.ANSI_RED + node.getName() + ": Failed to find a plan (" + currentJob + ")" + Settings.ANSI_RESET);
-                    break;
-
-                case Message.RUN_FINISHED:
-
-                    break;
-
-                case Message.FILES_COPIED:
-
                     break;
 
                 case Message.PROCESS_RESULTS:
                     try {
                         if (msg.getMessage().equals("success")) {
+                            System.out.print(node.getName() + ": ");
                             processResults(currentJob);
-                            System.err.println(Settings.ANSI_GREEN + node.getName() + ": " + currentJob + " success" + Settings.ANSI_RESET);
                         } else {
-                            System.err.println(Settings.ANSI_RED + node.getName() + ": " + currentJob + " failure" + Settings.ANSI_RESET);
                             createErrorLog(msg.getInput(), currentJob);
+                            // if the planner is not incompatible with the problem in the current job
+                            if (!currentJob.getPlanner().getIncompatibleDomains().contains(currentJob.getDomain().getXmlDomain().getDomain().getId())) {
+                                System.err.println(Settings.ANSI_RED + node.getName() + ": " + currentJob + " failure " + dateFormat.format(new Date()) + Settings.ANSI_RESET);
+                                // if the planner failed on the current problem less than 5 times
+                                // put the job back in the queue with a higher priority
+                                if (currentJob.getProblem().getRunCount(currentJob.getPlanner()) < 3) {
+                                    currentJob.getProblem().increaseRunCount(currentJob.getPlanner());
+                                    Planner planner = currentJob.getPlanner();
+                                    XmlDomain.Domain.Problems.Problem problem = currentJob.getProblem();
+                                    Domain domain = currentJob.getDomain();
+                                    jobQueue.put(new Job(new Job(planner, problem, domain), 2));
+                                }
+                            }
                         }
                     } finally {
+                        serializer.serializePlannerList(plannerList);
                         takeJob();
                     }
             }
@@ -723,8 +767,8 @@ public class Server {
                 // the job did not complete and is sent back to the queue
                 // with a higher priority
                 if (currentJob != null) {
-                    System.out.println(Settings.ANSI_RED + node.getName() + ": " + currentJob + " failed." +
-                            "\nadding job back to queue with higher priority" + Settings.ANSI_RESET);
+                    System.out.println(Settings.ANSI_RED + node.getName() + ": " + currentJob + " failed because client disconnected" +
+                            "\nadding job back to queue with higher priority " + dateFormat.format(new Date()) + Settings.ANSI_RESET);
                     jobQueue.put(new Job(currentJob, 2));
                 }
 

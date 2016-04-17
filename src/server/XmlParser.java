@@ -43,6 +43,13 @@ public class XmlParser {
         return domainList;
     }
 
+    public ArrayList<Domain> updateDomainList(ArrayList<Domain> oldDomainList) {
+        domainList = oldDomainList;
+        updateXmlDomains(Settings.DOMAIN_DIR_PATH);
+        Collections.sort(domainList);
+        return domainList;
+    }
+
     /**
      * Recursive method which finds all 'metadata.xml' files
      * under a given directory, imports them as XmlDomain objects,
@@ -63,6 +70,34 @@ public class XmlParser {
             File childFile = new File(file.getPath() + "/" + child);
             if (childFile.isDirectory()) {
                 createXmlDomains(childFile.getPath());
+            }
+        }
+    }
+
+    private void updateXmlDomains(String path) {
+        File file = new File(path);
+        String[] childFiles = file.list();
+
+        if (Arrays.asList(childFiles).contains("metadata.xml")) {
+            Domain tempDomain = new Domain(file, unmarshal(file.getPath()));
+            boolean exists = false;
+            for (Domain d: domainList) {
+                if (d.getXmlDomain().getDomain().getId().equals(tempDomain.getXmlDomain().getDomain().getId())) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                domainList.add(tempDomain);
+                System.out.println("Added domain " + tempDomain.getXmlDomain().getDomain().getId());
+            }
+            return;
+        }
+
+        for (String child: childFiles) {
+            File childFile = new File(file.getPath() + "/" + child);
+            if (childFile.isDirectory()) {
+                updateXmlDomains(childFile.getPath());
             }
         }
     }

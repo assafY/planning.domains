@@ -2,6 +2,8 @@ package web;
 
 import data.Domain;
 import data.Planner;
+import data.Result;
+import data.XmlDomain;
 import server.Server;
 
 import java.io.*;
@@ -153,6 +155,20 @@ public class RequestHandler {
 
                 for (Domain d : server.getDomainList()) {
                     if (d.getXmlDomain().getDomain().getShortId().equals(domainRequested)) {
+                        builder.append("<planning:metadata xmlns:planning=\"http://planning.domains/\">\n");
+                        builder.append("<results>\n");
+                        for (XmlDomain.Domain.Problems.Problem p: d.getXmlDomain().getDomain().getProblems().getProblem()) {
+                            // get best result
+                            Result currentResult = p.getBestResult();
+                            builder.append("<problem>\n");
+                            builder.append("<num>" + p + "</num>\n");
+                            if (currentResult != null) {
+                                builder.append("<actions>" + currentResult.getResult() + "</actions>\n");
+                                builder.append("<planner>" + currentResult.getPlannerName() + "</planner>\n");
+                            }
+                            builder.append("</problem>\n");
+                        }
+                        builder.append("</results>\n");
                         file = d.getXmlDomain().getXmlFile();
                         break;
                     }
@@ -164,7 +180,9 @@ public class RequestHandler {
 
                 String currentLine;
                 while ((currentLine = buffer.readLine()) != null) {
-                    builder.append(currentLine + "\n");
+                    if (!currentLine.contains("xmlns:planning")) {
+                        builder.append(currentLine + "\n");
+                    }
                 }
             }
         }
