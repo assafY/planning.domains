@@ -28,6 +28,10 @@ public class Domain implements Serializable, Comparable<Domain> {
         return xmlDomain;
     }
 
+    public void setNewDir(File newDir) {
+        this.domainDir = newDir;
+    }
+
     @Override
     public int compareTo(Domain d) {
         return this.getXmlDomain().getDomain().getShortId().compareTo(d.getXmlDomain().getDomain().getShortId());

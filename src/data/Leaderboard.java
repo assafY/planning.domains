@@ -2,6 +2,7 @@ package data;
 
 import global.Global;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,24 +11,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class Leaderboard {
+public class Leaderboard implements Serializable {
 
-    private HashMap<Planner, Double> leaderboardMap;
-    private LinkedHashMap<Planner, Double> sortedLeaderboard;
-
-    public Leaderboard() {
-        leaderboardMap = new HashMap<>();
-        sortedLeaderboard = new LinkedHashMap<>();
-    }
+    private HashMap<String, Double> leaderboardMap;
+    private LinkedHashMap<String, Double> sortedLeaderboard;
 
     /**
      * Iterates over all problems in all domains known by the server
      * and stores a hashmap of all known planners and their total
-     * score over all problems.
+     * score over all problems. Sorts all planner entries into a
+     * ranked linked hash map and returns it.
      *
      * @param domainList - list of all domains known by server
+     * @return the sorted leaderboard as a linked hash map
      */
-    public void setLeaderboard(ArrayList<Domain> domainList) {
+    public LinkedHashMap<String, Double> getLeaderboard(ArrayList<Domain> domainList) {
+        leaderboardMap = new HashMap<>();
         for (Domain currentDomain: domainList) {
             for (XmlDomain.Domain.Problems.Problem currentProblem:
                     currentDomain.getXmlDomain().getDomain().getProblems().getProblem()) {
@@ -36,38 +35,41 @@ public class Leaderboard {
         }
 
         sortLeaderboard();
-    }
-
-    public LinkedHashMap<Planner, Double> getSortedLeaderboard() {
         return sortedLeaderboard;
     }
 
-    public void addProblemResults(HashMap<Planner, Double> problemResultsMap) {
+    /**
+     * Adds all ratified results that were recorded for
+     * a single problem to the leaderboard map
+     *
+     * @param problemResultsMap map containing ratified results between 1.0 and 0
+     */
+    private void addProblemResults(HashMap<String, Double> problemResultsMap) {
         if (problemResultsMap != null && problemResultsMap.size() > 0) {
-            Iterator iter = problemResultsMap.entrySet().iterator();
-            Map.Entry currentResult = null;
-            while (iter.hasNext()) {
-                currentResult = (Map.Entry) iter.next();
-                increaseResultBy((Planner) currentResult.getKey(), (Double) currentResult.getValue());
+            for (Map.Entry currentResult: problemResultsMap.entrySet()) {
+                increaseResultBy((String) currentResult.getKey(), (Double) currentResult.getValue());
             }
         }
     }
 
-    private void increaseResultBy(Planner planner, double result) {
-        Double previousResult = leaderboardMap.get(planner);
+    private void increaseResultBy(String plannerName, double result) {
+        Double previousResult = leaderboardMap.get(plannerName);
         if (previousResult != null) {
-            leaderboardMap.put(planner, result + previousResult);
+            leaderboardMap.put(plannerName, result + previousResult);
         } else {
-            leaderboardMap.put(planner, result);
+            leaderboardMap.put(plannerName, result);
         }
     }
 
-    public void sortLeaderboard() {
+    /**
+     * Sorts the main leaderboard map from best to worst planner
+     */
+    private void sortLeaderboard() {
         if (leaderboardMap != null) {
-            ArrayList<Map.Entry<Planner, Double>> sortedList = new ArrayList<>(leaderboardMap.entrySet());
-            Collections.sort(sortedList, new Comparator<Map.Entry<Planner, Double>>() {
-                public int compare(Map.Entry<Planner, Double> planner1,
-                                   Map.Entry<Planner, Double> planner2) {
+            ArrayList<Map.Entry<String, Double>> sortedList = new ArrayList<>(leaderboardMap.entrySet());
+            Collections.sort(sortedList, new Comparator<Map.Entry<String, Double>>() {
+                public int compare(Map.Entry<String, Double> planner1,
+                                   Map.Entry<String, Double> planner2) {
                     return planner2.getValue().compareTo(planner1.getValue());
                 }
             });
@@ -75,7 +77,7 @@ public class Leaderboard {
             sortedLeaderboard = new LinkedHashMap<>();
             Iterator iter = sortedList.iterator();
             while (iter.hasNext()) {
-                Map.Entry<Planner, Double> currentPlanner = (Map.Entry<Planner, Double>) iter.next();
+                Map.Entry<String, Double> currentPlanner = (Map.Entry<String, Double>) iter.next();
                 sortedLeaderboard.put(currentPlanner.getKey(), currentPlanner.getValue());
             }
         }

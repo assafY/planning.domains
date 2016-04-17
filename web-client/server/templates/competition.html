@@ -13,10 +13,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="table-row" ng-repeat='entry in leaderboard' ng-click='getPlannerStats(entry.planner);'>
-					<td>{{ entry.rank }}</td>
-					<td class="mdl-data-table__cell--non-numeric">{{ entry.planner }}</td>
-					<td >{{ entry.score }}</td>
+				<tr class="table-row" ng-repeat='planner in leaderboard.entry' ng-click='getPlannerStats(entry.planner);'>
+					<td>{{ planner.rank }}</td>
+					<td class="mdl-data-table__cell--non-numeric">{{ planner.planner }}</td>
+					<td >{{ planner.score }}</td>
 				</tr>
 			</tbody>
 		</table>

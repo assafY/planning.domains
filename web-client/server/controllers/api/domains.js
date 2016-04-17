@@ -39,7 +39,11 @@ router.get(/[a-z0-9-]+/, function (req, res) {
 	request(SERVER_ADDRESS + req.query.domainId, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			xmlParser.parseString(body, function (err, result) {
-				res.json(result['planning:metadata'].domain)
+				if (result) {
+					res.json(result['planning:metadata'])
+				} else {
+					console.log(err)
+				}
 			})
 		}
 	})

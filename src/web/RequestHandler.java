@@ -2,6 +2,8 @@ package web;
 
 import data.Domain;
 import data.Planner;
+import data.Result;
+import data.XmlDomain;
 import server.Server;
 
 import java.io.*;
@@ -29,6 +31,18 @@ public class RequestHandler {
         this.server = server;
     }
 
+    /**
+     * Handles GET requests. Five request types are possible:
+     * all: the client requests an XML response with all domain names, ipc years and formulations
+     * leaderboard: the client requests the current leaderboard for all planners
+     * upload: a new domain or planner were uploaded, copy all new server files to one of the nodes
+     * pddl: the client requests the pddl source of a domain file
+     * domain: the client requests the XML file of a certain domain
+     *
+     * @param request the client socket
+     * @param domainRequested the request data
+     * @throws IOException
+     */
     private void doGet(Socket request, String domainRequested) throws IOException {
         StringBuilder builder = new StringBuilder();
 
@@ -93,17 +107,17 @@ public class RequestHandler {
         } else if (domainRequested.startsWith("leaderboard")) {
             builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                     "<leaderboard>\n");
-            LinkedHashMap<Planner, Double> leaderboard = server.getLeaderboard().getSortedLeaderboard();
+            LinkedHashMap<String, Double> leaderboard = server.getLeaderboard();
 
             int rank = 1;
-            for (Map.Entry<Planner, Double> currentPlanner : leaderboard.entrySet()) {
+            for (Map.Entry<String, Double> currentPlanner : leaderboard.entrySet()) {
 
                 // format result to two decimal place
                 DecimalFormat df = new DecimalFormat("#.00");
                 double score = Double.parseDouble(df.format(currentPlanner.getValue()));
 
                 builder.append("<entry>\n");
-                builder.append("<planner>" + currentPlanner.getKey().getName() + "</planner>\n");
+                builder.append("<planner>" + currentPlanner.getKey() + "</planner>\n");
                 builder.append("<rank>" + rank + "</rank>\n");
                 builder.append("<score>" + score + "</score>\n");
                 builder.append("</entry>\n");
@@ -118,6 +132,7 @@ public class RequestHandler {
                 server.copyFilesToNodes(true, dir);
             } else if (domainRequested.startsWith("domain")) {
                 server.copyFilesToNodes(false, dir);
+                server.setDomainAdditionSafety(true);
             }
 
         } else {
@@ -140,6 +155,20 @@ public class RequestHandler {
 
                 for (Domain d : server.getDomainList()) {
                     if (d.getXmlDomain().getDomain().getShortId().equals(domainRequested)) {
+                        builder.append("<planning:metadata xmlns:planning=\"http://planning.domains/\">\n");
+                        builder.append("<results>\n");
+                        for (XmlDomain.Domain.Problems.Problem p: d.getXmlDomain().getDomain().getProblems().getProblem()) {
+                            // get best result
+                            Result currentResult = p.getBestResult();
+                            builder.append("<problem>\n");
+                            builder.append("<num>" + p + "</num>\n");
+                            if (currentResult != null) {
+                                builder.append("<actions>" + currentResult.getResult() + "</actions>\n");
+                                builder.append("<planner>" + currentResult.getPlannerName() + "</planner>\n");
+                            }
+                            builder.append("</problem>\n");
+                        }
+                        builder.append("</results>\n");
                         file = d.getXmlDomain().getXmlFile();
                         break;
                     }
@@ -151,7 +180,9 @@ public class RequestHandler {
 
                 String currentLine;
                 while ((currentLine = buffer.readLine()) != null) {
-                    builder.append(currentLine + "\n");
+                    if (!currentLine.contains("xmlns:planning")) {
+                        builder.append(currentLine + "\n");
+                    }
                 }
             }
         }
@@ -159,7 +190,20 @@ public class RequestHandler {
         sendResponse(request, builder);
     }
 
+    /**
+     * Handles POST requests. POST requests are only sent when a new
+     * a new domain is uploaded. The method parses the request and
+     * build an attribute and file maps which are later used to
+     * create a new XmlDomain object and marshal an XML file. The response
+     * to the client is the directory where the domain files should be uploaded.
+     *
+     * @param request the client socket
+     * @param requestBody the request data
+     * @throws IOException
+     */
     private void doPost(Socket request, String requestBody) throws IOException {
+
+        server.setDomainAdditionSafety(false);
 
         requestBody = requestBody.replaceAll("%5B", "[");
         requestBody = requestBody.replaceAll("%5D", "]");
@@ -226,7 +270,7 @@ public class RequestHandler {
         }
         sendResponse(request, builder);*/
 
-        // create xml file for this domain and get directory name
+        // create xml file for this domain and send directory name to client
         builder.append(server.getXmlParser().addXmlDomain(attributeMap, fileMap));
         sendResponse(request, builder);
     }
@@ -246,43 +290,45 @@ public class RequestHandler {
         int contentLength = 0;
         boolean isPostRequest = false;
 
-        while (!(input = requestReader.readLine()).equals("")) {
-            if (input.startsWith("GET")) {
-                input = input.substring(input.indexOf('/') + 1);
+        if (requestReader != null) {
+            while ((input = requestReader.readLine()) != null && !input.equals("")) {
+                if (input.startsWith("GET")) {
+                    input = input.substring(input.indexOf('/') + 1);
 
-                if (input.startsWith(" ")) {
-                    requestBody = "all";
-                } else {
-                    requestBody = input.substring(0, input.indexOf(" "));
-                }
-
-                doGet(request, requestBody);
-                break;
-            }
-            if (input.startsWith("POST")) {
-                isPostRequest = true;
-
-                while((input = requestReader.readLine()) != null) {
-                    if (input.startsWith("content-length")) {
-                        contentLength = Integer.valueOf(input.substring(input.indexOf(' ')+1));
-                        break;
+                    if (input.startsWith(" ")) {
+                        requestBody = "all";
+                    } else {
+                        requestBody = input.substring(0, input.indexOf(" "));
                     }
-                }
-                break;
-            }
-        }
 
-        if (isPostRequest) {
-            if (contentLength > 0) {
-                int read;
-                while ((read = requestReader.read()) != -1) {
-                    requestBody += (char) read;
-                    if (requestBody.length() == contentLength + 21) {
-                        break;
+                    doGet(request, requestBody);
+                    break;
+                }
+                if (input.startsWith("POST")) {
+                    isPostRequest = true;
+
+                    while ((input = requestReader.readLine()) != null) {
+                        if (input.startsWith("content-length")) {
+                            contentLength = Integer.valueOf(input.substring(input.indexOf(' ') + 1));
+                            break;
+                        }
                     }
+                    break;
                 }
+            }
 
-                doPost(request, requestBody);
+            if (isPostRequest) {
+                if (contentLength > 0) {
+                    int read;
+                    while ((read = requestReader.read()) != -1) {
+                        requestBody += (char) read;
+                        if (requestBody.length() == contentLength + 21) {
+                            break;
+                        }
+                    }
+
+                    doPost(request, requestBody);
+                }
             }
         }
     }

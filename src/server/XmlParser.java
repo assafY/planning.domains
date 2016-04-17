@@ -16,9 +16,18 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+/**
+ * Handles the unmarhalling of domain XML files and
+ * the marshaling of XML files from uploaded domains
+ */
 public class XmlParser {
 
     private ArrayList<Domain> domainList;
+    private Server server;
+
+    public XmlParser(Server server) {
+        this.server = server;
+    }
 
     /**
      * Instantiates local domain list, and calls method that iterates
@@ -30,6 +39,13 @@ public class XmlParser {
     public ArrayList<Domain> getDomainList() {
         domainList = new ArrayList<>();
         createXmlDomains(Settings.DOMAIN_DIR_PATH);
+        Collections.sort(domainList);
+        return domainList;
+    }
+
+    public ArrayList<Domain> updateDomainList(ArrayList<Domain> oldDomainList) {
+        domainList = oldDomainList;
+        updateXmlDomains(Settings.DOMAIN_DIR_PATH);
         Collections.sort(domainList);
         return domainList;
     }
@@ -54,6 +70,34 @@ public class XmlParser {
             File childFile = new File(file.getPath() + "/" + child);
             if (childFile.isDirectory()) {
                 createXmlDomains(childFile.getPath());
+            }
+        }
+    }
+
+    private void updateXmlDomains(String path) {
+        File file = new File(path);
+        String[] childFiles = file.list();
+
+        if (Arrays.asList(childFiles).contains("metadata.xml")) {
+            Domain tempDomain = new Domain(file, unmarshal(file.getPath()));
+            boolean exists = false;
+            for (Domain d: domainList) {
+                if (d.getXmlDomain().getDomain().getId().equals(tempDomain.getXmlDomain().getDomain().getId())) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                domainList.add(tempDomain);
+                System.out.println("Added domain " + tempDomain.getXmlDomain().getDomain().getId());
+            }
+            return;
+        }
+
+        for (String child: childFiles) {
+            File childFile = new File(file.getPath() + "/" + child);
+            if (childFile.isDirectory()) {
+                updateXmlDomains(childFile.getPath());
             }
         }
     }
@@ -86,10 +130,13 @@ public class XmlParser {
     }
 
     /**
-     * Creates a new XML file for an uploaded domain
+     * Reads an attribute map and file map and create
+     * a new domain object, setting its fields from
+     * the values in the maps.
      *
      * @param attributeMap all domain attributes apart from file names
      * @param fileMap map object of domain names and corresponding file lists
+     * @return directory name for the client to upload the files to
      */
     public String addXmlDomain(Map<String, String> attributeMap, Map<String, ArrayList<String>> fileMap) {
         XmlDomain newXmlDomain = new XmlDomain();
@@ -186,9 +233,19 @@ public class XmlParser {
         problems.setProblem(problemList);
         newXmlDomain.getDomain().setProblems(problems);
 
+        // marshal the object and return directory name
         return marshal(newXmlDomain);
     }
 
+    /**
+     * uses Java reflection to set the requirements and
+     * properties of this domain in its object.
+     *
+     * @param isRequirements true if thelist contains requirements, false if properties
+     * @param list this list of requirements or properties
+     * @param complexityText if complexity is a property, contains the complexity class
+     * @return an Object referencing XmlDomain.Domain.Requirements or XmlDomain.Domain.Properties
+     */
     private Object xmlDomainReflection(boolean isRequirements, ArrayList<String> list,
                                        String complexityText) {
         XmlDomain.Domain.Requirements domainRequirements = new XmlDomain.Domain.Requirements();
@@ -240,7 +297,12 @@ public class XmlParser {
         return domainProperties;
     }
 
-    public static String marshal(XmlDomain domain) {
+    /**
+     * marshals a new XML file for a given domain
+     * @param domain the XmlDomain object to marshal
+     * @return the name of the directory the xml was saved in
+     */
+    public String marshal(XmlDomain domain) {
 
         // create a new directory to store the file
         File newDomainDir = new File(Settings.DOMAIN_DIR_PATH + "uploads/" + domain.getDomain().getShortId());
@@ -278,6 +340,8 @@ public class XmlParser {
             e.printStackTrace();
         }
 
+        // create a new Domain object and add to server list
+        server.addNewDomain(new Domain(newDomainDir, domain));
         return newDomainDir.getName();
     }
 }

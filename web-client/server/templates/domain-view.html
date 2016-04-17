@@ -1,22 +1,22 @@
 <div class='container'>
 	<div class='fixed-width'>
 		<div class='page-title'>
-			<h5 class="page-title" ng-show="domain.title._"> {{ domain.title._ }} </h5>
-			<h5 class="page-title" ng-hide="domain.title._"> {{ domain.title }} </h5>
-				<br><div class="domain-button-view" ng-show="domain.link"><a href='{{ domain.link }}' target='_blank'><button class="mdl-button mdl-js-button domain-button">Visit Website</button></a></div>
+			<h5 class="page-title" ng-show="domain.domain.title._"> {{ domain.domain.title._ }} </h5>
+			<h5 class="page-title" ng-hide="domain.domain.title._"> {{ domain.domain.title }} </h5>
+				<br><div class="domain-button-view" ng-show="domain.domain.link"><a href='{{ domain.domain.link }}' target='_blank'><button class="mdl-button mdl-js-button domain-button">Visit Website</button></a></div>
 		</div>
 	</div>
 	<div class='fixed-width'>
 		<div id='domain-view'>
 			<div id='domain-details'>
 				<br><strong>Requirements:</strong><br><br>
-				<div ng-repeat="(key, data) in domain.requirements">
+				<div ng-repeat="(key, data) in domain.domain.requirements">
 					{{ key }}
 				</div>
 				<br>
-				<div ng-show='domain.properties'>
+				<div ng-show='domain.domain.properties'>
 					<br><strong>Properties:</strong><br><br>
-					<div ng-repeat="(key, data) in domain.properties">
+					<div ng-repeat="(key, data) in domain.domain.properties">
 						{{ key }} <span ng-show="key === 'complexity'"> ({{ data }})</span>
 					</div>
 					<br>
@@ -29,12 +29,16 @@
 						<tr class="table-header-row">
 							<th class="mdl-data-table__cell--non-numeric">Problem</th>
 							<th class="mdl-data-table__cell--non-numeric">Domain</th>
+							<th class="mdl-data-table__cell--non-numeric">Best Solution</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="table-row" ng-repeat='problem in domain.problems.problem'>
+						<tr class="table-row" ng-repeat='problem in domain.domain.problems.problem'>
 							<td class="mdl-data-table__cell--non-numeric" ng-click='getPddlFile(problem.$.problem_file)'>{{ problem.$.problem_file }}</td>
 							<td class="mdl-data-table__cell--non-numeric" ng-click='getPddlFile(problem.$.domain_file)'>{{ problem.$.domain_file }}</td>
+							<td class="mdl-data-table__cell--non-numeric"><span id="problem-grade" ng-show="problem.$.results.actions" ng-attr-title="Found by {{problem.$.results.planner}}">
+								<img src="img/grade_star.png">{{ problem.$.results.actions}}</img>
+							</span></td>
 						</tr>
 					</tbody>
 				</table>

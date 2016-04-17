@@ -2,16 +2,16 @@ package data;
 
 public class Result {
 
-    private Planner planner;
+    private String plannerName;
     private int result;
 
-    public Result(Planner planner, int result) {
-        this.planner = planner;
+    public Result(String plannerName, int result) {
+        this.plannerName = plannerName;
         this.result = result;
     }
 
-    public Planner getPlanner() {
-        return planner;
+    public String getPlannerName() {
+        return plannerName;
     }
 
     public int getResult() {

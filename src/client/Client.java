@@ -66,7 +66,44 @@ public class Client {
         String domainId = job.getDomainId();
         String plannerPath = job.getPlanner().getPath();
         XmlDomain.Domain.Problems.Problem problem = job.getProblem();
-        String resultFile = plannerPath + "/" + domainId + "-" + problem;
+        String resultFile = plannerPath + "/" + job.getPlanner().getName() + "-" + domainId + "-" + problem;
+        boolean success = false;
+
+        StringBuilder processInput = new StringBuilder();
+        processInput.append(job + " process log\n\n");
+
+        // special case required if running lama - need to run translate
+        // and preprocess scripts before plan script
+        if (job.getPlanner().getName().equals("seq-sat-lama-2011")) {
+            String[] lamaArguments = {Settings.RUN_LAMA_TRANSLATE, domainPath + problem.getDomain_file(),
+                    domainPath + problem.getProblem_file()};
+
+            pBuilder = new ProcessBuilder(lamaArguments);
+            Process process;
+
+            try {
+                process = pBuilder.start();
+
+                String runError = (Global.getProcessOutput(process.getErrorStream()));
+                String runInput = (Global.getProcessOutput(process.getInputStream()));
+
+                processInput.append("lama translate.py input:\n" + runInput +
+                        "\nlama translate.py error:\n" + runError);
+
+                int result = process.waitFor();
+
+                if (result == 0) {
+                    pBuilder = new ProcessBuilder(Settings.RUN_LAMA_PREPROCESS);
+                    process = pBuilder.start();
+                    process.waitFor();
+                }
+
+            } catch (IOException e) {
+                sendMessage(new Message(e, Message.JOB_INTERRUPTED));
+            } catch (InterruptedException e) {
+                sendMessage(new Message(e, Message.JOB_INTERRUPTED));
+            }
+        }
 
         /*
             The arguments for the process builder. Run the plan script in the planner path,
@@ -82,56 +119,68 @@ public class Client {
         Process process;
 
         try {
-            long startTime = System.currentTimeMillis();
+            // long startTime = System.currentTimeMillis();
             process = pBuilder.start();
 
             // print the result, later this must record the result
             String runError = (Global.getProcessOutput(process.getErrorStream()));
+            String runInput = (Global.getProcessOutput(process.getInputStream()));
+
+            processInput.append("planner process input:\n" + runInput +
+                    "\nplanner process error:\n" + runError);
+
             int result = process.waitFor();
-            long totalTime = System.currentTimeMillis() - startTime;
+            // long totalTime = System.currentTimeMillis() - startTime;
 
             // if the run finished successfully, reset the process builder to run result sending script
             if (result == 0) {
-                // start process for sending results
-                String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@"
-                        + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlanner().getName()};
-                pBuilder.command(resultArgs);
-                process = pBuilder.start();
-                String error = Global.getProcessOutput(process.getErrorStream()).toLowerCase();
-                int newResult = process.waitFor();
-
-                    // if the results were sent to the server successfully,
-                    // delete local result files and request a new job.
-                if (newResult == 0) {
-
-                    pBuilder.command(Settings.RESULT_DEL_SCRIPT, resultFile);
-                    process = pBuilder.start();
-                    process.waitFor();
-                    sendMessage(new Message(Message.JOB_REQUEST));
-
-                    // if results file doesn't exist and run time was
-                    // extremely short, the planner is incompatible with domain
-                } else if (error.contains("no such file")) {
-                    if (totalTime < 30) {
-                        sendMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
-
-                        // if job time wasn't short, a plan wasn't found
-                    } else {
-                        sendMessage(new Message(Message.PLAN_NOT_FOUND));
-                    }
-
-                    // otherwise the job was probably interrupted
+                // check for different requirement incompatibility errors thrown by different planners
+                if (runInput.contains("Undeclared requirement") || runInput.contains("Was expecting") ||
+                        runInput.contains("Parsing error") || runInput.contains("Segmentation fault") ||
+                        runInput.contains("not supported")) {
+                    sendMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
                 } else {
-                    sendMessage(new Message(Message.JOB_INTERRUPTED));
+
+                    // start process for sending results
+                    String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@"
+                            + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlanner().getName()};
+                    pBuilder.command(resultArgs);
+                    process = pBuilder.start();
+                    String error = Global.getProcessOutput(process.getErrorStream()).toLowerCase();
+                    String input = Global.getProcessOutput(process.getInputStream()).toLowerCase();
+
+                    processInput.append("\ncopy process input:\n" + input +
+                            "\ncopy process error:\n" + error);
+
+                    int newResult = process.waitFor();
+
+                    // if results file doesn't exist check for
+                    // different planners' incompatibility errors
+                    if (newResult != 0) {
+                        if (error.contains("no such file")) {
+                            if (runError.contains("AssertionError") || runError.contains("definition expected") ||
+                                    runError.contains("Failed to open domain file") || runError.contains("can't find operator file") ||
+                                    runError.contains("not supported") || runError.contains("Segmentation fault")) {
+
+                                sendMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
+                            }
+                        }
+                    } else {
+                        success = true;
+                    }
                 }
             }
 
             // if the run did not finish successfully
             else {
-                if (runError.contains("AssertionError")) {
+                // check for different requirement incompatibility errors thrown by different planners
+                if (processInput.toString().contains("AssertionError") || runError.contains("AssertionError") || runError.contains("definition expected") ||
+                        runError.contains("Failed to open domain file") || runError.contains("can't find operator file") ||
+                        runError.contains("not supported") || runError.contains("Segmentation fault")) {
+
                     sendMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
                 } else {
-                    sendMessage(new Message(Message.JOB_INTERRUPTED));
+                    sendMessage(new Message(processInput.toString(), Message.JOB_INTERRUPTED));
                 }
             }
 
@@ -140,6 +189,48 @@ public class Client {
 
         } catch (InterruptedException e1) {
             sendMessage(new Message(e1, Message.JOB_INTERRUPTED));
+        } finally {
+            // if planner is lama, delete lama specific files
+            if (job.getPlanner().getName().equals("seq-sat-lama-2011")) {
+                pBuilder.command(Settings.LAMA_DEL_SCRIPT);
+                try {
+                    process = pBuilder.start();
+
+                    String delError = Global.getProcessOutput(process.getErrorStream()).toLowerCase();
+                    String delInput = Global.getProcessOutput(process.getInputStream()).toLowerCase();
+
+                    processInput.append("\ndelete lama files input:\n" + delInput +
+                            "\ndelete lama files error:\n" + delError);
+
+                    process.waitFor();
+                } catch (IOException e) {
+                    sendMessage(new Message(e, Message.JOB_INTERRUPTED));
+                } catch (InterruptedException e) {
+                    sendMessage(new Message(e, Message.JOB_INTERRUPTED));
+                }
+            }
+            // delete all local result files
+            pBuilder.command(Settings.RESULT_DEL_SCRIPT, resultFile);
+            try {
+                process = pBuilder.start();
+
+                String delError = Global.getProcessOutput(process.getErrorStream()).toLowerCase();
+                String delInput = Global.getProcessOutput(process.getInputStream()).toLowerCase();
+
+                processInput.append("\ndelete process input:\n" + delInput +
+                        "\ndelete process error:\n" + delError);
+
+                process.waitFor();
+                if (success) {
+                    sendMessage(new Message("success", processInput.toString(), Message.PROCESS_RESULTS));
+                } else {
+                    sendMessage(new Message("failure", processInput.toString(), Message.PROCESS_RESULTS));
+                }
+            } catch (IOException e) {
+                sendMessage(new Message(e, Message.JOB_INTERRUPTED));
+            } catch (InterruptedException e) {
+                sendMessage(new Message(e, Message.JOB_INTERRUPTED));
+            }
         }
     }
 
@@ -175,6 +266,7 @@ public class Client {
             // if requested to run a planner on a domain
             case Message.RUN_JOB:
                 runPlannerProcess(msg.getJob());
+
                 break;
         }
     }
