@@ -64,4 +64,11 @@ public class Job implements Comparable<Job>, Serializable {
     public String toString() {
         return getDomainId() + ", " + problem + ": " + planner.getName();
     }
+
+    @Override
+    public boolean equals(Object object) {
+        Job other = (Job) object;
+        return this.planner.getName().equals(other.getPlanner().getName()) && this.getDomainId().equals(other.getDomainId())
+            && this.problem.getNumber() == other.problem.getNumber();
+    }
 }

@@ -66,7 +66,7 @@ router.get('/domain-notify', function (req, res) {
 });
 
 router.post('/', uploadDomain, function (req, res, next) {
-	// make local dir and move uploaded fiiles to it, then
+	// make local dir and move uploaded files to it, then
 	// call sftp function to send the files to Calcium
 
 	exec('mkdir ./uploads/' + req.body.dirname, function (error, stdout, stderr) {

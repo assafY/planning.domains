@@ -42,19 +42,19 @@ router.get(/[a-z0-9-]+/, function (req, res) {
 				if (result) {
 					res.json(result['planning:metadata'])
 				} else {
-					console.log(err)
+					console.log(error)
 				}
 			})
 		}
 	})
 });
 
-router.post('/', function (req, res) {
-	console.log('domain reveived :D')
-	console.log(req.body.name)
-	console.log(req.body.formulation)
-	console.log(req.body.ipc)
-	res.sendStatus(201)
-});
+//  router.post('/', function (req, res) {
+// 	console.log('domain reveived :D')
+// 	console.log(req.body.name)
+// 	console.log(req.body.formulation)
+// 	console.log(req.body.ipc)
+//	res.sendStatus(201)
+//  });
 
 module.exports = router;

@@ -21,7 +21,7 @@ public class Serializer {
         try {
 
             FileOutputStream fileOutput = new FileOutputStream(Settings.SERIALIZATION_DIR + Settings.DOMAINLIST_FILE);
-            ObjectOutputStream objOutput = new ObjectOutputStream(fileOutput); //FSTObjectOutput(fileOutput);
+            ObjectOutputStream objOutput = new ObjectOutputStream(fileOutput);
             objOutput.writeObject(domainList);
             objOutput.close();
 
@@ -39,7 +39,7 @@ public class Serializer {
         try {
 
             FileInputStream fileInput = new FileInputStream(Settings.SERIALIZATION_DIR + Settings.DOMAINLIST_FILE);
-            ObjectInputStream objInput = new ObjectInputStream(fileInput);//FSTObjectInput(fileInput);
+            ObjectInputStream objInput = new ObjectInputStream(fileInput);
             domainList = (ArrayList<Domain>) objInput.readObject();
             objInput.close();
             fileInput.close();
@@ -59,7 +59,7 @@ public class Serializer {
         try {
 
             FileOutputStream fileOutput = new FileOutputStream(Settings.SERIALIZATION_DIR + Settings.PLANNERLIST_FILE);
-            ObjectOutputStream objOutput = new ObjectOutputStream(fileOutput); //FSTObjectOutput(fileOutput);
+            ObjectOutputStream objOutput = new ObjectOutputStream(fileOutput);
             objOutput.writeObject(plannerList);
             objOutput.close();
 
@@ -75,7 +75,7 @@ public class Serializer {
         try {
 
             FileInputStream fileInput = new FileInputStream(Settings.SERIALIZATION_DIR + Settings.PLANNERLIST_FILE);
-            ObjectInputStream objInput = new ObjectInputStream(fileInput); //FSTObjectInput(fileInput);
+            ObjectInputStream objInput = new ObjectInputStream(fileInput);
             plannerList = (ArrayList<Planner>) objInput.readObject();
             objInput.close();
             fileInput.close();
@@ -89,42 +89,6 @@ public class Serializer {
         }
 
         return plannerList;
-    }
-
-    public synchronized void serializeLeaderboard(Leaderboard leaderboard) {
-        try {
-
-            FileOutputStream fileOutput = new FileOutputStream(Settings.SERIALIZATION_DIR + Settings.LEADERBOARD_FILE);
-            ObjectOutputStream objOutput = new ObjectOutputStream(fileOutput); //FSTObjectOutput(fileOutput);
-            objOutput.writeObject(leaderboard);
-            objOutput.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Leaderboard deserializeLeaderboard() {
-        Leaderboard leaderboard = null;
-        try {
-
-            FileInputStream fileInput = new FileInputStream(Settings.SERIALIZATION_DIR + Settings.LEADERBOARD_FILE);
-            ObjectInputStream objInput = new ObjectInputStream(fileInput); //FSTObjectInput(fileInput);
-            leaderboard = (Leaderboard) objInput.readObject();
-            objInput.close();
-            fileInput.close();
-
-        } catch (FileNotFoundException e) {
-            System.err.println(Settings.ANSI_RED + "Saved leaderboard file not found. Creating planner objects for all domains in res folder." + Settings.ANSI_RESET);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return leaderboard;
     }
 
 }

@@ -2,7 +2,8 @@
 	<div class='fixed-width'>
 		<div class='page-title'>
 			<h5 class="page-title" ng-show="domain.domain.title._"> {{ domain.domain.title._ }} </h5>
-			<h5 class="page-title" ng-hide="domain.domain.title._"> {{ domain.domain.title }} </h5>
+			<h5 class="page-title" ng-hide="domain.domain.title._ || domain.domain.title[0]"> {{ domain.domain.title }} </h5>
+			<h5 class="page-title" ng-show="domain.domain.title[0]"> {{ domain.domain.title[0]._ }} </h5>
 				<br><div class="domain-button-view" ng-show="domain.domain.link"><a href='{{ domain.domain.link }}' target='_blank'><button class="mdl-button mdl-js-button domain-button">Visit Website</button></a></div>
 		</div>
 	</div>

@@ -7,7 +7,8 @@ import java.io.Serializable;
 public class Message implements Serializable {
 
     // message types
-    public static final int CLIENT_CONNECTED = 1,
+    public static final int CLIENT_DISCONNECTED = 0,
+                            CLIENT_CONNECTED = 1,
                             DUPLICATE_THREAD = 2,
                             RUN_JOB = 3,
                             JOB_INTERRUPTED = 4,

@@ -45,7 +45,6 @@ public class Client {
             sendMessage(new Message(Message.JOB_REQUEST));
 
         } catch (IOException e) {
-            //TODO: handle exception
             System.err.println("Error connecting to server");
         }
     }
@@ -55,7 +54,6 @@ public class Client {
             InetAddress address = InetAddress.getLocalHost();
             clientName = address.getHostName().replaceAll("\\s", "");
         } catch (UnknownHostException e) {
-            //TODO : handle exception
             System.out.println("Cannot resolve hostname");
         }
     }
@@ -66,19 +64,27 @@ public class Client {
         String domainId = job.getDomainId();
         String plannerPath = job.getPlanner().getPath();
         XmlDomain.Domain.Problems.Problem problem = job.getProblem();
-        String resultFile = plannerPath + "/" + job.getPlanner().getName() + "-" + domainId + "-" + problem;
+        String resultFileName = job.getPlanner().getName() + "-" + domainId + "-" + problem;
+        String resultFile = plannerPath + "/" + resultFileName;
+        boolean lamaCompiled = false;
         boolean success = false;
 
         StringBuilder processInput = new StringBuilder();
         processInput.append(job + " process log\n\n");
 
+        // on shutdown check if a result was found for this job
+        Runtime.getRuntime().addShutdownHook(new shutdownThread(job, resultFile));
+
         // special case required if running lama - need to run translate
         // and preprocess scripts before plan script
         if (job.getPlanner().getName().equals("seq-sat-lama-2011")) {
+            new File(resultFileName).mkdir();
+
             String[] lamaArguments = {Settings.RUN_LAMA_TRANSLATE, domainPath + problem.getDomain_file(),
                     domainPath + problem.getProblem_file()};
 
             pBuilder = new ProcessBuilder(lamaArguments);
+            pBuilder.directory(new File(resultFileName));
             Process process;
 
             try {
@@ -94,8 +100,12 @@ public class Client {
 
                 if (result == 0) {
                     pBuilder = new ProcessBuilder(Settings.RUN_LAMA_PREPROCESS);
+                    pBuilder.directory(new File(resultFileName));
                     process = pBuilder.start();
-                    process.waitFor();
+                    int lamaResult = process.waitFor();
+                    if (lamaResult == 0) {
+                        lamaCompiled = true;
+                    }
                 }
 
             } catch (IOException e) {
@@ -112,30 +122,66 @@ public class Client {
                 the path and file name of the problem file
                 the name of the result file to create, in the format of domainId:problemNum
          */
-        String[] arguments = {Settings.RUN_PLANNER_SCRIPT, plannerPath, domainPath + problem.getDomain_file(),
-                domainPath + problem.getProblem_file(), resultFile};
+        if (job.getPlanner().getName().equals("seq-sat-lama-2011") && lamaCompiled) {
+            System.out.println("running planner");
+            String[] arguments = {"../" + Settings.RUN_PLANNER_SCRIPT, "../" + plannerPath, domainPath + problem.getDomain_file(),
+                    domainPath + problem.getProblem_file(), resultFile};
 
-        pBuilder = new ProcessBuilder(arguments);
+            pBuilder = new ProcessBuilder(arguments);
+            pBuilder.directory(new File(resultFileName));
+        } else {
+            String[] arguments = {Settings.RUN_PLANNER_SCRIPT, plannerPath, domainPath + problem.getDomain_file(),
+                    domainPath + problem.getProblem_file(), resultFile};
+
+            pBuilder = new ProcessBuilder(arguments);
+        }
+
         Process process;
 
         try {
             // long startTime = System.currentTimeMillis();
             process = pBuilder.start();
 
-            // print the result, later this must record the result
-            String runError = (Global.getProcessOutput(process.getErrorStream()));
-            String runInput = (Global.getProcessOutput(process.getInputStream()));
+            String runError = "";
+            String runInput = "";
 
-            processInput.append("planner process input:\n" + runInput +
-                    "\nplanner process error:\n" + runError);
+            int result = -1;
 
-            int result = process.waitFor();
-            // long totalTime = System.currentTimeMillis() - startTime;
+            if (job.getPlanner().getName().equals("seq-sat-lama-2011") && lamaCompiled) {
+                System.out.println("before while");
+                int timeCounter = 0;
+                while (result == -1) {
+                    File rf = new File(resultFile + ".1");
+                    if (rf.exists()) {
+                        System.out.println("file exists");
+                        result = 0;
+                        // kill the planning process
+                        ProcessBuilder pidPBuilder = new ProcessBuilder(Settings.KILL_LAMA_PROCESS_SCRIPT);
+                        pidPBuilder.start();
+                    } else {
+                        System.out.println("file doesn't exist yet");
+                        Thread.sleep(5000);
+                        timeCounter += 5000;
+                        if (timeCounter >= 25000000) {
+                            result = 1;
+                        }
+                    }
+                }
+            } else if (!job.getPlanner().equals("seq-sat-lama-2011")){
+                runError = (Global.getProcessOutput(process.getErrorStream()));
+                runInput = (Global.getProcessOutput(process.getInputStream()));
+                processInput.append("planner process input:\n" + runInput +
+                        "\nplanner process error:\n" + runError);
+                result = process.waitFor();
+                // long totalTime = System.currentTimeMillis() - startTime;
+            } else {
+                result = 1;
+            }
 
             // if the run finished successfully, reset the process builder to run result sending script
             if (result == 0) {
                 // check for different requirement incompatibility errors thrown by different planners
-                if (runInput.contains("Undeclared requirement") || runInput.contains("Was expecting") ||
+                if (runInput.contains("Was expecting") ||
                         runInput.contains("Parsing error") || runInput.contains("Segmentation fault") ||
                         runInput.contains("not supported")) {
                     sendMessage(new Message(Message.INCOMPATIBLE_DOMAIN));
@@ -144,6 +190,7 @@ public class Client {
                     // start process for sending results
                     String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@"
                             + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlanner().getName()};
+                    pBuilder.directory(new File(System.getProperty("user.dir")));
                     pBuilder.command(resultArgs);
                     process = pBuilder.start();
                     String error = Global.getProcessOutput(process.getErrorStream()).toLowerCase();
@@ -166,6 +213,7 @@ public class Client {
                             }
                         }
                     } else {
+                        System.out.println("result found and copied");
                         success = true;
                     }
                 }
@@ -192,7 +240,7 @@ public class Client {
         } finally {
             // if planner is lama, delete lama specific files
             if (job.getPlanner().getName().equals("seq-sat-lama-2011")) {
-                pBuilder.command(Settings.LAMA_DEL_SCRIPT);
+                pBuilder.command(Settings.LAMA_DEL_SCRIPT, resultFileName);
                 try {
                     process = pBuilder.start();
 
@@ -305,6 +353,43 @@ public class Client {
         } catch (IOException e) {
             //TODO: handle exception
             System.err.println("Error sending message to server");
+        }
+    }
+
+
+
+//    Runtime.getRuntime().addShutdownHook(
+//            new Thread("app-shutdown-hook") {
+//        @Override
+//        public void run() {
+//            System.out.println("bye");
+//        }
+//    });
+
+    public class shutdownThread extends Thread {
+
+        private Job job;
+        private String resultFile;
+
+        public shutdownThread(Job job, String resultFile) {
+            this.job = job;
+            this.resultFile = resultFile;
+        }
+
+        @Override
+        public void run() {
+            try {
+                // on unexpected shutdown copy result files if they exist
+                String[] resultArgs = {Settings.RESULT_COPY_SCRIPT, resultFile, Settings.USER_NAME + "@"
+                        + Settings.HOST_NAME + ":" + Settings.REMOTE_RESULT_DIR + job.getPlanner().getName()};
+                pBuilder.command(resultArgs);
+                Process process = pBuilder.start();
+                process.waitFor();
+                sendMessage(new Message(Message.CLIENT_DISCONNECTED));
+
+            } catch (IOException e) {}
+                catch(InterruptedException e) {}
+
         }
     }
 
